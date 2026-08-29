@@ -1,4 +1,4 @@
-:root {
+ :root {
     --bg-color: #f8fafc;
     --card-bg: #ffffff;
     --text-primary: #1e293b;
@@ -73,6 +73,8 @@ nav {
     gap: 20px;
 }
 
+.nav-item { background: transparent; border: none; cursor: pointer; color: var(--text-primary); }
+
 .search-container { position: relative; }
 
 #searchInput {
@@ -88,7 +90,7 @@ nav {
     position: absolute;
     top: 100%;
     right: 0;
-    width: 300px;
+    width: 320px;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -143,12 +145,27 @@ button {
     box-shadow: var(--shadow);
     cursor: pointer;
     transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
 }
 
 .card:hover { transform: translateY(-5px); border-color: var(--accent-color); }
 
 .card h3 { margin-bottom: 10px; }
 .card p { font-size: 0.9rem; color: var(--text-secondary); }
+
+.card .arrow {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    font-size: 1.2rem;
+    color: var(--accent-color);
+    transition: transform 0.18s ease;
+}
+
+.card:hover .arrow { transform: translateX(6px); }
 
 /* Breadcrumbs */
 .breadcrumb {
@@ -186,7 +203,7 @@ button {
 .resource-btn {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 8px;
     background: var(--bg-color);
     border: 1px solid var(--border-color);
@@ -227,7 +244,22 @@ footer {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-    .nav-links { display: none; } /* Simplified for code brevity - mobile menu can be added */
+    .nav-links { display: none; }
+    .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        right: 20px;
+        top: 64px;
+        background: var(--card-bg);
+        padding: 12px;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        width: calc(100% - 40px);
+        gap: 12px;
+    }
     .unit-grid { grid-template-columns: 1fr; }
     .hero h1 { font-size: 1.8rem; }
+    #searchInput { width: 100%; }
+    .search-results { right: 0; left: 0; width: auto; }
 }

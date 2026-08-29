@@ -18,9 +18,9 @@
 </head>
 <body class="light-theme">
     <header>
-        <nav class="container nav-bar">
+        <nav class="container nav-bar" role="navigation" aria-label="Main navigation">
             <div class="left">
-                <div class="logo" onclick="navigateTo('home')">
+                <div class="logo" role="button" tabindex="0" aria-label="Go to home" onclick="navigateTo('home')">
                     <span class="logo-icon">⚙️</span>
                     <span class="logo-text">AU <span class="highlight">Notes</span></span>
                 </div>
@@ -28,11 +28,12 @@
 
             <div class="right">
                 <button id="menuToggle" class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
-                <div class="nav-links" id="navLinks">
-                    <button onclick="navigateTo('home')">Home</button>
-                    <div class="search-container">
+                <div class="nav-links" id="navLinks" role="menubar">
+                    <button class="nav-item" onclick="navigateTo('home')" role="menuitem">Home</button>
+                    <button class="nav-item" onclick="navigateTo('browse')" role="menuitem">Departments</button>
+                    <div class="search-container" role="search">
                         <input type="text" id="searchInput" placeholder="Search code, subject or topic..." oninput="handleSearch()" aria-label="Search">
-                        <div id="searchResults" class="search-results" role="listbox"></div>
+                        <div id="searchResults" class="search-results" role="listbox" aria-label="Search results"></div>
                     </div>
                     <button id="themeToggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
                 </div>
@@ -47,7 +48,7 @@
     <footer class="container">
         <div class="footer-content">
             <p><strong>AU Notes</strong> - Engineering Resource Portal</p>
-            <p class="disclaimer">AU Notes is an independent student resource and is NOT officially affiliated with Anna University. Third-party resources are linked to their original sources; we do not host copyrighted solutions unless the owner permits.</p>
+            <p class="disclaimer">AU Notes is an independent student resource and is NOT officially affiliated with Anna University. Third-party resources are linked to their original sources; we host or link only publicly available documents for educational use.</p>
             <div class="footer-links">
                 <span>Regulation 2021</span>
                 <span>Regulation 2025</span>

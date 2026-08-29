@@ -1,8 +1,6 @@
-/* AU NOTES - Refactored to load JSON data files dynamically
-   - Departments remain in-code
-   - Semester/subject data is loaded from data/<deptFolder>/sem<n>.json on demand
-   - Search will fetch semester files on first use (lazy)
-   - Uses hash routing for direct links: #/details/ME3451
+/* AU NOTES - Improved navigation, clickable cards, mobile menu, enhanced search
+   - Keeps original design and dark-mode support
+   - Uses hash routing: #/dept/:deptId, #/dept/:deptId/sem:sem, #/dept/:deptId/sem:sem/:code
 */
 
 const DEPARTMENTS = [
@@ -15,8 +13,9 @@ const DEPARTMENTS = [
 ];
 
 // In-memory cache for loaded semester JSON data
-const loadedData = {}; // key: `${deptId}-r2021-sem${sem}` => array of subjects
-let searchIndex = null; // built lazily
+// key: `${deptId}-r2021-sem${sem}` => array of subject objects augmented with dept and sem
+const loadedData = {}; // { key: [ {code,name,units,pyqs,...,dept,sem,updated,popular} ] }
+let searchIndex = null; // built lazily from all departments
 
 // State Management
 let currentState = {
@@ -32,15 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initMenuToggle();
     handleHashRoute();
     render();
-
-    // Back button support
-    window.onpopstate = () => {
-        const state = window.history.state;
-        if (state) {
-            currentState = state;
-            render(false);
-        }
-    };
 
     window.addEventListener('hashchange', () => {
         handleHashRoute();
@@ -77,36 +67,49 @@ function toggleMenu() {
     nav.classList.toggle('open');
 }
 
-// Hash routing: support direct links like #/details/ME3451
+// Hash routing parser
 function handleHashRoute() {
-    const hash = location.hash || '';
-    if (hash.startsWith('#/details/')) {
-        const code = hash.split('/')[2];
-        if (code) {
-            // Try to find subject; this will fetch semester files lazily if needed
-            navigateTo('details', { subjectCode: code });
-            return;
+    const hash = (location.hash || '').replace(/^#/, ''); // remove leading #
+    // patterns: /, /dept/mech, /dept/mech/sem4, /dept/mech/sem4/ME4301
+    if (!hash || hash === '/' ) {
+        navigateTo('home', {}, true);
+        return;
+    }
+    const parts = hash.split('/').filter(Boolean);
+    if (parts[0] === 'dept') {
+        const deptId = parts[1] || null;
+        if (!deptId) return navigateTo('home', {}, true);
+        if (!parts[2]) return navigateTo('semesters', { dept: deptId }, true);
+        const semPart = parts[2];
+        const semMatch = semPart.match(/^sem(\d+)$/i);
+        if (semMatch) {
+            const sem = parseInt(semMatch[1], 10);
+            if (!parts[3]) return navigateTo('subjects', { dept: deptId, sem }, true);
+            const code = parts[3];
+            return navigateTo('details', { dept: deptId, sem, subjectCode: code }, true);
         }
     }
-    // default: no change
+    // fallback
+    navigateTo('home', {}, true);
 }
 
 // Navigation Router
-function navigateTo(view, params = {}) {
+function navigateTo(view, params = {}, fromHash = false) {
     currentState = { view, ...params };
-    // push state and update hash for shareable URLs on details view
-    if (view === 'details' && params.subjectCode) {
-        location.hash = `#/details/${params.subjectCode}`;
-    } else if (view === 'home') {
-        history.pushState(currentState, '', location.pathname + location.search);
-        location.hash = '';
-    } else {
-        history.pushState(currentState, '', '');
+    // set hash for shareable URLs
+    if (view === 'home') {
+        if (!fromHash) location.hash = '';
+    } else if (view === 'semesters' && params.dept) {
+        if (!fromHash) location.hash = `#/dept/${params.dept}`;
+    } else if (view === 'subjects' && params.dept && params.sem) {
+        if (!fromHash) location.hash = `#/dept/${params.dept}/sem${params.sem}`;
+    } else if (view === 'details' && params.dept && params.sem && params.subjectCode) {
+        if (!fromHash) location.hash = `#/dept/${params.dept}/sem${params.sem}/${params.subjectCode}`;
     }
     render();
 }
 
-function render(pushHistory = true) {
+function render() {
     const app = document.getElementById('app');
     app.innerHTML = ''; // Clear current content
 
@@ -123,35 +126,35 @@ function render(pushHistory = true) {
         case 'details':
             renderSubjectDetails(app, currentState.subjectCode);
             break;
+        case 'browse':
+            renderHome(app); // same as home but focus on departments
+            break;
         default:
             renderHome(app);
     }
     window.scrollTo(0, 0);
 }
 
-// VIEW: Home
-function renderHome(container) {
+// VIEW: Home (with Browse by Department, Popular Subjects, Recently Added)
+async function renderHome(container) {
     container.innerHTML = `
         <section class="hero">
             <h1>Anna University Engineering Notes</h1>
             <p>Notes • PYQs • Question Banks • Important Questions • Video Lectures</p>
+        </section>
+
+        <section>
+            <h2>Browse by Department</h2>
             <div class="grid" id="deptGrid"></div>
         </section>
+
         <section>
-            <h2>Regulation</h2>
-            <div class="grid">
-                <div class="card" onclick="alert('R2021 is active. Select a department below.')">
-                    <h3>Regulation 2021</h3>
-                    <p>Current active syllabus for 2nd, 3rd, and 4th year students.</p>
-                </div>
-                <div class="card" style="opacity: 0.6">
-                    <h3>Regulation 2025</h3>
-                    <p>Coming Soon for new batch.</p>
-                </div>
-            </div>
+            <h2>Popular Subjects</h2>
+            <div id="popularGrid" class="grid"></div>
         </section>
+
         <section>
-            <h2>Recently Updated</h2>
+            <h2>Recently Added</h2>
             <div id="recentGrid" class="grid"></div>
         </section>
     `;
@@ -160,60 +163,101 @@ function renderHome(container) {
     DEPARTMENTS.forEach(dept => {
         const card = document.createElement('div');
         card.className = 'card';
+        card.setAttribute('role','button');
+        card.setAttribute('tabindex','0');
         card.innerHTML = `
-            <div style="font-size: 2rem">${dept.icon}</div>
-            <h3>${dept.name}</h3>
-            <p>R2021 Semester 1 - 8</p>
+            <div style="display:flex;align-items:center;gap:12px">
+                <div style="font-size:2rem">${dept.icon}</div>
+                <div>
+                    <h3 style="margin:0">${dept.name}</h3>
+                    <p style="margin:0;color:var(--text-secondary)">R2021 • Semester 1–8</p>
+                </div>
+            </div>
+            <div class="arrow">→</div>
         `;
-        card.onclick = () => navigateTo('semesters', { dept: dept.id });
+        // Entire card clickable
+        card.addEventListener('click', () => navigateTo('semesters', { dept: dept.id }));
+        // support keyboard
+        card.addEventListener('keydown', (e) => { if (e.key === 'Enter') navigateTo('semesters', { dept: dept.id }); });
         grid.appendChild(card);
     });
 
-    // Build recent list from available loadedData (will be empty on first load). Offer note if empty.
+    // Build popular and recent lists by scanning JSONs (async)
+    const popularGrid = document.getElementById('popularGrid');
     const recentGrid = document.getElementById('recentGrid');
-    const recentItems = collectRecentlyUpdated(10);
-    if (recentItems.length === 0) {
-        recentGrid.innerHTML = `<div class="card"><p>No recent updates yet. Visit a semester to load data.</p></div>`;
+
+    popularGrid.innerHTML = `<div class="card"><p>Loading popular subjects…</p></div>`;
+    recentGrid.innerHTML = `<div class="card"><p>Loading recently added…</p></div>`;
+
+    // load all department sem files (non-blocking) and collect subjects
+    const allSubjects = [];
+    for (const dept of DEPARTMENTS) {
+        for (let s = 1; s <= 8; s++) {
+            const arr = await loadSemesterData(dept.id, s);
+            if (arr && arr.length) {
+                arr.forEach(sub => {
+                    allSubjects.push({ ...sub, dept: dept.id, deptName: dept.name, sem: s });
+                });
+            }
+        }
+    }
+
+    // Popular
+    const popular = allSubjects.filter(s => s.popular).slice(0, 8);
+    if (popular.length === 0) {
+        popularGrid.innerHTML = `<div class="card"><p>No popular subjects yet.</p></div>`;
     } else {
-        recentGrid.innerHTML = recentItems.map(item => `
-            <div class="card" onclick="navigateTo('details', { subjectCode: '${item.code}' })">
-                <p style="color: var(--accent-color); font-weight: bold;">${item.code}</p>
-                <h3>${item.name}</h3>
-                <p>Updated: ${item.updated || '—'}</p>
+        popularGrid.innerHTML = popular.map(p => `
+            <div class="card" role="button" onclick="navigateTo('details',{dept:'${p.dept}',sem:${p.sem},subjectCode:'${p.code}'})" tabindex="0">
+                <div>
+                    <p style="color:var(--accent-color);font-weight:bold;margin:0">${p.code}</p>
+                    <h3 style="margin:6px 0">${p.name}</h3>
+                    <p style="margin:0;color:var(--text-secondary)">${p.deptName} • Semester ${p.sem}</p>
+                </div>
+                <div class="arrow">→</div>
+            </div>
+        `).join('');
+    }
+
+    // Recently Added (by updated field)
+    const recent = allSubjects.filter(s => s.updated).sort((a,b)=> (b.updated||'').localeCompare(a.updated||'')).slice(0,8);
+    if (recent.length === 0) {
+        recentGrid.innerHTML = `<div class="card"><p>No recent updates.</p></div>`;
+    } else {
+        recentGrid.innerHTML = recent.map(r => `
+            <div class="card" role="button" onclick="navigateTo('details',{dept:'${r.dept}',sem:${r.sem},subjectCode:'${r.code}'})" tabindex="0">
+                <div>
+                    <p style="color:var(--accent-color);font-weight:bold;margin:0">🆕 ${r.name}</p>
+                    <h3 style="margin:6px 0">${r.code}</h3>
+                    <p style="margin:0;color:var(--text-secondary)">Updated: ${r.updated}</p>
+                </div>
+                <div class="arrow">→</div>
             </div>
         `).join('');
     }
 }
 
-function collectRecentlyUpdated(limit = 8) {
-    const all = [];
-    Object.values(loadedData).forEach(arr => {
-        arr.forEach(s => {
-            if (s.updated) all.push(s);
-        });
-    });
-    all.sort((a, b) => (b.updated || '').localeCompare(a.updated || ''));
-    return all.slice(0, limit);
-}
-
 // VIEW: Semesters
 function renderSemesters(container, deptId) {
-    const dept = DEPARTMENTS.find(d => d.id === deptId);
+    const dept = DEPARTMENTS.find(d => d.id === deptId) || { name: deptId };
     container.innerHTML = `
-        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> > ${dept ? dept.name : deptId}</div>
+        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> &nbsp;›&nbsp; <span>${dept.name}</span></div>
         <h2>Select Semester</h2>
         <div class="grid">
             ${[1,2,3,4,5,6,7,8].map(num => `
-                <div class="card" onclick="navigateTo('subjects', { dept: '${deptId}', sem: ${num} })">
-                    <h3>Semester ${num}</h3>
-                    <p>${dept ? dept.name : deptId} - R2021</p>
+                <div class="card" role="button" tabindex="0" onclick="navigateTo('subjects',{dept:'${deptId}',sem:${num}})">
+                    <div>
+                        <h3>Semester ${num}</h3>
+                        <p style="margin:0;color:var(--text-secondary)">${dept.name} - R2021</p>
+                    </div>
+                    <div class="arrow">→</div>
                 </div>
             `).join('')}
         </div>
     `;
 }
 
-// Load semester JSON (on demand)
+// Load semester JSON (on demand) and normalize
 async function loadSemesterData(deptId, sem) {
     const key = `${deptId}-r2021-sem${sem}`;
     if (loadedData[key]) return loadedData[key];
@@ -232,8 +276,16 @@ async function loadSemesterData(deptId, sem) {
             return loadedData[key];
         }
         const json = await res.json();
-        // Expecting an array of subject objects
-        loadedData[key] = Array.isArray(json) ? json : [];
+        let subjects = [];
+        // support two shapes: array directly, or {semester: n, subjects: []}
+        if (Array.isArray(json)) {
+            subjects = json;
+        } else if (json && Array.isArray(json.subjects)) {
+            subjects = json.subjects;
+        }
+        // normalize: ensure code and name exist; add dept & sem
+        subjects = subjects.map(s => ({ ...s, dept: deptId, sem }));
+        loadedData[key] = subjects;
         return loadedData[key];
     } catch (e) {
         console.error('Failed to load', path, e);
@@ -244,12 +296,12 @@ async function loadSemesterData(deptId, sem) {
 
 // VIEW: Subjects List
 async function renderSubjects(container, deptId, sem) {
-    const dept = DEPARTMENTS.find(d => d.id === deptId);
+    const dept = DEPARTMENTS.find(d => d.id === deptId) || { name: deptId };
     container.innerHTML = `
         <div class="breadcrumb">
-            <span onclick="navigateTo('home')">Home</span> > 
-            <span onclick="navigateTo('semesters', {dept: '${deptId}'})">${dept ? dept.name : deptId}</span> > 
-            Semester ${sem}
+            <span onclick="navigateTo('home')">Home</span> &nbsp;›&nbsp; 
+            <span onclick="navigateTo('semesters',{dept:'${deptId}'})">${dept.name}</span> &nbsp;›&nbsp; 
+            <span>Semester ${sem}</span>
         </div>
         <h2>Subjects</h2>
         <div id="subjectsGrid" class="grid">
@@ -265,37 +317,37 @@ async function renderSubjects(container, deptId, sem) {
     }
 
     grid.innerHTML = subjects.map(s => `
-        <div class="card" onclick="navigateTo('details', { subjectCode: '${s.code}' })">
-            <p style="color: var(--accent-color); font-weight: bold;">${s.code}</p>
-            <h3>${s.name}</h3>
-            <p>View Study Materials →</p>
+        <div class="card" role="button" tabindex="0" onclick="navigateTo('details',{dept:'${deptId}',sem:${sem},subjectCode:'${s.code || s.name.replace(/\s+/g,'_')}'} )">
+            <div>
+                <p style="color: var(--accent-color); font-weight: bold; margin:0">${s.code || ''}</p>
+                <h3 style="margin:6px 0">${s.name || ''}</h3>
+                <p style="margin:0;color:var(--text-secondary)">View Study Materials →</p>
+            </div>
+            <div class="arrow">→</div>
         </div>
     `).join('');
 }
 
 // VIEW: Subject Details
 async function renderSubjectDetails(container, code) {
-    // Try to locate subject in loadedData
+    // Find subject across loadedData
     let subject = null;
+    let foundDept = null;
+    let foundSem = null;
     for (const key in loadedData) {
         const arr = loadedData[key] || [];
-        const found = arr.find(s => s.code === code);
-        if (found) {
-            subject = found;
-            break;
-        }
+        const found = arr.find(s => (s.code === code) || (s.code && s.code.toLowerCase() === code.toLowerCase()));
+        if (found) { subject = found; foundDept = found.dept; foundSem = found.sem; break; }
     }
-
-    // If not found, attempt to fetch all mechanical sem files (lazy search)
+    // If not found, try load all depts sems lazily (useful on direct link)
     if (!subject) {
-        // try sem1..sem8 for mechanical only (we only have mechanical JSONs for now)
-        for (let i = 1; i <= 8; i++) {
-            const arr = await loadSemesterData('mech', i);
-            const found = arr.find(s => s.code === code);
-            if (found) {
-                subject = found;
-                break;
+        for (const dept of DEPARTMENTS) {
+            for (let i = 1; i <= 8; i++) {
+                const arr = await loadSemesterData(dept.id, i);
+                const found = arr.find(s => (s.code === code) || (s.code && s.code.toLowerCase() === code.toLowerCase()));
+                if (found) { subject = found; foundDept = dept.id; foundSem = i; break; }
             }
+            if (subject) break;
         }
     }
 
@@ -304,28 +356,32 @@ async function renderSubjectDetails(container, code) {
         return;
     }
 
+    const deptObj = DEPARTMENTS.find(d => d.id === (foundDept || subject.dept)) || { name: 'Department' };
+    const sem = foundSem || subject.sem || '';
+
     container.innerHTML = `
-        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> › <span onclick="navigateTo('semesters', {dept: 'mech'})">Mechanical Engineering</span> › ${subject.code}</div>
+        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> &nbsp;›&nbsp; <span onclick="navigateTo('semesters',{dept:'${deptObj.id || 'mech'}}')">${deptObj.name}</span> &nbsp;›&nbsp; <span onclick="navigateTo('subjects',{dept:'${deptObj.id || 'mech'}',sem:${sem}})">Semester ${sem}</span> &nbsp;›&nbsp; <span>${subject.code || subject.name}</span></div>
         <button class="back-btn" onclick="window.history.back()">← Back</button>
         <div class="subject-header">
-            <p>${subject.code}</p>
-            <h1>${subject.name}</h1>
+            <p>${subject.code || ''}</p>
+            <h1>${subject.name || ''}</h1>
             <p>Regulation 2021 • Anna University</p>
         </div>
 
         <div class="resource-section">
             <h3>📚 UNIT-WISE NOTES</h3>
-            <div class="unit-grid">
+            <div class="unit-grid" id="unitGrid">
                 ${((subject.units || [])).map((u, i) => {
-                    const link = (subject.units && subject.units[i] && subject.units[i].notes) || (subject.notes && subject.notes[`u${i+1}`]) || null;
+                    const link = (subject.units && subject.units[i] && (subject.units[i].notes || subject.units[i].link)) || (subject.notes && subject.notes[`u${i+1}`]) || null;
                     if (link && link !== '#') {
+                        // If link is relative path, keep as-is
                         return `
-                            <a href="${link}" class="resource-btn">
+                            <a class="resource-btn" href="${link}" target="_blank" rel="noopener noreferrer">
                                 <div>
                                     <strong>Unit ${i+1}</strong>
                                     <div style="font-size:0.9rem">${typeof u === 'string' ? u : u.name || ''}</div>
                                 </div>
-                                <div class="status">✅ Available</div>
+                                <div style="margin-left:12px">📄 Open</div>
                             </a>
                         `;
                     } else {
@@ -335,7 +391,7 @@ async function renderSubjectDetails(container, code) {
                                     <strong>Unit ${i+1}</strong>
                                     <div style="font-size:0.9rem">${typeof u === 'string' ? u : u.name || ''}</div>
                                 </div>
-                                <div class="status">⏳ Coming Soon</div>
+                                <div style="margin-left:12px">⏳ Coming Soon</div>
                             </div>
                         `;
                     }
@@ -374,16 +430,16 @@ function renderPyqs(pyqs) {
     if (!pyqs) return '<p>Coming soon</p>';
     // pyqs can be object or array
     if (Array.isArray(pyqs)) {
-        return pyqs.map(p => `
-            <a href="${p.link}" class="resource-btn" ${p.link && p.link !== '#' ? 'target="_blank"' : ''}>
-                ${p.year} ${p.session ? p.session : ''} <span style="margin-left:auto">Open</span>
-            </a>
-        `).join('');
+        return pyqs.map(p => {
+            const link = p.link && p.link !== '#' ? p.link : null;
+            if (link) return `<a href="${link}" class="resource-btn" target="_blank">${p.year} ${p.session ? p.session : ''} <span style="margin-left:auto">Open</span></a>`;
+            return `<div class="resource-btn disabled">${p.year} ${p.session ? p.session : ''} — ⏳ Coming Soon</div>`;
+        }).join('');
     }
     // object map
-    return Object.entries(pyqs).map(([year, url]) => `
-        ${url && url !== '#' ? `<a href="${url}" class="resource-btn" target="_blank">${year} Paper</a>` : `<div class="resource-btn disabled">${year} — ⏳ Coming Soon</div>`}
-    `).join('');
+    return Object.entries(pyqs).map(([year, url]) => (
+        url && url !== '#' ? `<a href="${url}" class="resource-btn" target="_blank">${year} Paper</a>` : `<div class="resource-btn disabled">${year} — ⏳ Coming Soon</div>`
+    )).join('');
 }
 
 function renderExamPrep(subject) {
@@ -393,40 +449,42 @@ function renderExamPrep(subject) {
     const formula = subject.formulaSheet || subject.formula || null;
     const solved = subject.solvedProblems || null;
 
-    if (qbank) parts.push(`<a href="${qbank}" class="resource-btn" target="_blank">Question Bank</a>`);
-    else parts.push(`<div class="resource-btn disabled">Question Bank — ⏳ Coming Soon</div>`);
+    if (qbank && qbank !== '#') parts.push(`<a href="${qbank}" class="resource-btn" target="_blank">📖 Question Bank</a>`);
+    else parts.push(`<div class="resource-btn disabled">📖 Question Bank — ⏳ Coming Soon</div>`);
 
-    if (imp) parts.push(`<a href="${imp}" class="resource-btn" target="_blank">Important Questions</a>`);
-    else parts.push(`<div class="resource-btn disabled">Important Questions — ⏳ Coming Soon</div>`);
+    if (imp && imp !== '#') parts.push(`<a href="${imp}" class="resource-btn" target="_blank">🎯 Important Questions</a>`);
+    else parts.push(`<div class="resource-btn disabled">🎯 Important Questions — ⏳ Coming Soon</div>`);
 
-    if (formula) parts.push(`<a href="${formula}" class="resource-btn" target="_blank">Formula Sheet</a>`);
-    else parts.push(`<div class="resource-btn disabled">Formula Sheet — ⏳ Coming Soon</div>`);
+    if (formula && formula !== '#') parts.push(`<a href="${formula}" class="resource-btn" target="_blank">📐 Formula Sheet</a>`);
+    else parts.push(`<div class="resource-btn disabled">📐 Formula Sheet — ⏳ Coming Soon</div>`);
 
-    if (solved) parts.push(`<a href="${solved}" class="resource-btn" target="_blank">Solved Problems</a>`);
-    else parts.push(`<div class="resource-btn disabled">Solved Problems — ⏳ Coming Soon</div>`);
+    if (solved && solved !== '#') parts.push(`<a href="${solved}" class="resource-btn" target="_blank">✅ Solved Problems</a>`);
+    else parts.push(`<div class="resource-btn disabled">✅ Solved Problems — ⏳ Coming Soon</div>`);
 
     return parts.join('\n');
 }
 
-// Search Logic with lazy indexing
+// Search Logic with lazy indexing across all departments
 async function handleSearch() {
     const input = document.getElementById('searchInput');
+    if (!input) return;
     const query = (input.value || '').trim().toLowerCase();
     const resultsDiv = document.getElementById('searchResults');
 
     if (query.length < 2) {
-        resultsDiv.style.display = 'none';
+        if (resultsDiv) resultsDiv.style.display = 'none';
         return;
     }
 
-    // build index if not ready (only mechanical dept for now)
     if (!searchIndex) {
         searchIndex = [];
-        for (let i = 1; i <= 8; i++) {
-            const arr = await loadSemesterData('mech', i);
-            arr.forEach(s => {
-                searchIndex.push({ ...s, sem: i, dept: 'mech' });
-            });
+        for (const dept of DEPARTMENTS) {
+            for (let i = 1; i <= 8; i++) {
+                const arr = await loadSemesterData(dept.id, i);
+                arr.forEach(s => {
+                    searchIndex.push({ ...s, dept: dept.id, deptName: dept.name, sem: i });
+                });
+            }
         }
     }
 
@@ -434,6 +492,7 @@ async function handleSearch() {
     searchIndex.forEach(s => {
         if (s.code && s.code.toLowerCase().includes(query)) matches.push({ type: 'subject', item: s });
         else if (s.name && s.name.toLowerCase().includes(query)) matches.push({ type: 'subject', item: s });
+        else if (s.deptName && s.deptName.toLowerCase().includes(query)) matches.push({ type: 'dept', item: s });
         // search units
         (s.units || []).forEach((u, idx) => {
             const uname = typeof u === 'string' ? u : u.name || '';
@@ -443,30 +502,32 @@ async function handleSearch() {
         });
     });
 
-    if (matches.length > 0) {
+    if (matches.length > 0 && resultsDiv) {
         resultsDiv.innerHTML = matches.map(m => {
             if (m.type === 'subject') {
-                return `<div class="search-item" onclick="selectSearch('${m.item.code}')"><strong>${m.item.code}</strong><br><small>${m.item.name}</small></div>`;
-            } else {
+                return `<div class="search-item" onclick="selectSearch('${m.item.code}', ${m.item.sem}, '${m.item.dept}')"><strong>${m.item.code}</strong><br><small>${m.item.name}</small></div>`;
+            } else if (m.type === 'unit') {
                 const u = m.item.units[m.unitIndex];
                 const uName = typeof u === 'string' ? u : u.name || '';
-                return `<div class="search-item" onclick="selectSearch('${m.item.code}', ${m.unitIndex})"><strong>${m.item.code} — Unit ${m.unitIndex+1}</strong><br><small>${uName} — ${m.item.name}</small></div>`;
+                return `<div class="search-item" onclick="selectSearch('${m.item.code}', ${m.item.sem}, '${m.item.dept}', ${m.unitIndex})"><strong>${m.item.code} — Unit ${m.unitIndex+1}</strong><br><small>${uName} — ${m.item.name}</small></div>`;
+            } else {
+                return `<div class="search-item" onclick="selectSearch('${m.item.code}', ${m.item.sem}, '${m.item.dept}')"><strong>${m.item.name}</strong><br><small>${m.item.deptName} • Semester ${m.item.sem}</small></div>`;
             }
         }).join('');
         resultsDiv.style.display = 'block';
-    } else {
+    } else if (resultsDiv) {
         resultsDiv.style.display = 'none';
     }
 }
 
-function selectSearch(code, unitIndex = null) {
-    document.getElementById('searchResults').style.display = 'none';
-    document.getElementById('searchInput').value = '';
-    navigateTo('details', { subjectCode: code });
-    // Optionally we could scroll to unit after detail page loads — left as future improvement
+function selectSearch(code, sem = 1, dept = 'mech', unitIndex = null) {
+    const resultsDiv = document.getElementById('searchResults');
+    if (resultsDiv) resultsDiv.style.display = 'none';
+    const input = document.getElementById('searchInput');
+    if (input) input.value = '';
+    navigateTo('details', { dept, sem, subjectCode: code });
+    // Optionally scroll to unit after page loads (future improvement)
 }
-
-/* Utility: comingSoon previously used alerts — we now avoid alerts and show statuses in UI */
 
 // Exported for debugging
 window._AUNOTES = { DEPARTMENTS, loadedData };
