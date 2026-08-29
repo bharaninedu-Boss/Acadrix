@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AU Notes - Engineering Study Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-mode">
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="logo" onclick="showHome()">AU<span>Notes</span></h1>
+            <div class="nav-controls">
+                <button id="theme-toggle" title="Toggle Dark/Light Mode">🌓</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="search-wrapper">
+            <input type="text" id="main-search" placeholder="Search subjects (e.g. Python, MA3151)...">
+            <div id="search-results" class="results-dropdown"></div>
+        </div>
+    </header>
+
+    <main id="app-content" class="container">
+        <!-- Home View -->
+        <section id="home-view" class="view">
+            <h2 class="section-title">Select Your Department</h2>
+            <div class="dept-grid" id="dept-list"></div>
+        </section>
+
+        <!-- Semester View -->
+        <section id="sem-view" class="view hidden">
+            <button class="back-btn" onclick="showHome()">← Back to Departments</button>
+            <h2 id="dept-title" class="section-title">Department Name</h2>
+            <div class="sem-grid" id="sem-list"></div>
+        </section>
+
+        <!-- Subject View -->
+        <section id="subject-view" class="view hidden">
+            <button class="back-btn" id="back-to-sem">← Back to Semesters</button>
+            <h2 id="sem-title" class="section-title">Semester Subjects</h2>
+            <div class="subject-list" id="subjects-container"></div>
+        </section>
+
+        <!-- Material View -->
+        <section id="material-view" class="view hidden">
+            <button class="back-btn" id="back-to-sub">← Back to Subjects</button>
+            <h2 id="material-title" class="section-title">Subject Materials</h2>
+            <div class="material-sections" id="materials-container"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Anna University Notes Portal</p>
+        <p>Responsive Engineering Resources</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
