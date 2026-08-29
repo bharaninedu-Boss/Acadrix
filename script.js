@@ -39,24 +39,667 @@ const DATA = {
                 ]
             }
         },
-        "Mechanical Engineering": {
-            id: "Mech",
-            semesters: {
+        /**
+ * DATA CONFIGURATION
+ * Add/Edit subjects here.
+ */
+const DATA = {
+    "departments": {
+        "Computer Science": {
+            "id": "CSE",
+            "semesters": {
                 "Semester 1": [
-                    { 
-                        code: "MA3151", name: "Matrices and Calculus", popular: true,
-                        units: [
-                            { n: 1, title: "Matrices", link: "#" },
-                            { n: 2, title: "Differential Calculus", link: "#" },
-                            { n: 3, title: "Functions of Several Variables", link: "#" },
-                            { n: 4, title: "Integral Calculus", link: "#" },
-                            { n: 5, title: "Multiple Integrals", link: "#" }
+                    {
+                        "code": "GE3151",
+                        "name": "Problem Solving and Python Programming",
+                        "popular": true,
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Computational Thinking",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Data, Expressions, Statements",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Control Flow, Functions",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Lists, Tuples, Dictionaries",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Files, Modules, Packages",
+                                "link": "#"
+                            }
                         ],
-                        pyq: "#", qbank: "#", imp: "#"
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
                     }
                 ]
             }
         },
+
+        "Mechanical Engineering": {
+            "id": "Mech",
+            "semesters": {
+                "Semester 1": [
+                    {
+                        "code": "HS3152",
+                        "name": "Professional English - I",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Communication and Language Skills",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Reading and Writing Skills",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Professional Communication",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Presentation and Communication",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Professional Writing",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "MA3151",
+                        "name": "Matrices and Calculus",
+                        "popular": true,
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Matrices",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Differential Calculus",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Functions of Several Variables",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Integral Calculus",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Multiple Integrals",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "PH3151",
+                        "name": "Engineering Physics",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Properties of Matter",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Waves and Optics",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Thermal Physics",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Quantum Physics",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Applications of Physics",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "CY3151",
+                        "name": "Engineering Chemistry",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Water Technology",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Engineering Materials",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Energy Sources",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Corrosion and its Control",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Nanochemistry and Applications",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "GE3151",
+                        "name": "Problem Solving and Python Programming",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Computational Thinking",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Data Expressions and Statements",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Control Flow and Functions",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Lists, Tuples and Dictionaries",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Files, Modules and Packages",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "GE3152",
+                        "name": "Heritage of Tamils",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Language and Literature",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Heritage and Culture",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Tamil Society",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Arts and Architecture",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Tamil Heritage and Technology",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "GE3171",
+                        "name": "Problem Solving and Python Programming Laboratory",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Python Programming Basics",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Control Statements",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Functions",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Data Structures",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Files and Modules",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "BS3171",
+                        "name": "Physics and Chemistry Laboratory",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Physics Experiments",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Chemistry Experiments",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "GE3172",
+                        "name": "English Laboratory",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Communication Skills",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Listening and Speaking",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Presentation Skills",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    }
+                ],
+
+                "Semester 2": [
+                    {
+                        "code": "HS3252",
+                        "name": "Professional English - II",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Communication Skills",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Technical Writing",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Professional Communication",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Presentation Skills",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Career Communication",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "MA3251",
+                        "name": "Statistics and Numerical Methods",
+                        "popular": true,
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Statistics",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Probability Distributions",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Testing of Hypothesis",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Numerical Methods",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Numerical Solution of Equations",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "PH3251",
+                        "name": "Materials Science",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Crystal Structure",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Phase Diagrams",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Magnetic and Electrical Properties",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Mechanical Properties",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Advanced Materials",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "BE3251",
+                        "name": "Basic Electrical and Electronics Engineering",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Electrical Circuits",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "AC Circuits and Measurements",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Electrical Machines",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Semiconductor Devices",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Digital Electronics",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "GE3251",
+                        "name": "Engineering Graphics",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Geometrical Constructions",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Projection of Points and Lines",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Projection of Solids",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Sections and Development",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Isometric and Perspective Projection",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "GE3252",
+                        "name": "Tamils and Technology",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Traditional Knowledge",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Agriculture and Water Management",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Architecture and Engineering",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Manufacturing and Technology",
+                                "link": "#"
+                            },
+                            {
+                                "n": 5,
+                                "title": "Tamil Contributions to Technology",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "GE3271",
+                        "name": "Engineering Practices Laboratory",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Civil Engineering Practices",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Electrical Engineering Practices",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Mechanical Engineering Practices",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Electronics Engineering Practices",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "BE3271",
+                        "name": "Basic Electrical and Electronics Engineering Laboratory",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Electrical Circuit Experiments",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Electrical Machine Experiments",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Electronic Device Experiments",
+                                "link": "#"
+                            },
+                            {
+                                "n": 4,
+                                "title": "Digital Electronics Experiments",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    },
+
+                    {
+                        "code": "GE3272",
+                        "name": "Communication Laboratory / Foreign Language",
+                        "units": [
+                            {
+                                "n": 1,
+                                "title": "Communication Skills",
+                                "link": "#"
+                            },
+                            {
+                                "n": 2,
+                                "title": "Listening and Speaking",
+                                "link": "#"
+                            },
+                            {
+                                "n": 3,
+                                "title": "Presentation and Interaction",
+                                "link": "#"
+                            }
+                        ],
+                        "pyq": "#",
+                        "qbank": "#",
+                        "imp": "#",
+                        "videos": []
+                    }
+                ]
         "Electronics & Communication": { id: "ECE", semesters: {} },
         "Electrical & Electronics": { id: "EEE", semesters: {} },
         "Information Technology": { id: "IT", semesters: {} },
