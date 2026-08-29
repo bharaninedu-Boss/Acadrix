@@ -5,25 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AU Notes | Anna University Engineering Resources</title>
     <meta name="description" content="Free Anna University engineering notes, previous year question papers, important questions, and video resources for R2021 and R2025.">
+    <link rel="canonical" href="https://bharaninedu-Boss.github.io/MECH-KUTTY/">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="AU Notes | Anna University Engineering Notes">
+    <meta property="og:description" content="Notes, previous year question papers, question banks and video resources for Anna University engineering students.">
+    <meta property="og:type" content="website">
+
     <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="light-theme">
     <header>
-        <nav class="container">
-            <div class="logo" onclick="navigateTo('home')">
-                <span class="logo-icon">⚙️</span>
-                <span class="logo-text">AU <span class="highlight">Notes</span></span>
-            </div>
-            
-            <div class="nav-links">
-                <button onclick="navigateTo('home')">Home</button>
-                <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Search code or subject..." oninput="handleSearch()">
-                    <div id="searchResults" class="search-results"></div>
+        <nav class="container nav-bar">
+            <div class="left">
+                <div class="logo" onclick="navigateTo('home')">
+                    <span class="logo-icon">⚙️</span>
+                    <span class="logo-text">AU <span class="highlight">Notes</span></span>
                 </div>
-                <button id="themeToggle" class="theme-btn">🌙</button>
+            </div>
+
+            <div class="right">
+                <button id="menuToggle" class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+                <div class="nav-links" id="navLinks">
+                    <button onclick="navigateTo('home')">Home</button>
+                    <div class="search-container">
+                        <input type="text" id="searchInput" placeholder="Search code, subject or topic..." oninput="handleSearch()" aria-label="Search">
+                        <div id="searchResults" class="search-results" role="listbox"></div>
+                    </div>
+                    <button id="themeToggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+                </div>
             </div>
         </nav>
     </header>
@@ -35,7 +47,7 @@
     <footer class="container">
         <div class="footer-content">
             <p><strong>AU Notes</strong> - Engineering Resource Portal</p>
-            <p class="disclaimer">AU Notes is an independent student resource and is NOT officially affiliated with Anna University. Third-party resources are linked to their original sources; we do not claim ownership of third-party content.</p>
+            <p class="disclaimer">AU Notes is an independent student resource and is NOT officially affiliated with Anna University. Third-party resources are linked to their original sources; we do not host copyrighted solutions unless the owner permits.</p>
             <div class="footer-links">
                 <span>Regulation 2021</span>
                 <span>Regulation 2025</span>
