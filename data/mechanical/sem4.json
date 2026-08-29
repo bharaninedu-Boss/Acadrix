@@ -1,9 +1,25 @@
-{
-  "semester": 4,
-  "subjects": [
-    {
-      "name": "THERMAL ENGINEERING",
-      "pyq": "https://github.com/bharaninedu-Boss/MECH-KUTTY/blob/main/data/mechanical/THERMAL%20ENGINEERING.pdf"
-    }
-  ]
-}
+[
+  {
+    "code": "ME4301",
+    "name": "THERMAL ENGINEERING",
+    "updated": "2026-08-29",
+    "units": [
+      {"name": "Basic Concepts and Properties of Pure Substances", "notes": "#"},
+      {"name": "Gas Power Cycles", "notes": "#"},
+      {"name": "Steam Power Cycles", "notes": "#"},
+      {"name": "Internal Combustion Engines", "notes": "#"},
+      {"name": "Refrigeration and Air-Conditioning", "notes": "#"},
+      {"name": "Combustion and Heat Transfer", "notes": "#"}
+    ],
+    "pyqs": [
+      {"year": "Most Recent", "link": "data/mechanical/THERMAL%20ENGINEERING.pdf"}
+    ],
+    "videos": [
+      {"title": "Thermal Engineering — Lecture Series (Intro)", "channel": "Example Channel", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
+    ],
+    "questionBank": "#",
+    "importantQuestions": "#",
+    "formulaSheet": "#",
+    "solvedProblems": "#"
+  }
+]
