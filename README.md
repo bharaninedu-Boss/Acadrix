@@ -6,7 +6,7 @@ Engineering Notes & Resources
 
 ### B.E Mechanical Engineering
 
-- Regulation 2021
+- Regulation 2021--https://raw.githubusercontent.com/bharaninedu-Boss/MECH-KUTTY/main/B.E.Mech.pdf
 - Regulation 2025
 
 ## 📚 Resources
