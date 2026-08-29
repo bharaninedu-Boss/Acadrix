@@ -3,139 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AU Notes - Engineering Study Materials Portal</title>
-    <meta name="description" content="Access Anna University Engineering Notes, Question Banks, and Previous Year Questions for CSE, Mechanical, ECE, EEE, and Civil.">
+    <title>AU Notes | Anna University Engineering Resources</title>
+    <meta name="description" content="Free Anna University engineering notes, previous year question papers, important questions, and video resources for R2021 and R2025.">
     <link rel="stylesheet" href="style.css">
-    <!-- Inter Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="light-mode">
-    <nav class="navbar">
-        <div class="nav-container">
-            <h1 class="logo" onclick="navigateTo('home')">AU<span>Notes</span></h1>
-            <div class="nav-controls">
-                <button id="theme-toggle" aria-label="Toggle Dark Mode">🌓</button>
+<body class="light-theme">
+    <header>
+        <nav class="container">
+            <div class="logo" onclick="navigateTo('home')">
+                <span class="logo-icon">⚙️</span>
+                <span class="logo-text">AU <span class="highlight">Notes</span></span>
             </div>
-        </div>
-    </nav>
-
-    <!-- Announcement Section -->
-    <div class="announcement-bar">
-        <p>📢 <strong>Update:</strong> Semester Exam Timetable for Nov/Dec 2024 is now available. <a href="#">View Details</a></p>
-    </div>
-
-    <header class="hero">
-        <div class="hero-content">
-            <h1>Engineering Resources Simplified</h1>
-            <p>Notes, Question Banks, and Solved Papers for Anna University Students</p>
-            <div class="search-wrapper">
-                <input type="text" id="main-search" placeholder="Search code or subject (e.g. CS3301, Python)..." autocomplete="off">
-                <div id="search-results" class="results-dropdown"></div>
+            
+            <div class="nav-links">
+                <button onclick="navigateTo('home')">Home</button>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search code or subject..." oninput="handleSearch()">
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+                <button id="themeToggle" class="theme-btn">🌙</button>
             </div>
-        </div>
+        </nav>
     </header>
 
-    <div class="container">
-        <!-- Breadcrumbs -->
-        <nav class="breadcrumbs" id="breadcrumbs">
-            <span onclick="navigateTo('home')">Home</span>
-        </nav>
+    <main id="app" class="container">
+        <!-- Content will be injected here by script.js -->
+    </main>
 
-        <main id="app-content">
-            
-            <!-- Home View -->
-            <section id="home-view" class="view">
-                <div class="home-sections">
-                    <div class="side-content">
-                        <h2 class="section-title">Departments</h2>
-                        <div class="dept-grid" id="dept-list"></div>
-                    </div>
-                    
-                    <div class="main-featured">
-                        <h2 class="section-title">Popular Subjects</h2>
-                        <div class="popular-grid" id="popular-subjects"></div>
-                        
-                        <h2 class="section-title" style="margin-top: 40px;">Recently Added</h2>
-                        <div class="recent-list" id="recent-materials"></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Semester View -->
-            <section id="sem-view" class="view hidden">
-                <div class="view-header">
-                    <button class="back-btn" onclick="goBack()">← Back</button>
-                    <h2 id="dept-title" class="section-title">Department</h2>
-                </div>
-                <div class="sem-grid" id="sem-list"></div>
-            </section>
-
-            <!-- Subject List View -->
-            <section id="subject-view" class="view hidden">
-                <div class="view-header">
-                    <button class="back-btn" onclick="goBack()">← Back</button>
-                    <h2 id="sem-title" class="section-title">Semester</h2>
-                </div>
-                <div class="subject-list" id="subjects-container"></div>
-            </section>
-
-            <!-- Detailed Subject Page -->
-            <section id="material-view" class="view hidden">
-                <div class="view-header">
-                    <button class="back-btn" onclick="goBack()">← Back</button>
-                    <div class="subject-header">
-                        <span id="mat-code" class="code-badge">CODE</span>
-                        <h2 id="mat-title">Subject Name</h2>
-                    </div>
-                </div>
-
-                <div class="material-grid">
-                    <div class="notes-column">
-                        <h3 class="group-title">📚 Unit-Wise Notes</h3>
-                        <div class="unit-list" id="unit-container">
-                            <!-- Units injected here -->
-                        </div>
-                    </div>
-                    
-                    <div class="resources-column">
-                        <h3 class="group-title">📝 Exam Prep</h3>
-                        <div class="resource-grid" id="extra-resources">
-                            <!-- Resources injected here -->
-                        </div>
-                        
-                        <h3 class="group-title" style="margin-top: 30px;">🎥 Video Lectures</h3>
-                        <div class="video-grid" id="video-container">
-                            <!-- Videos injected here -->
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <footer class="main-footer">
-        <div class="footer-grid">
-            <div class="footer-about">
-                <h3>AU<span>Notes</span></h3>
-                <p>A dedicated platform for Anna University engineering students to access quality study materials for free.</p>
-            </div>
+    <footer class="container">
+        <div class="footer-content">
+            <p><strong>AU Notes</strong> - Engineering Resource Portal</p>
+            <p class="disclaimer">AU Notes is an independent student resource and is NOT officially affiliated with Anna University. Third-party resources are linked to their original sources; we do not claim ownership of third-party content.</p>
             <div class="footer-links">
-                <h4>Quick Links</h4>
-                <a href="#" onclick="navigateTo('home')">Home</a>
-                <a href="#">About Us</a>
-                <a href="#">Contact</a>
+                <span>Regulation 2021</span>
+                <span>Regulation 2025</span>
             </div>
-            <div class="footer-legal">
-                <h4>Legal</h4>
-                <a href="#">Disclaimer</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Use</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 AU Notes Portal. Designed for Students.</p>
         </div>
     </footer>
 
