@@ -1,6 +1,7 @@
-/* AU NOTES - Improved navigation, clickable cards, mobile menu, enhanced search
+/* AU NOTES - Improved navigation, clickable cards, mobile menu, enhanced search, breadcrumbs, arrow UI, resource and unit cards, hash routing
    - Keeps original design and dark-mode support
    - Uses hash routing: #/dept/:deptId, #/dept/:deptId/sem:sem, #/dept/:deptId/sem:sem/:code
+   - Added: keyboard search navigation, unit deep-linking, download buttons
 */
 
 const DEPARTMENTS = [
@@ -16,6 +17,9 @@ const DEPARTMENTS = [
 // key: `${deptId}-r2021-sem${sem}` => array of subject objects augmented with dept and sem
 const loadedData = {}; // { key: [ {code,name,units,pyqs,...,dept,sem,updated,popular} ] }
 let searchIndex = null; // built lazily from all departments
+let searchResultsInternal = []; // current search matches
+let searchActiveIndex = -1; // active index in results for keyboard navigation
+let pendingScrollToUnit = null; // { dept, sem, code, unitIndex }
 
 // State Management
 let currentState = {
@@ -29,6 +33,7 @@ let currentState = {
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initMenuToggle();
+    initSearchKeyboard();
     handleHashRoute();
     render();
 
@@ -65,6 +70,44 @@ function toggleMenu() {
     const nav = document.getElementById('navLinks');
     if (!nav) return;
     nav.classList.toggle('open');
+}
+
+function initSearchKeyboard() {
+    const input = document.getElementById('searchInput');
+    if (!input) return;
+    input.addEventListener('keydown', (e) => {
+        const resultsDiv = document.getElementById('searchResults');
+        if (!resultsDiv || resultsDiv.style.display === 'none') return;
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            searchActiveIndex = Math.min(searchActiveIndex + 1, searchResultsInternal.length - 1);
+            highlightSearchItem();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            searchActiveIndex = Math.max(searchActiveIndex - 1, 0);
+            highlightSearchItem();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (searchActiveIndex >= 0 && searchActiveIndex < searchResultsInternal.length) {
+                const m = searchResultsInternal[searchActiveIndex];
+                selectSearch(m.item.code, m.item.sem, m.item.dept, m.unitIndex ?? null);
+            }
+        } else if (e.key === 'Escape') {
+            resultsDiv.style.display = 'none';
+        }
+    });
+}
+
+function highlightSearchItem() {
+    const resultsDiv = document.getElementById('searchResults');
+    if (!resultsDiv) return;
+    const children = Array.from(resultsDiv.children);
+    children.forEach((c, i) => {
+        if (i === searchActiveIndex) c.classList.add('active'); else c.classList.remove('active');
+    });
+    // ensure active item is visible
+    const active = children[searchActiveIndex];
+    if (active) active.scrollIntoView({ block: 'nearest' });
 }
 
 // Hash routing parser
@@ -300,7 +343,7 @@ async function renderSubjects(container, deptId, sem) {
     container.innerHTML = `
         <div class="breadcrumb">
             <span onclick="navigateTo('home')">Home</span> &nbsp;›&nbsp; 
-            <span onclick="navigateTo('semesters',{dept:'${deptId}'})">${dept.name}</span> &nbsp;›&nbsp; 
+            <span onclick="navigateTo('semesters', { dept: '${deptId}' })">${dept.name}</span> &nbsp;›&nbsp; 
             <span>Semester ${sem}</span>
         </div>
         <h2>Subjects</h2>
@@ -317,7 +360,7 @@ async function renderSubjects(container, deptId, sem) {
     }
 
     grid.innerHTML = subjects.map(s => `
-        <div class="card" role="button" tabindex="0" onclick="navigateTo('details',{dept:'${deptId}',sem:${sem},subjectCode:'${s.code || s.name.replace(/\s+/g,'_')}'} )">
+        <div class="card" role="button" tabindex="0" onclick="navigateTo('details',{dept:'${deptId}',sem:${sem},subjectCode:'${s.code || (s.name||'').replace(/\\s+/g,'_')}'} )">
             <div>
                 <p style="color: var(--accent-color); font-weight: bold; margin:0">${s.code || ''}</p>
                 <h3 style="margin:6px 0">${s.name || ''}</h3>
@@ -356,7 +399,7 @@ async function renderSubjectDetails(container, code) {
         return;
     }
 
-    const deptObj = DEPARTMENTS.find(d => d.id === (foundDept || subject.dept)) || { name: 'Department' };
+    const deptObj = DEPARTMENTS.find(d => d.id === (foundDept || subject.dept)) || { name: 'Department', id: foundDept };
     const sem = foundSem || subject.sem || '';
 
     container.innerHTML = `
@@ -373,9 +416,12 @@ async function renderSubjectDetails(container, code) {
             <div class="unit-grid" id="unitGrid">
                 ${((subject.units || [])).map((u, i) => {
                     const link = (subject.units && subject.units[i] && (subject.units[i].notes || subject.units[i].link)) || (subject.notes && subject.notes[`u${i+1}`]) || null;
+                    const safeId = `unit-${i+1}`;
                     if (link && link !== '#') {
-                        // If link is relative path, keep as-is
+                        const isSameOrigin = !/^https?:\/\//i.test(link);
+                        const downloadBtn = isSameOrigin ? `<a class="download-btn" href="${link}" download>⬇ Download</a>` : '';
                         return `
+                            <div id="${safeId}">
                             <a class="resource-btn" href="${link}" target="_blank" rel="noopener noreferrer">
                                 <div>
                                     <strong>Unit ${i+1}</strong>
@@ -383,6 +429,8 @@ async function renderSubjectDetails(container, code) {
                                 </div>
                                 <div style="margin-left:12px">📄 Open</div>
                             </a>
+                            ${downloadBtn}
+                            </div>
                         `;
                     } else {
                         return `
@@ -424,6 +472,22 @@ async function renderSubjectDetails(container, code) {
             `).join('') : '<p>No videos recommended yet.</p>'}
         </div>
     `;
+
+    // If navigation requested a unit, scroll to it
+    if (pendingScrollToUnit && (pendingScrollToUnit.code === subject.code || pendingScrollToUnit.subjectCode === subject.code)) {
+        const idx = pendingScrollToUnit.unitIndex;
+        if (typeof idx === 'number') {
+            const el = document.getElementById(`unit-${idx+1}`);
+            if (el) {
+                setTimeout(() => {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    el.style.boxShadow = '0 0 0 3px rgba(37,99,235,0.12)';
+                    setTimeout(()=>{ el.style.boxShadow = ''; }, 2000);
+                }, 200);
+            }
+        }
+        pendingScrollToUnit = null;
+    }
 }
 
 function renderPyqs(pyqs) {
@@ -473,6 +537,8 @@ async function handleSearch() {
 
     if (query.length < 2) {
         if (resultsDiv) resultsDiv.style.display = 'none';
+        searchResultsInternal = [];
+        searchActiveIndex = -1;
         return;
     }
 
@@ -502,6 +568,9 @@ async function handleSearch() {
         });
     });
 
+    searchResultsInternal = matches;
+    searchActiveIndex = matches.length > 0 ? 0 : -1;
+
     if (matches.length > 0 && resultsDiv) {
         resultsDiv.innerHTML = matches.map(m => {
             if (m.type === 'subject') {
@@ -515,6 +584,8 @@ async function handleSearch() {
             }
         }).join('');
         resultsDiv.style.display = 'block';
+        // highlight first
+        highlightSearchItem();
     } else if (resultsDiv) {
         resultsDiv.style.display = 'none';
     }
@@ -525,9 +596,14 @@ function selectSearch(code, sem = 1, dept = 'mech', unitIndex = null) {
     if (resultsDiv) resultsDiv.style.display = 'none';
     const input = document.getElementById('searchInput');
     if (input) input.value = '';
+    // set pending scrolling instruction for deep-linking
+    if (typeof unitIndex === 'number') {
+        pendingScrollToUnit = { dept, sem, code, unitIndex };
+    } else {
+        pendingScrollToUnit = null;
+    }
     navigateTo('details', { dept, sem, subjectCode: code });
-    // Optionally scroll to unit after page loads (future improvement)
 }
 
 // Exported for debugging
-window._AUNOTES = { DEPARTMENTS, loadedData };
+window._AUNOTES = { DEPARTMENTS, loadedData, searchIndex };
