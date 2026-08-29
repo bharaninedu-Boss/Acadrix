@@ -1,0 +1,6 @@
+
+/* Extra styles for search keyboard navigation (active), and download button */
+.search-item.active { background: rgba(37,99,235,0.06); }
+
+.download-btn { padding: 6px 10px; border-radius: 6px; background: var(--accent-color); color: white; text-decoration: none; margin-left:8px; font-size:0.85rem; }
+.download-btn:hover { background: var(--accent-hover); }
