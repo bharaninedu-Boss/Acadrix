@@ -1,25 +1,5 @@
-[
-  {
-    "code": "ME4301",
-    "name": "THERMAL ENGINEERING",
-    "updated": "2026-08-29",
-    "units": [
-      {"name": "Basic Concepts and Properties of Pure Substances", "notes": "#"},
-      {"name": "Gas Power Cycles", "notes": "#"},
-      {"name": "Steam Power Cycles", "notes": "#"},
-      {"name": "Internal Combustion Engines", "notes": "#"},
-      {"name": "Refrigeration and Air-Conditioning", "notes": "#"},
-      {"name": "Combustion and Heat Transfer", "notes": "#"}
-    ],
-    "pyqs": [
-      {"year": "Most Recent", "link": "data/mechanical/THERMAL%20ENGINEERING.pdf"}
-    ],
-    "videos": [
-      {"title": "Thermal Engineering — Lecture Series (Intro)", "channel": "Example Channel", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
-    ],
-    "questionBank": "#",
-    "importantQuestions": "#",
-    "formulaSheet": "#",
-    "solvedProblems": "#"
-  }
-]
+{
+  "semester": 4,
+  "officialSource": "https://cac.annauniv.edu/aidetails/afug_2021_fu/Revised/Mech/B.E.Mech.pdf",
+  "subjects": []
+}
