@@ -1,99 +1,108 @@
-/**
- * AU NOTES - ACADEMIC DATA
- * Use this section to add new subjects, PDFs, and links.
- */
-const ACADEMIC_DATA = {
-    departments: [
-        { id: "mech", name: "Mechanical Engineering", icon: "⚙️" },
-        { id: "cse", name: "Computer Science", icon: "💻" },
-        { id: "ece", name: "Electronics & Communication", icon: "📟" },
-        { id: "eee", name: "Electrical & Electronics", icon: "⚡" },
-        { id: "it", name: "Information Technology", icon: "🌐" },
-        { id: "civil", name: "Civil Engineering", icon: "🏗️" }
-    ],
-    subjects: {
-        "mech-r2021-sem1": [
-            { code: "MA3151", name: "Matrices and Calculus", units: ["Matrices", "Differential Calculus", "Functions of Several Variables", "Integral Calculus", "Multiple Integrals"], popular: true },
-            { code: "PH3151", name: "Engineering Physics", units: ["Mechanics", "Oscillations, Optics and Lasers", "Quantum Physics", "Applied Quantum Mechanics", "Laser and Fiber Optics"] },
-            { code: "CY3151", name: "Engineering Chemistry", units: ["Water and Its Treatment", "Nano Chemistry", "Phase Rule and Alloys", "Fuels and Combustion", "Energy Sources and Storage Devices"] },
-            { code: "GE3151", name: "Problem Solving and Python Programming", units: ["Computational Thinking & Problem Solving", "Data, Expressions, Statements", "Control Flow, Functions", "Lists, Tuples, Dictionaries", "Files, Modules, Packages"] },
-            { code: "HS3152", name: "Professional English - I", units: ["Content to be added", "Content to be added", "Content to be added", "Content to be added", "Content to be added"] },
-            { code: "GE3152", name: "Heritage of Tamils", units: ["Content to be added", "Content to be added", "Content to be added", "Content to be added", "Content to be added"] }
-        ],
-        "mech-r2021-sem2": [
-            { code: "HS3252", name: "Professional English - II", units: ["Content to be added", "Content to be added", "Content to be added", "Content to be added", "Content to be added"] },
-            { code: "MA3251", name: "Statistics and Numerical Methods", units: ["Testing of Hypothesis", "Design of Experiments", "Solution of Equations", "Interpolation and Approximation", "Numerical Integration"] },
-            { code: "PH3251", name: "Materials Science", units: ["Crystallography", "Phase Diagrams", "Mechanical Properties", "Magnetic, Dielectric & Optical Materials", "New Materials"] },
-            { code: "BE3251", name: "Basic Electrical and Electronics Engineering", units: ["Electrical Circuits", "Electrical Machines", "Utilization of Electrical Energy", "Electronic Circuits", "Digital Electronics"] },
-            { code: "GE3251", name: "Engineering Graphics", units: ["Plane Curves and Freehand Sketching", "Projection of Points, Lines and Plane Surfaces", "Projection of Solids", "Projection of Sectioned Solids and Development of Surfaces", "Isometric and Perspective Projections"] }
-        ],
-        "mech-r2021-sem3": [
-            { 
-                code: "ME3391", 
-                name: "Engineering Thermodynamics", 
-                units: ["Basic Concepts and First Law", "Second Law and Availability", "Properties of Pure Substance and Steam Power Cycle", "Ideal and Real Gases", "Psychrometry"],
-                notes: { u1: "https://example.com/notes1", u2: "#", u3: "#", u4: "#", u5: "#" },
-                pyqs: { "2023": "https://example.com/pyq23", "2022": "#" },
-                videos: [{ title: "First Law Explained", channel: "Mech Master", url: "https://youtube.com" }]
-            },
-            { code: "MA3351", name: "Transforms and Partial Differential Equations", units: ["Partial Differential Equations", "Fourier Series", "Applications of Partial Differential Equations", "Fourier Transforms", "Z-transforms and Difference Equations"] },
-            { code: "ME3351", name: "Engineering Mechanics", units: ["Statics of Particles", "Equilibrium of Rigid Bodies", "Properties of Surfaces and Solids", "Dynamics of Particles", "Friction and Rigid Body Dynamics"] },
-            { code: "CE3391", name: "Fluid Mechanics and Machinery", units: ["Fluid Properties and Flow Characteristics", "Flow Through Pipes and Boundary Layer", "Dimensional Analysis and Model Studies", "Turbines", "Pumps"] }
-        ],
-        "mech-r2021-sem4": [
-            { code: "ME3491", name: "Theory of Machines", units: ["Mechanisms", "Kinematics of Linkage Mechanisms", "Kinematics of Cam Mechanisms", "Gears and Gear Trains", "Friction and Force Analysis"] },
-            { code: "ME3451", name: "Thermal Engineering", units: ["Gas and Combined Power Cycles", "Internal Combustion Engines", "Steam Nozzles and Turbines", "Air Compressors", "Refrigeration and Air Conditioning"] }
-        ],
-        "mech-r2021-sem5": [
-            { code: "ME3591", name: "Design of Machine Elements", units: ["Steady and Variable Stresses", "Shafts and Couplings", "Temporary and Permanent Joints", "Energy Storing Elements", "Bearings"], formula: "https://example.com/formula-dme" },
-            { code: "ME3592", name: "Metrology and Measurements", units: ["Basics of Metrology", "Linear and Angular Measurements", "Form Measurement", "Laser and Advances in Metrology", "Measurement of Mechanical Parameters"] }
-        ]
-        // You can add sem6, sem7, sem8 following the same pattern
-    }
-};
+/* AU NOTES - Refactored to load JSON data files dynamically
+   - Departments remain in-code
+   - Semester/subject data is loaded from data/<deptFolder>/sem<n>.json on demand
+   - Search will fetch semester files on first use (lazy)
+   - Uses hash routing for direct links: #/details/ME3451
+*/
+
+const DEPARTMENTS = [
+    { id: "mech", name: "Mechanical Engineering", icon: "⚙️", folder: "mechanical" },
+    { id: "cse", name: "Computer Science", icon: "💻", folder: "computer" },
+    { id: "ece", name: "Electronics & Communication", icon: "📟", folder: "electronics" },
+    { id: "eee", name: "Electrical & Electronics", icon: "⚡", folder: "electrical" },
+    { id: "it", name: "Information Technology", icon: "🌐", folder: "it" },
+    { id: "civil", name: "Civil Engineering", icon: "🏗️", folder: "civil" }
+];
+
+// In-memory cache for loaded semester JSON data
+const loadedData = {}; // key: `${deptId}-r2021-sem${sem}` => array of subjects
+let searchIndex = null; // built lazily
 
 // State Management
 let currentState = {
     view: 'home',
     dept: null,
     sem: null,
-    subject: null
+    subjectCode: null
 };
 
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
+    initMenuToggle();
+    handleHashRoute();
     render();
-    
+
     // Back button support
     window.onpopstate = () => {
         const state = window.history.state;
-        if(state) {
+        if (state) {
             currentState = state;
             render(false);
         }
     };
+
+    window.addEventListener('hashchange', () => {
+        handleHashRoute();
+    });
 });
 
 // Theme Logic
 function initTheme() {
     const savedTheme = localStorage.getItem('theme') || 'light-theme';
     document.body.className = savedTheme;
-    document.getElementById('themeToggle').textContent = savedTheme === 'light-theme' ? '🌙' : '☀️';
-    
-    document.getElementById('themeToggle').addEventListener('click', () => {
-        const isLight = document.body.classList.contains('light-theme');
-        const newTheme = isLight ? 'dark-theme' : 'light-theme';
-        document.body.className = newTheme;
-        localStorage.setItem('theme', newTheme);
-        document.getElementById('themeToggle').textContent = isLight ? '☀️' : '🌙';
-    });
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) themeToggle.textContent = savedTheme === 'light-theme' ? '🌙' : '☀️';
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const isLight = document.body.classList.contains('light-theme');
+            const newTheme = isLight ? 'dark-theme' : 'light-theme';
+            document.body.className = newTheme;
+            localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = isLight ? '☀️' : '🌙';
+        });
+    }
+}
+
+function initMenuToggle() {
+    const menuToggle = document.getElementById('menuToggle');
+    if (!menuToggle) return;
+    menuToggle.addEventListener('click', toggleMenu);
+}
+
+function toggleMenu() {
+    const nav = document.getElementById('navLinks');
+    if (!nav) return;
+    nav.classList.toggle('open');
+}
+
+// Hash routing: support direct links like #/details/ME3451
+function handleHashRoute() {
+    const hash = location.hash || '';
+    if (hash.startsWith('#/details/')) {
+        const code = hash.split('/')[2];
+        if (code) {
+            // Try to find subject; this will fetch semester files lazily if needed
+            navigateTo('details', { subjectCode: code });
+            return;
+        }
+    }
+    // default: no change
 }
 
 // Navigation Router
 function navigateTo(view, params = {}) {
     currentState = { view, ...params };
-    window.history.pushState(currentState, '', '');
+    // push state and update hash for shareable URLs on details view
+    if (view === 'details' && params.subjectCode) {
+        location.hash = `#/details/${params.subjectCode}`;
+    } else if (view === 'home') {
+        history.pushState(currentState, '', location.pathname + location.search);
+        location.hash = '';
+    } else {
+        history.pushState(currentState, '', '');
+    }
     render();
 }
 
@@ -101,7 +110,7 @@ function render(pushHistory = true) {
     const app = document.getElementById('app');
     app.innerHTML = ''; // Clear current content
 
-    switch(currentState.view) {
+    switch (currentState.view) {
         case 'home':
             renderHome(app);
             break;
@@ -114,8 +123,10 @@ function render(pushHistory = true) {
         case 'details':
             renderSubjectDetails(app, currentState.subjectCode);
             break;
+        default:
+            renderHome(app);
     }
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
 }
 
 // VIEW: Home
@@ -139,10 +150,14 @@ function renderHome(container) {
                 </div>
             </div>
         </section>
+        <section>
+            <h2>Recently Updated</h2>
+            <div id="recentGrid" class="grid"></div>
+        </section>
     `;
 
     const grid = document.getElementById('deptGrid');
-    ACADEMIC_DATA.departments.forEach(dept => {
+    DEPARTMENTS.forEach(dept => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
@@ -153,108 +168,200 @@ function renderHome(container) {
         card.onclick = () => navigateTo('semesters', { dept: dept.id });
         grid.appendChild(card);
     });
+
+    // Build recent list from available loadedData (will be empty on first load). Offer note if empty.
+    const recentGrid = document.getElementById('recentGrid');
+    const recentItems = collectRecentlyUpdated(10);
+    if (recentItems.length === 0) {
+        recentGrid.innerHTML = `<div class="card"><p>No recent updates yet. Visit a semester to load data.</p></div>`;
+    } else {
+        recentGrid.innerHTML = recentItems.map(item => `
+            <div class="card" onclick="navigateTo('details', { subjectCode: '${item.code}' })">
+                <p style="color: var(--accent-color); font-weight: bold;">${item.code}</p>
+                <h3>${item.name}</h3>
+                <p>Updated: ${item.updated || '—'}</p>
+            </div>
+        `).join('');
+    }
+}
+
+function collectRecentlyUpdated(limit = 8) {
+    const all = [];
+    Object.values(loadedData).forEach(arr => {
+        arr.forEach(s => {
+            if (s.updated) all.push(s);
+        });
+    });
+    all.sort((a, b) => (b.updated || '').localeCompare(a.updated || ''));
+    return all.slice(0, limit);
 }
 
 // VIEW: Semesters
 function renderSemesters(container, deptId) {
-    const dept = ACADEMIC_DATA.departments.find(d => d.id === deptId);
+    const dept = DEPARTMENTS.find(d => d.id === deptId);
     container.innerHTML = `
-        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> > ${dept.name}</div>
+        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> > ${dept ? dept.name : deptId}</div>
         <h2>Select Semester</h2>
         <div class="grid">
             ${[1,2,3,4,5,6,7,8].map(num => `
                 <div class="card" onclick="navigateTo('subjects', { dept: '${deptId}', sem: ${num} })">
                     <h3>Semester ${num}</h3>
-                    <p>${dept.name} - R2021</p>
+                    <p>${dept ? dept.name : deptId} - R2021</p>
                 </div>
             `).join('')}
         </div>
     `;
 }
 
-// VIEW: Subjects List
-function renderSubjects(container, deptId, sem) {
+// Load semester JSON (on demand)
+async function loadSemesterData(deptId, sem) {
     const key = `${deptId}-r2021-sem${sem}`;
-    const subjects = ACADEMIC_DATA.subjects[key] || [];
-    
+    if (loadedData[key]) return loadedData[key];
+
+    const dept = DEPARTMENTS.find(d => d.id === deptId);
+    if (!dept) {
+        loadedData[key] = [];
+        return loadedData[key];
+    }
+
+    const path = `data/${dept.folder}/sem${sem}.json`;
+    try {
+        const res = await fetch(path);
+        if (!res.ok) {
+            loadedData[key] = [];
+            return loadedData[key];
+        }
+        const json = await res.json();
+        // Expecting an array of subject objects
+        loadedData[key] = Array.isArray(json) ? json : [];
+        return loadedData[key];
+    } catch (e) {
+        console.error('Failed to load', path, e);
+        loadedData[key] = [];
+        return loadedData[key];
+    }
+}
+
+// VIEW: Subjects List
+async function renderSubjects(container, deptId, sem) {
+    const dept = DEPARTMENTS.find(d => d.id === deptId);
     container.innerHTML = `
         <div class="breadcrumb">
             <span onclick="navigateTo('home')">Home</span> > 
-            <span onclick="navigateTo('semesters', {dept: '${deptId}'})">${deptId.toUpperCase()}</span> > 
+            <span onclick="navigateTo('semesters', {dept: '${deptId}'})">${dept ? dept.name : deptId}</span> > 
             Semester ${sem}
         </div>
         <h2>Subjects</h2>
-        <div class="grid">
-            ${subjects.length > 0 ? subjects.map(s => `
-                <div class="card" onclick="navigateTo('details', { subjectCode: '${s.code}' })">
-                    <p style="color: var(--accent-color); font-weight: bold;">${s.code}</p>
-                    <h3>${s.name}</h3>
-                    <p>View Study Materials →</p>
-                </div>
-            `).join('') : '<p>Content coming soon for this semester.</p>'}
+        <div id="subjectsGrid" class="grid">
+            <div class="card">Loading subjects…</div>
         </div>
     `;
+
+    const subjects = await loadSemesterData(deptId, sem);
+    const grid = document.getElementById('subjectsGrid');
+    if (!subjects || subjects.length === 0) {
+        grid.innerHTML = `<p>Content coming soon for this semester.</p>`;
+        return;
+    }
+
+    grid.innerHTML = subjects.map(s => `
+        <div class="card" onclick="navigateTo('details', { subjectCode: '${s.code}' })">
+            <p style="color: var(--accent-color); font-weight: bold;">${s.code}</p>
+            <h3>${s.name}</h3>
+            <p>View Study Materials →</p>
+        </div>
+    `).join('');
 }
 
 // VIEW: Subject Details
-function renderSubjectDetails(container, code) {
-    // Find subject in data
+async function renderSubjectDetails(container, code) {
+    // Try to locate subject in loadedData
     let subject = null;
-    for (let key in ACADEMIC_DATA.subjects) {
-        subject = ACADEMIC_DATA.subjects[key].find(s => s.code === code);
-        if (subject) break;
+    for (const key in loadedData) {
+        const arr = loadedData[key] || [];
+        const found = arr.find(s => s.code === code);
+        if (found) {
+            subject = found;
+            break;
+        }
+    }
+
+    // If not found, attempt to fetch all mechanical sem files (lazy search)
+    if (!subject) {
+        // try sem1..sem8 for mechanical only (we only have mechanical JSONs for now)
+        for (let i = 1; i <= 8; i++) {
+            const arr = await loadSemesterData('mech', i);
+            const found = arr.find(s => s.code === code);
+            if (found) {
+                subject = found;
+                break;
+            }
+        }
     }
 
     if (!subject) {
-        container.innerHTML = "Subject not found.";
+        container.innerHTML = `<div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> › <span>Subject</span></div><div class="card"><p>Subject not found.</p></div>`;
         return;
     }
 
     container.innerHTML = `
-        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> > ${code}</div>
+        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> › <span onclick="navigateTo('semesters', {dept: 'mech'})">Mechanical Engineering</span> › ${subject.code}</div>
+        <button class="back-btn" onclick="window.history.back()">← Back</button>
         <div class="subject-header">
-            <p>${code}</p>
+            <p>${subject.code}</p>
             <h1>${subject.name}</h1>
             <p>Regulation 2021 • Anna University</p>
         </div>
 
         <div class="resource-section">
-            <h3>📚 Unit-wise Notes</h3>
+            <h3>📚 UNIT-WISE NOTES</h3>
             <div class="unit-grid">
-                ${subject.units.map((u, i) => {
-                    const link = (subject.notes && subject.notes[`u${i+1}`]) || "#";
-                    return `
-                        <a href="${link}" class="resource-btn" ${link === "#" ? 'onclick="comingSoon(event)"' : 'target="_blank"'}>
-                            Unit ${i+1}: ${u}
-                        </a>
-                    `;
+                ${((subject.units || [])).map((u, i) => {
+                    const link = (subject.units && subject.units[i] && subject.units[i].notes) || (subject.notes && subject.notes[`u${i+1}`]) || null;
+                    if (link && link !== '#') {
+                        return `
+                            <a href="${link}" class="resource-btn">
+                                <div>
+                                    <strong>Unit ${i+1}</strong>
+                                    <div style="font-size:0.9rem">${typeof u === 'string' ? u : u.name || ''}</div>
+                                </div>
+                                <div class="status">✅ Available</div>
+                            </a>
+                        `;
+                    } else {
+                        return `
+                            <div class="resource-btn disabled">
+                                <div>
+                                    <strong>Unit ${i+1}</strong>
+                                    <div style="font-size:0.9rem">${typeof u === 'string' ? u : u.name || ''}</div>
+                                </div>
+                                <div class="status">⏳ Coming Soon</div>
+                            </div>
+                        `;
+                    }
                 }).join('')}
             </div>
         </div>
 
         <div class="grid">
             <div class="resource-section">
-                <h3>📝 Previous Year Questions</h3>
-                ${subject.pyqs ? Object.entries(subject.pyqs).map(([year, url]) => `
-                    <a href="${url}" class="resource-btn" style="margin-top:10px" target="_blank">Year ${year} Paper</a>
-                `).join('') : '<p>Coming soon</p>'}
+                <h3>📝 PREVIOUS YEAR QUESTIONS</h3>
+                ${renderPyqs(subject.pyqs)}
             </div>
-            
+
             <div class="resource-section">
-                <h3>🎯 Exam Prep</h3>
-                <a href="${subject.qbank || '#'}" class="resource-btn" onclick="${!subject.qbank ? 'comingSoon(event)' : ''}" style="margin-top:10px">Question Bank</a>
-                <a href="${subject.imp || '#'}" class="resource-btn" onclick="${!subject.imp ? 'comingSoon(event)' : ''}" style="margin-top:10px">Important Questions</a>
-                ${subject.formula ? `<a href="${subject.formula}" class="resource-btn" style="margin-top:10px" target="_blank">Formula Sheet</a>` : ''}
+                <h3>🎯 EXAM PREPARATION</h3>
+                ${renderExamPrep(subject)}
             </div>
         </div>
 
         <div class="resource-section">
-            <h3>🎥 Recommended Videos</h3>
-            ${subject.videos ? subject.videos.map(v => `
+            <h3>🎥 RECOMMENDED VIDEOS</h3>
+            ${((subject.videos || [])).length > 0 ? subject.videos.map(v => `
                 <div class="video-card">
                     <div>
                         <p><strong>${v.title}</strong></p>
-                        <p style="font-size:0.8rem; color:var(--text-secondary)">Channel: ${v.channel}</p>
+                        <p style="font-size:0.8rem; color:var(--text-secondary)">Channel: ${v.channel || ''}</p>
                     </div>
                     <a href="${v.url}" target="_blank" class="resource-btn">Watch →</a>
                 </div>
@@ -263,43 +370,103 @@ function renderSubjectDetails(container, code) {
     `;
 }
 
-// Search Logic
-function handleSearch() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
+function renderPyqs(pyqs) {
+    if (!pyqs) return '<p>Coming soon</p>';
+    // pyqs can be object or array
+    if (Array.isArray(pyqs)) {
+        return pyqs.map(p => `
+            <a href="${p.link}" class="resource-btn" ${p.link && p.link !== '#' ? 'target="_blank"' : ''}>
+                ${p.year} ${p.session ? p.session : ''} <span style="margin-left:auto">Open</span>
+            </a>
+        `).join('');
+    }
+    // object map
+    return Object.entries(pyqs).map(([year, url]) => `
+        ${url && url !== '#' ? `<a href="${url}" class="resource-btn" target="_blank">${year} Paper</a>` : `<div class="resource-btn disabled">${year} — ⏳ Coming Soon</div>`}
+    `).join('');
+}
+
+function renderExamPrep(subject) {
+    const parts = [];
+    const qbank = subject.questionBank || subject.qbank || null;
+    const imp = subject.importantQuestions || subject.imp || null;
+    const formula = subject.formulaSheet || subject.formula || null;
+    const solved = subject.solvedProblems || null;
+
+    if (qbank) parts.push(`<a href="${qbank}" class="resource-btn" target="_blank">Question Bank</a>`);
+    else parts.push(`<div class="resource-btn disabled">Question Bank — ⏳ Coming Soon</div>`);
+
+    if (imp) parts.push(`<a href="${imp}" class="resource-btn" target="_blank">Important Questions</a>`);
+    else parts.push(`<div class="resource-btn disabled">Important Questions — ⏳ Coming Soon</div>`);
+
+    if (formula) parts.push(`<a href="${formula}" class="resource-btn" target="_blank">Formula Sheet</a>`);
+    else parts.push(`<div class="resource-btn disabled">Formula Sheet — ⏳ Coming Soon</div>`);
+
+    if (solved) parts.push(`<a href="${solved}" class="resource-btn" target="_blank">Solved Problems</a>`);
+    else parts.push(`<div class="resource-btn disabled">Solved Problems — ⏳ Coming Soon</div>`);
+
+    return parts.join('\n');
+}
+
+// Search Logic with lazy indexing
+async function handleSearch() {
+    const input = document.getElementById('searchInput');
+    const query = (input.value || '').trim().toLowerCase();
     const resultsDiv = document.getElementById('searchResults');
-    
+
     if (query.length < 2) {
         resultsDiv.style.display = 'none';
         return;
     }
 
-    let matches = [];
-    Object.values(ACADEMIC_DATA.subjects).flat().forEach(s => {
-        if (s.code.toLowerCase().includes(query) || s.name.toLowerCase().includes(query)) {
-            matches.push(s);
+    // build index if not ready (only mechanical dept for now)
+    if (!searchIndex) {
+        searchIndex = [];
+        for (let i = 1; i <= 8; i++) {
+            const arr = await loadSemesterData('mech', i);
+            arr.forEach(s => {
+                searchIndex.push({ ...s, sem: i, dept: 'mech' });
+            });
         }
+    }
+
+    const matches = [];
+    searchIndex.forEach(s => {
+        if (s.code && s.code.toLowerCase().includes(query)) matches.push({ type: 'subject', item: s });
+        else if (s.name && s.name.toLowerCase().includes(query)) matches.push({ type: 'subject', item: s });
+        // search units
+        (s.units || []).forEach((u, idx) => {
+            const uname = typeof u === 'string' ? u : u.name || '';
+            if (uname.toLowerCase().includes(query)) {
+                matches.push({ type: 'unit', item: s, unitIndex: idx });
+            }
+        });
     });
 
     if (matches.length > 0) {
-        resultsDiv.innerHTML = matches.map(m => `
-            <div class="search-item" onclick="selectSearch('${m.code}')">
-                <strong>${m.code}</strong><br>
-                <small>${m.name}</small>
-            </div>
-        `).join('');
+        resultsDiv.innerHTML = matches.map(m => {
+            if (m.type === 'subject') {
+                return `<div class="search-item" onclick="selectSearch('${m.item.code}')"><strong>${m.item.code}</strong><br><small>${m.item.name}</small></div>`;
+            } else {
+                const u = m.item.units[m.unitIndex];
+                const uName = typeof u === 'string' ? u : u.name || '';
+                return `<div class="search-item" onclick="selectSearch('${m.item.code}', ${m.unitIndex})"><strong>${m.item.code} — Unit ${m.unitIndex+1}</strong><br><small>${uName} — ${m.item.name}</small></div>`;
+            }
+        }).join('');
         resultsDiv.style.display = 'block';
     } else {
         resultsDiv.style.display = 'none';
     }
 }
 
-function selectSearch(code) {
+function selectSearch(code, unitIndex = null) {
     document.getElementById('searchResults').style.display = 'none';
     document.getElementById('searchInput').value = '';
     navigateTo('details', { subjectCode: code });
+    // Optionally we could scroll to unit after detail page loads — left as future improvement
 }
 
-function comingSoon(e) {
-    e.preventDefault();
-    alert("This resource is coming soon! We are currently uploading notes.");
-}
+/* Utility: comingSoon previously used alerts — we now avoid alerts and show statuses in UI */
+
+// Exported for debugging
+window._AUNOTES = { DEPARTMENTS, loadedData };
