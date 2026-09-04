@@ -360,7 +360,7 @@ async function renderSubjectDetails(container, code) {
     const sem = foundSem || subject.sem || '';
 
     container.innerHTML = `
-        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> &nbsp;›&nbsp; <span onclick="navigateTo('semesters',{dept:'${deptObj.id || 'mech'}}')">${deptObj.name}</span> &nbsp;›&nbsp; <span onclick="navigateTo('subjects',{dept:'${deptObj.id || 'mech'}',sem:${sem}})">Semester ${sem}</span> &nbsp;›&nbsp; <span>${subject.code || subject.name}</span></div>
+        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> &nbsp;›&nbsp; <span onclick="navigateTo('semesters',{dept:'${deptObj.id || 'mech'}}')">${deptObj.name}</span> &nbsp;›&nbsp; <span onclick="navigateTo('subjects',{dept:'${deptObj.id || 'mech'}',sem:${sem}})">${sem && 'Semester ' + sem}</span> &nbsp;›&nbsp; <span>${subject.code}</span></div>
         <button class="back-btn" onclick="window.history.back()">← Back</button>
         <div class="subject-header">
             <p>${subject.code || ''}</p>
@@ -509,14 +509,26 @@ async function handleSearch() {
             } else if (m.type === 'unit') {
                 const u = m.item.units[m.unitIndex];
                 const uName = typeof u === 'string' ? u : u.name || '';
-                return `<div class="search-item" onclick="selectSearch('${m.item.code}', ${m.item.sem}, '${m.item.dept}', ${m.unitIndex})"><strong>${m.item.code} — Unit ${m.unitIndex+1}</strong><br><small>${uName} — ${m.item.name}</small></div>`;
+                return `<div class="search-item" onclick="selectSearch('${m.item.code}', ${m.item.sem}, '${m.item.dept}', ${m.unitIndex})"><strong>${m.item.code} — Unit ${m.unitIndex+1}</strong><br><small>${uName}</small></div>`;
             } else {
                 return `<div class="search-item" onclick="selectSearch('${m.item.code}', ${m.item.sem}, '${m.item.dept}')"><strong>${m.item.name}</strong><br><small>${m.item.deptName} • Semester ${m.item.sem}</small></div>`;
             }
         }).join('');
         resultsDiv.style.display = 'block';
     } else if (resultsDiv) {
-        resultsDiv.style.display = 'none';
+        // Show "No results" message
+        resultsDiv.innerHTML = `
+            <div style="text-align:center; padding:20px; color:var(--text-secondary); min-height:120px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                <p style="font-size:1.1rem; font-weight:600; margin:0 0 8px 0">❌ No results found</p>
+                <p style="font-size:0.85rem; margin:0 0 12px 0">Try searching by:</p>
+                <div style="text-align:left; font-size:0.8rem; line-height:1.6;">
+                    <small>📍 Subject code (e.g., <strong>ME4301</strong>)</small><br>
+                    <small>📍 Subject name (e.g., <strong>Thermal</strong>)</small><br>
+                    <small>📍 Unit topic (e.g., <strong>thermodynamics</strong>)</small>
+                </div>
+            </div>
+        `;
+        resultsDiv.style.display = 'block';
     }
 }
 
