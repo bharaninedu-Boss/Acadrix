@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B.E Mechanical Engineering Notes - AU Notes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        body.dark-theme {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        body.dark-theme header {
+            background: #242424;
+            border-bottom: 1px solid #444;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-btn {
+            padding: 0.5rem 1rem;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: #0056b3;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .pdf-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        body.dark-theme .pdf-header {
+            background: #242424;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .pdf-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #007bff;
+        }
+
+        .pdf-header p {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        body.dark-theme .pdf-header p {
+            color: #aaa;
+        }
+
+        .pdf-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: #0056b3;
+        }
+
+        .btn.secondary {
+            background: #6c757d;
+        }
+
+        .btn.secondary:hover {
+            background: #5a6268;
+        }
+
+        .pdf-viewer-container {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        body.dark-theme .pdf-viewer-container {
+            background: #242424;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .pdf-viewer-container embed,
+        .pdf-viewer-container iframe {
+            width: 100%;
+            height: 800px;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .pdf-info {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        body.dark-theme .pdf-info {
+            background: #242424;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .pdf-info h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .pdf-info ul {
+            list-style-position: inside;
+            line-height: 1.8;
+        }
+
+        .pdf-info li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer {
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            padding: 2rem;
+            margin-top: 3rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        body.dark-theme .footer {
+            background: #242424;
+            border-top: 1px solid #444;
+            color: #aaa;
+        }
+
+        @media (max-width: 768px) {
+            .pdf-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .pdf-controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .pdf-viewer-container embed,
+            .pdf-viewer-container iframe {
+                height: 500px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        body.dark-theme .loading {
+            color: #aaa;
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="back-btn">← Back to Home</a>
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="pdf-header">
+            <h1>📚 B.E Mechanical Engineering Notes</h1>
+            <p><strong>Regulation:</strong> R2021</p>
+            <p><strong>Format:</strong> Comprehensive PDF Document</p>
+            <p><strong>Content:</strong> Complete syllabus coverage for all semesters</p>
+            
+            <div class="pdf-controls">
+                <a href="https://raw.githubusercontent.com/bharaninedu-Boss/Acadrix/main/B.E.Mech.pdf" 
+                   class="btn" download="B.E.Mech.pdf">
+                   ⬇️ Download PDF
+                </a>
+                <a href="https://raw.githubusercontent.com/bharaninedu-Boss/Acadrix/main/B.E.Mech.pdf" 
+                   class="btn secondary" target="_blank">
+                   🔗 Open in New Tab
+                </a>
+            </div>
+        </div>
+
+        <div class="pdf-viewer-container">
+            <div class="loading">📄 Loading PDF viewer...</div>
+            <iframe id="pdfViewer" 
+                    src="https://mozilla.github.io/pdf.js/web/viewer.html?file=https://raw.githubusercontent.com/bharaninedu-Boss/Acadrix/main/B.E.Mech.pdf"
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+        <div class="pdf-info">
+            <h3>📖 About This Document</h3>
+            <ul>
+                <li><strong>Complete B.E Mechanical Engineering Syllabus</strong> - All 8 semesters covered</li>
+                <li><strong>Regulation 2021 (R2021)</strong> - Latest Anna University curriculum</li>
+                <li><strong>Professional Formatting</strong> - Well-organized and easy to navigate</li>
+                <li><strong>Easy to Search</strong> - Use PDF search (Ctrl+F) to find topics quickly</li>
+                <li><strong>Download & Share</strong> - Download the PDF for offline use</li>
+                <li><strong>Print-Friendly</strong> - Optimized for printing and studying</li>
+            </ul>
+        </div>
+
+        <div class="pdf-info">
+            <h3>💡 Tips for Using This PDF</h3>
+            <ul>
+                <li>Use the search function (Ctrl+F or Cmd+F) to find specific topics</li>
+                <li>Zoom in/out using the viewer controls for better readability</li>
+                <li>Download the PDF to access offline on any device</li>
+                <li>Print specific pages or the entire document for study notes</li>
+                <li>Use the bookmark/outline feature in the viewer if available</li>
+                <li>Share this resource with your classmates</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p><strong>AU Notes</strong> - Free Engineering Resources for Anna University</p>
+        <p>This resource is provided by students, for students. Not officially affiliated with Anna University.</p>
+    </footer>
+
+    <script>
+        // Theme Management
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light-theme';
+            document.body.className = savedTheme;
+            updateThemeToggle();
+        }
+
+        function updateThemeToggle() {
+            const themeToggle = document.querySelector('.theme-toggle');
+            const isLight = document.body.classList.contains('light-theme');
+            themeToggle.textContent = isLight ? '🌙' : '☀️';
+        }
+
+        function toggleTheme() {
+            const isLight = document.body.classList.contains('light-theme');
+            const newTheme = isLight ? 'dark-theme' : 'light-theme';
+            document.body.className = newTheme;
+            localStorage.setItem('theme', newTheme);
+            updateThemeToggle();
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+        });
+    </script>
+</body>
+</html>
