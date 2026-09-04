@@ -523,7 +523,19 @@ async function handleSearch() {
         }).join('');
         resultsDiv.style.display = 'block';
     } else if (resultsDiv) {
-        resultsDiv.style.display = 'none';
+        // Show "No results" message
+        resultsDiv.innerHTML = `
+            <div style="text-align:center; padding:20px; color:var(--text-secondary); min-height:120px; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+                <p style="font-size:1.1rem; font-weight:600; margin:0 0 8px 0">❌ No results found</p>
+                <p style="font-size:0.85rem; margin:0 0 12px 0">Try searching by:</p>
+                <div style="text-align:left; font-size:0.8rem; line-height:1.6;">
+                    <small>📍 Subject code (e.g., <strong>ME4301</strong>)</small><br>
+                    <small>📍 Subject name (e.g., <strong>Thermal</strong>)</small><br>
+                    <small>📍 Unit topic (e.g., <strong>thermodynamics</strong>)</small>
+                </div>
+            </div>
+        `;
+        resultsDiv.style.display = 'block';
     }
 }
 
