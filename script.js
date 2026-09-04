@@ -67,6 +67,11 @@ function toggleMenu() {
     nav.classList.toggle('open');
 }
 
+function closeMenu() {
+    const nav = document.getElementById('navLinks');
+    if (nav) nav.classList.remove('open');
+}
+
 // Hash routing parser
 function handleHashRoute() {
     const hash = (location.hash || '').replace(/^#/, ''); // remove leading #
@@ -96,6 +101,8 @@ function handleHashRoute() {
 // Navigation Router
 function navigateTo(view, params = {}, fromHash = false) {
     currentState = { view, ...params };
+    // Close mobile menu on navigation
+    closeMenu();
     // set hash for shareable URLs
     if (view === 'home') {
         if (!fromHash) location.hash = '';
@@ -360,7 +367,7 @@ async function renderSubjectDetails(container, code) {
     const sem = foundSem || subject.sem || '';
 
     container.innerHTML = `
-        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> &nbsp;›&nbsp; <span onclick="navigateTo('semesters',{dept:'${deptObj.id || 'mech'}}')">${deptObj.name}</span> &nbsp;›&nbsp; <span onclick="navigateTo('subjects',{dept:'${deptObj.id || 'mech'}',sem:${sem}})">Semester ${sem}</span> &nbsp;›&nbsp; <span>${subject.code || subject.name}</span></div>
+        <div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> &nbsp;›&nbsp; <span onclick="navigateTo('semesters',{dept:'${deptObj.id || 'mech'}}')">${deptObj.name}</span> &nbsp;›&nbsp; <span onclick="navigateTo('subjects',{dept:'${deptObj.id || 'mech'}',sem:${sem}})">${sem && 'Semester ' + sem}</span> &nbsp;›&nbsp; <span>${subject.code}</span></div>
         <button class="back-btn" onclick="window.history.back()">← Back</button>
         <div class="subject-header">
             <p>${subject.code || ''}</p>
@@ -509,7 +516,7 @@ async function handleSearch() {
             } else if (m.type === 'unit') {
                 const u = m.item.units[m.unitIndex];
                 const uName = typeof u === 'string' ? u : u.name || '';
-                return `<div class="search-item" onclick="selectSearch('${m.item.code}', ${m.item.sem}, '${m.item.dept}', ${m.unitIndex})"><strong>${m.item.code} — Unit ${m.unitIndex+1}</strong><br><small>${uName} — ${m.item.name}</small></div>`;
+                return `<div class="search-item" onclick="selectSearch('${m.item.code}', ${m.item.sem}, '${m.item.dept}', ${m.unitIndex})"><strong>${m.item.code} — Unit ${m.unitIndex+1}</strong><br><small>${uName}</small></div>`;
             } else {
                 return `<div class="search-item" onclick="selectSearch('${m.item.code}', ${m.item.sem}, '${m.item.dept}')"><strong>${m.item.name}</strong><br><small>${m.item.deptName} • Semester ${m.item.sem}</small></div>`;
             }
