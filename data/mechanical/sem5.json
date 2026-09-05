@@ -1,1 +1,27 @@
-[]
+[
+  {
+    "code": "ME3591",
+    "name": "Design of Machine Elements",
+    "updated": "2026-09-05",
+    "popular": true,
+    "units": [
+      {"name": "Fundamental Concepts in Design"},
+      {"name": "Design of Shafts and Keys"},
+      {"name": "Design of Couplings and Power Screws"},
+      {"name": "Design of Springs, Flywheels and Bearings"},
+      {"name": "Design of Joints and Machine Components"}
+    ],
+    "pyqs": [
+      {
+        "year": "2024",
+        "session": "April/May",
+        "link": "data/mechanical/ACADRIX_ME3591_April_May_2024_PYQ.pdf"
+      }
+    ],
+    "videos": [],
+    "questionBank": null,
+    "importantQuestions": null,
+    "formulaSheet": null,
+    "solvedProblems": null
+  }
+]
