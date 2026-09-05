@@ -19,7 +19,8 @@
     "videos": [],
     "questionBank": null,
     "importantQuestions": "data/mechanical/ME3591_Important_Questions.html",
-    "formulaSheet": null,
-    "solvedProblems": null
+    "formulaSheet": "data/mechanical/ME3591_Formula_Sheet.html",
+    "solvedProblems": null,
+    "lastDayRevision": "data/mechanical/ME3591_Last_Day_Revision.html"
   }
 ]
