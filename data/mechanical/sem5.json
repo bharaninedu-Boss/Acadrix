@@ -20,7 +20,7 @@
     "questionBank": null,
     "importantQuestions": "data/mechanical/ME3591_Important_Questions.html",
     "formulaSheet": "data/mechanical/ME3591_Formula_Sheet.html",
-    "solvedProblems": null,
+    "solvedProblems": "data/mechanical/ME3591_Solved_Problems.html",
     "lastDayRevision": "data/mechanical/ME3591_Last_Day_Revision.html"
   }
 ]
