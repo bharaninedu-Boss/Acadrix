@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bharaninedu-boss.github.io/Acadrix/sitemap.xml
