@@ -5,7 +5,7 @@
     "updated": "2026-09-05",
     "popular": true,
     "units": [
-      {"name": "Fundamental Concepts in Design"},
+      {"name": "Fundamental Concepts in Design", "notes": "data/mechanical/ME3591_Unit1_Notes.html"},
       {"name": "Design of Shafts and Keys"},
       {"name": "Design of Couplings and Power Screws"},
       {"name": "Design of Springs, Flywheels and Bearings"},
