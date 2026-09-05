@@ -7,8 +7,8 @@
     "units": [
       {"name": "Fundamental Concepts in Design", "notes": "data/mechanical/ME3591_Unit1_Solved_Examples.html"},
       {"name": "Design of Shafts and Keys", "notes": "data/mechanical/ME3591_Unit2_Notes.html"},
-      {"name": "Design of Temporary and Permanent Joints", "notes": "data/mechanical/ME3591_Unit3_Notes.html", "solvedProblems": "data/mechanical/ME3591_Unit3_Solved_Problems.html"},
-      {"name": "Design of Energy Storing Elements and Engine Components"},
+      {"name": "Design of Temporary and Permanent Joints", "notes": "data/mechanical/ME3591_Unit3_Notes.html"},
+      {"name": "Design of Energy Storing Elements and Engine Components", "notes": "data/mechanical/ME3591_Unit4_Notes.html"},
       {"name": "Design of Bearings and Miscellaneous Elements"}
     ],
     "pyqs": [
