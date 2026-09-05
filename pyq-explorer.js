@@ -1,24 +1,38 @@
 /* ACADRIX PYQ Explorer
-   Builds a searchable/filterable question-paper explorer from subject pyq metadata.
-   Existing PDFs remain unchanged; only structured metadata is displayed here.
+   Search/filter previous-year papers from the subject's semester JSON.
 */
 (function () {
   'use strict';
 
-  function init() {
+  async function init() {
     const details = document.querySelector('.subject-header');
     if (!details) return;
-    const subjectCode = (details.querySelector('p') || {}).textContent || '';
-    const codeMatch = subjectCode.match(/[A-Z]{2}\d{4}/i);
+
+    const headerText = details.textContent || '';
+    const codeMatch = headerText.match(/[A-Z]{2}\d{4}/i);
     if (!codeMatch) return;
+    const code = codeMatch[0].toUpperCase();
 
     const section = document.getElementById('acadrx-pyqs');
     if (!section || section.dataset.explorerReady === '1') return;
-    section.dataset.explorerReady = '1';
 
-    const pyqs = window.currentSubject && Array.isArray(window.currentSubject.pyqs)
-      ? window.currentSubject.pyqs : [];
+    // The current subject renderer does not expose its object globally,
+    // so load the semester data directly. This also works on direct links.
+    let pyqs = [];
+    try {
+      const res = await fetch('data/mechanical/sem5.json');
+      if (res.ok) {
+        const json = await res.json();
+        const subjects = Array.isArray(json) ? json : (json && Array.isArray(json.subjects) ? json.subjects : []);
+        const subject = subjects.find(s => String(s.code || '').toUpperCase() === code);
+        if (subject && Array.isArray(subject.pyqs)) pyqs = subject.pyqs;
+      }
+    } catch (e) {
+      console.warn('ACADRIX PYQ Explorer could not load PYQ data.', e);
+    }
+
     if (!pyqs.length) return;
+    section.dataset.explorerReady = '1';
 
     const wrapper = document.createElement('div');
     wrapper.className = 'pyq-explorer';
@@ -36,7 +50,7 @@
     const year = wrapper.querySelector('#pyqYear');
     const session = wrapper.querySelector('#pyqSession');
     const search = wrapper.querySelector('#pyqSearch');
-    const years = [...new Set(pyqs.map(p => p.year).filter(Boolean))].sort().reverse();
+    const years = [...new Set(pyqs.map(p => p.year).filter(Boolean))].sort((a, b) => String(b).localeCompare(String(a)));
     const sessions = [...new Set(pyqs.map(p => p.session).filter(Boolean))].sort();
     years.forEach(v => year.insertAdjacentHTML('beforeend', `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`));
     sessions.forEach(v => session.insertAdjacentHTML('beforeend', `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`));
@@ -49,19 +63,26 @@
       });
       wrapper.querySelector('#pyqCount').textContent = `${filtered.length} paper${filtered.length === 1 ? '' : 's'} found`;
       const list = wrapper.querySelector('#pyqList');
-      if (!filtered.length) { list.innerHTML = '<div class="pyq-empty">No matching question papers.</div>'; return; }
+      if (!filtered.length) {
+        list.innerHTML = '<div class="pyq-empty">No matching question papers.</div>';
+        return;
+      }
       list.innerHTML = filtered.map(p => `
         <article class="pyq-card">
           <div><strong>${escapeHtml(p.year || 'Year')}</strong><span>${escapeHtml(p.session || '')}</span>${p.topic ? `<small>${escapeHtml(p.topic)}</small>` : ''}</div>
           ${p.link && p.link !== '#' ? `<a class="download-btn" href="${escapeAttr(p.link)}" target="_blank" rel="noopener">Open PDF ↗</a>` : ''}
         </article>`).join('');
     }
-    [search, year, session].forEach(el => el.addEventListener('input', render));
-    [year, session].forEach(el => el.addEventListener('change', render));
+
+    search.addEventListener('input', render);
+    year.addEventListener('change', render);
+    session.addEventListener('change', render);
     render();
   }
 
-  function escapeHtml(v) { return String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function escapeHtml(v) {
+    return String(v).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  }
   function escapeAttr(v) { return escapeHtml(v).replace(/`/g, '&#96;'); }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
