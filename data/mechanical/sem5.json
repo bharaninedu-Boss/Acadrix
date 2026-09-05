@@ -30,7 +30,7 @@
     "popular": true,
     "units": [
       {"name": "Basics of Metrology", "notes": "data/mechanical/ME3592_Unit1_Notes.html"},
-      {"name": "Measurement of Linear, Angular Dimensions, Assembly and Transmission Elements", "notes": null},
+      {"name": "Measurement of Linear, Angular Dimensions, Assembly and Transmission Elements", "notes": "data/mechanical/ME3592_Unit2_Notes.html"},
       {"name": "Tolerance Analysis", "notes": null},
       {"name": "Metrology of Surfaces", "notes": null},
       {"name": "Advances in Metrology", "notes": null}
