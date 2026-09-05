@@ -2,11 +2,11 @@
   {
     "code": "ME3591",
     "name": "Design of Machine Elements",
-    "updated": "2026-09-05",
+    "updated": "2026-09-06",
     "popular": true,
     "units": [
       {"name": "Fundamental Concepts in Design", "notes": "data/mechanical/ME3591_Unit1_Solved_Examples.html"},
-      {"name": "Design of Shafts and Keys"},
+      {"name": "Design of Shafts and Keys", "notes": "data/mechanical/ME3591_Unit2_Notes.html"},
       {"name": "Design of Couplings and Power Screws"},
       {"name": "Design of Springs, Flywheels and Bearings"},
       {"name": "Design of Joints and Machine Components"}
