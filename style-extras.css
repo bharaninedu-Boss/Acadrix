@@ -6,6 +6,46 @@
 /* Consistent section spacing */
 main > section { margin-bottom: 36px; }
 main h2 { margin-top: 28px; }
-
-/* Prevent long subject/resource text from breaking mobile layouts */
 .card h3, .resource-btn, .video-card { overflow-wrap: anywhere; }
+
+/* Navigation polish */
+.nav-item, .theme-btn, .menu-btn { min-height: 40px; }
+.nav-item { border-radius: 8px; transition: background-color .18s ease, color .18s ease; }
+.nav-item:hover, .nav-item:focus-visible { background: var(--bg-color); color: var(--accent-color); }
+.theme-btn, .menu-btn { border: 1px solid transparent; border-radius: 9px; min-width: 40px; }
+.theme-btn:hover, .theme-btn:focus-visible, .menu-btn:hover, .menu-btn:focus-visible { border-color: var(--border-color); background: var(--bg-color); }
+.theme-btn:focus-visible, .menu-btn:focus-visible, .nav-item:focus-visible { outline: 3px solid rgb(37 99 235 / .18); outline-offset: 2px; }
+.logo:focus-visible { outline: 3px solid rgb(37 99 235 / .18); outline-offset: 5px; border-radius: 8px; }
+
+/* Search usability */
+.search-results { z-index: 120; }
+.search-item:last-child { border-bottom: 0; }
+.search-item.active, .search-item:hover { background: var(--bg-color); }
+.search-item:focus-visible { outline: 2px solid var(--accent-color); outline-offset: -2px; }
+
+/* Mobile menu */
+@media (max-width: 768px) {
+  header { padding: .65rem 0; }
+  .nav-bar { gap: 8px; }
+  .logo { font-size: 1.25rem; }
+  .logo-icon { font-size: 1.05rem; }
+  .nav-links.open { animation: menuIn .16s ease-out; }
+  .nav-links.open .theme-btn { align-self: flex-start; }
+  .search-container { order: -1; }
+}
+
+@keyframes menuIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Floating back-to-top control */
+.back-to-top { position: fixed; right: 18px; bottom: 18px; width: 44px; height: 44px; border-radius: 50%; background: var(--accent-color); color: #fff; box-shadow: var(--shadow); opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity .2s ease, transform .2s ease, visibility .2s ease; z-index: 90; font-size: 1.2rem; }
+.back-to-top:hover { background: var(--accent-hover); transform: translateY(0); }
+.back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+.back-to-top:focus-visible { outline: 3px solid rgb(37 99 235 / .25); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-links.open { animation: none; }
+  .back-to-top { transition: none; }
+}
