@@ -2,13 +2,9 @@
 .search-item.active { background: rgba(37,99,235,0.06); }
 .download-btn { display: inline-flex; align-items: center; justify-content: center; padding: 7px 11px; border-radius: 6px; background: var(--accent-color); color: #fff; text-decoration: none; margin-left: 8px; font-size: .85rem; }
 .download-btn:hover { background: var(--accent-hover); }
-
-/* Consistent section spacing */
 main > section { margin-bottom: 36px; }
 main h2 { margin-top: 28px; }
 .card h3, .resource-btn, .video-card { overflow-wrap: anywhere; }
-
-/* Navigation polish */
 .nav-item, .theme-btn, .menu-btn { min-height: 40px; }
 .nav-item { border-radius: 8px; transition: background-color .18s ease, color .18s ease; }
 .nav-item:hover, .nav-item:focus-visible { background: var(--bg-color); color: var(--accent-color); }
@@ -16,14 +12,10 @@ main h2 { margin-top: 28px; }
 .theme-btn:hover, .theme-btn:focus-visible, .menu-btn:hover, .menu-btn:focus-visible { border-color: var(--border-color); background: var(--bg-color); }
 .theme-btn:focus-visible, .menu-btn:focus-visible, .nav-item:focus-visible { outline: 3px solid rgb(37 99 235 / .18); outline-offset: 2px; }
 .logo:focus-visible { outline: 3px solid rgb(37 99 235 / .18); outline-offset: 5px; border-radius: 8px; }
-
-/* Search usability */
 .search-results { z-index: 120; }
 .search-item:last-child { border-bottom: 0; }
 .search-item.active, .search-item:hover { background: var(--bg-color); }
 .search-item:focus-visible { outline: 2px solid var(--accent-color); outline-offset: -2px; }
-
-/* Mobile menu */
 @media (max-width: 768px) {
   header { padding: .65rem 0; }
   .nav-bar { gap: 8px; }
@@ -33,19 +25,27 @@ main h2 { margin-top: 28px; }
   .nav-links.open .theme-btn { align-self: flex-start; }
   .search-container { order: -1; }
 }
-
-@keyframes menuIn {
-  from { opacity: 0; transform: translateY(-5px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Floating back-to-top control */
+@keyframes menuIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 .back-to-top { position: fixed; right: 18px; bottom: 18px; width: 44px; height: 44px; border-radius: 50%; background: var(--accent-color); color: #fff; box-shadow: var(--shadow); opacity: 0; visibility: hidden; transform: translateY(10px); transition: opacity .2s ease, transform .2s ease, visibility .2s ease; z-index: 90; font-size: 1.2rem; }
 .back-to-top:hover { background: var(--accent-hover); transform: translateY(0); }
 .back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
 .back-to-top:focus-visible { outline: 3px solid rgb(37 99 235 / .25); outline-offset: 3px; }
 
+/* Subject-page study navigation */
+.subject-tabs { position: sticky; top: 70px; z-index: 80; display: flex; gap: 6px; overflow-x: auto; padding: 8px; margin: -10px 0 12px; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: var(--shadow); scrollbar-width: none; }
+.subject-tabs::-webkit-scrollbar { display: none; }
+.subject-tab { flex: 0 0 auto; padding: 10px 14px; border: 1px solid transparent; border-radius: 9px; color: var(--text-secondary); background: transparent; white-space: nowrap; font-weight: 600; }
+.subject-tab:hover, .subject-tab:focus-visible { color: var(--accent-color); background: var(--bg-color); }
+.subject-tab.active { color: var(--accent-color); background: var(--bg-color); border-color: var(--border-color); }
+.study-path { display: flex; justify-content: center; align-items: center; gap: 9px; flex-wrap: wrap; margin: 0 0 24px; padding: 11px 14px; border-radius: 10px; background: var(--bg-color); color: var(--text-secondary); font-size: .85rem; }
+.study-path span { font-weight: 600; }
+.study-path b { color: var(--accent-color); }
+#acadrx-units, #acadrx-pyqs, #acadrx-exam, #acadrx-videos { scroll-margin-top: 145px; }
+@media (max-width: 768px) {
+  .subject-tabs { top: 58px; margin-left: -2px; margin-right: -2px; }
+  .subject-tab { padding: 9px 11px; font-size: .82rem; }
+  .study-path { font-size: .78rem; gap: 6px; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .nav-links.open { animation: none; }
-  .back-to-top { transition: none; }
+  .nav-links.open, .back-to-top { animation: none; transition: none; }
 }
