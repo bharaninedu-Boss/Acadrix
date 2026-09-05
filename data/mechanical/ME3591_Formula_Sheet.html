@@ -1,1 +1,88 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ME3591 Formula Sheet | ACADRIX</title><style>body{font-family:Arial,sans-serif;max-width:900px;margin:auto;padding:24px;line-height:1.55;background:#f8fafc;color:#111827}h1,h2{color:#1d4ed8}.box{background:white;border:1px solid #dbeafe;border-radius:10px;padding:14px;margin:12px 0}code{font-size:1rem}small{color:#64748b}</style></head><body><h1>ME3591 – Design of Machine Elements</h1><p><strong>ACADRIX Formula Sheet • R-2021</strong></p><small>Quick revision reference. Check the applicable design theory, assumptions, standards and PSG Design Data Book before using any formula.</small><h2>1. Fundamental Design</h2><div class="box">Factor of safety: FOS = Failure stress / Allowable stress</div><div class="box">Normal stress: σ = P/A<br>Direct shear: τ = P/A<br>Bending stress: σ = M/Z<br>Torsional shear: τ = T/Zp</div><div class="box">Principal stresses: σ1, σ2 = (σx + σy)/2 ± √[((σx − σy)/2)² + τxy²]</div><div class="box">Maximum shear stress: τmax = (σ1 − σ2)/2</div><h2>2. Shafts and Keys</h2><div class="box">Power–torque: T = 60P/(2πN) when P is in watts and T in N·m.</div><div class="box">Solid shaft torsion: T = (π/16) τ d³</div><div class="box">Bending of circular shaft: σb = 32M/(πd³)</div><div class="box">Combined bending and torsion: use the specified failure theory and design-code relation.</div><div class="box">Key shear: τ = 2T/(d b l)<br>Key crushing: σc = 4T/(d t l)</div><h2>3. Couplings and Power Screws</h2><div class="box">Power screw mean diameter: d2 = (d + dcore)/2</div><div class="box">Helix angle: tan α = lead/(πd2)</div><div class="box">For trapezoidal threads: μ' = μ sec β, where β is the thread half-angle.</div><div class="box">Raising torque: T = Wd2/2 × tan(φ + α)</div><div class="box">Lowering torque: T = Wd2/2 × tan(φ − α)</div><h2>4. Springs, Flywheels and Bearings</h2><div class="box">Spring stiffness: k = W/δ</div><div class="box">Torque from belt: T = (T1 − T2)D/2</div><div class="box">Bearing pressure: p = W/(Ld)</div><div class="box">Surface speed: v = πdN/60</div><div class="box">Bearing friction power: P = fWv</div><h2>5. Joints and Welds</h2><div class="box">Fillet-weld throat = 0.707s</div><div class="box">Direct weld shear: τ = P/(0.707sL)</div><div class="box">Eccentric weld loading: combine direct shear and moment-induced stress using the weld-group properties.</div><h2>Last-minute checklist</h2><div class="box">✓ Write Given → Find → Formula → Substitution → Check → Final Answer.<br>✓ Keep units consistent.<br>✓ State FOS and failure theory.<br>✓ Use PSG standard sizes where applicable.<br>✓ Round only after the calculated value is obtained.</div></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ME3591 Formula Sheet | ACADRIX</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:950px;margin:auto;padding:24px;line-height:1.6;background:#f8fafc;color:#111827}
+h1,h2{color:#1d4ed8}h1{margin-bottom:6px}.sub{color:#475569}
+.box{background:white;border:1px solid #dbeafe;border-radius:10px;padding:15px;margin:12px 0}
+.formula{font-size:1.12rem;font-weight:700;padding:12px;background:#eff6ff;border-left:4px solid #2563eb;border-radius:6px;margin:8px 0}
+table{width:100%;border-collapse:collapse;background:white;margin:12px 0}th,td{border:1px solid #dbeafe;padding:9px;text-align:left}th{background:#eff6ff}
+.warn{background:#fff7ed;border-color:#fed7aa}.good{background:#f0fdf4;border-color:#bbf7d0}
+</style>
+</head>
+<body>
+<h1>ME3591 – Design of Machine Elements</h1>
+<p class="sub"><strong>ACADRIX Formula Sheet • Anna University R-2021 • Semester 5</strong></p>
+<div class="box warn"><strong>Notation rule:</strong> Use proper engineering symbols in the exam: σ, τ, σ₁, σ₂, σₓ, σᵧ, τₓᵧ, Sᵧₜ, Sᵤₜ, Sₑ, S′ₑ, M, T, d, b, t, l, W, N, etc. Do not write unclear forms such as “si” or “se” when a subscripted symbol is intended.</div>
+
+<h2>1. Fundamental Design</h2>
+<div class="formula">FOS = Failure stress / Allowable stress</div>
+<div class="formula">σ = P/A</div>
+<div class="formula">τ = P/Aₛ</div>
+<div class="formula">σᵦ = M/Z</div>
+<div class="formula">τ = T/Zₚ</div>
+<div class="formula">σ₁, σ₂ = (σₓ + σᵧ)/2 ± √[((σₓ − σᵧ)/2)² + τₓᵧ²]</div>
+<div class="formula">τₘₐₓ = (σ₁ − σ₂)/2</div>
+<div class="box"><strong>Symbols:</strong> P = load; A = cross-sectional area; Aₛ = shear area; M = bending moment; T = torque; Z = section modulus; Zₚ = polar section modulus; σ = normal stress; τ = shear stress.</div>
+
+<h2>2. Shafts and Keys</h2>
+<div class="formula">T = 60P/(2πN) &nbsp; [P in W, T in N·m]</div>
+<div class="formula">T = (π/16)τd³ &nbsp; (solid circular shaft)</div>
+<div class="formula">σᵦ = 32M/(πd³) &nbsp; (solid circular shaft)</div>
+<div class="box"><strong>Combined loading:</strong> Apply the failure theory specified in the question (for example, maximum shear stress theory or distortion-energy theory). Do not mix the equivalent-stress relations between theories.</div>
+<div class="formula">τₖ = 2T/(dbl)</div>
+<div class="formula">σ꜀ = 4T/(dtl)</div>
+<div class="box"><strong>Key symbols:</strong> d = shaft diameter; b = key width; t = key thickness; l = key length; τₖ = key shear stress; σ꜀ = key crushing stress.</div>
+
+<h2>3. Couplings and Power Screws</h2>
+<div class="formula">d₂ = (d + d꜀)/2</div>
+<div class="formula">tan α = Lead/(πd₂)</div>
+<div class="formula">μ′ = μ sec β</div>
+<div class="formula">φ = tan⁻¹(μ′)</div>
+<div class="formula">Tᵣ = (Wd₂/2) tan(φ + α)</div>
+<div class="formula">Tₗ = (Wd₂/2) tan(φ − α)</div>
+<div class="formula">η = tan α / tan(φ + α)</div>
+<div class="box"><strong>Power-screw symbols:</strong> d = nominal/major diameter; d꜀ = core diameter; d₂ = mean diameter; α = helix angle; μ = coefficient of friction; β = thread half-angle; μ′ = equivalent friction coefficient for trapezoidal thread; φ = friction angle; W = axial load; Tᵣ = torque to raise; Tₗ = torque to lower; η = efficiency.</div>
+
+<h2>4. Springs, Flywheels and Bearings</h2>
+<div class="formula">k = W/δ</div>
+<div class="formula">T = (T₁ − T₂)D/2</div>
+<div class="formula">p = W/(Ld)</div>
+<div class="formula">v = πdN/60</div>
+<div class="formula">Pₗ = fWv</div>
+<div class="box"><strong>Symbols:</strong> k = spring stiffness; δ = deflection; T₁, T₂ = belt tensions; D = pulley diameter; p = bearing pressure; L = bearing length; d = journal diameter; v = journal surface speed; f = coefficient of friction; Pₗ = friction power loss.</div>
+
+<h2>5. Fatigue and Fluctuating Stress</h2>
+<div class="formula">S′ₑ = 0.5Sᵤₜ</div>
+<div class="formula">Sₑ = KₐKᵦK꜀KᵈS′ₑ</div>
+<div class="formula">Kf = 1 + q(Kt − 1)</div>
+<div class="formula">σₐ = (σₘₐₓ − σₘᵢₙ)/2</div>
+<div class="formula">σₘ = (σₘₐₓ + σₘᵢₙ)/2</div>
+<div class="box"><strong>Fatigue symbols:</strong> Sᵤₜ = ultimate tensile strength; Sᵧₜ = tensile yield strength; S′ₑ = unmodified endurance limit; Sₑ = corrected endurance limit; Kₐ = surface factor; Kᵦ = size factor; K꜀ = reliability factor; Kᵈ = miscellaneous/modifying factor; Kt = theoretical stress-concentration factor; q = notch sensitivity; Kf = fatigue stress-concentration factor; σₐ = alternating stress; σₘ = mean stress.</div>
+
+<h2>6. Welded Joints</h2>
+<div class="formula">Fillet-weld throat = 0.707s</div>
+<div class="formula">τ = P/(0.707sL)</div>
+<div class="box"><strong>Symbols:</strong> s = fillet weld size; L = total effective weld length; P = applied load. For eccentric loading, calculate direct shear and moment-induced stress from the weld-group geometry, then combine them as required.</div>
+
+<h2>7. Exam Notation Checklist</h2>
+<table>
+<tr><th>Meaning</th><th>Write this symbol</th></tr>
+<tr><td>Normal stress</td><td>σ</td></tr>
+<tr><td>Shear stress</td><td>τ</td></tr>
+<tr><td>Principal stresses</td><td>σ₁, σ₂</td></tr>
+<tr><td>Mean stress</td><td>σₘ</td></tr>
+<tr><td>Alternating stress</td><td>σₐ</td></tr>
+<tr><td>Ultimate tensile strength</td><td>Sᵤₜ</td></tr>
+<tr><td>Tensile yield strength</td><td>Sᵧₜ</td></tr>
+<tr><td>Endurance limit</td><td>Sₑ</td></tr>
+<tr><td>Unmodified endurance limit</td><td>S′ₑ</td></tr>
+<tr><td>Fatigue stress-concentration factor</td><td>Kf</td></tr>
+<tr><td>Theoretical stress-concentration factor</td><td>Kt</td></tr>
+</table>
+<div class="box good"><strong>Exam method:</strong> Write the symbol first, define it if necessary, substitute values with units, retain intermediate units, and round only the final answer. Use PSG Design Data Book/approved standards whenever a standard dimension or chart value is required.</div>
+</body>
+</html>
