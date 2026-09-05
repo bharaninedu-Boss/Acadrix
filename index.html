@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f172a">
+    <meta name="color-scheme" content="light dark">
     <title>ACADRIX | Anna University Engineering Resources</title>
     <meta name="description" content="ACADRIX — free Anna University engineering notes, previous year question papers, question banks, important questions and study resources for R2021 and R2025 students.">
     <meta name="robots" content="index,follow">
     <link rel="canonical" href="https://bharaninedu-boss.github.io/Acadrix/">
-
     <meta property="og:title" content="ACADRIX | Anna University Engineering Resources">
     <meta property="og:description" content="Notes, PYQs, question banks and study resources for Anna University engineering students.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bharaninedu-boss.github.io/Acadrix/">
-
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="style-extras.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,26 +28,23 @@
                     <span class="logo-text">ACA<span class="highlight">DRIX</span></span>
                 </div>
             </div>
-
             <div class="right">
-                <button id="menuToggle" class="menu-btn" aria-label="Open menu" aria-controls="navLinks" aria-expanded="false">☰</button>
+                <button id="menuToggle" class="menu-btn" type="button" aria-label="Open menu" aria-controls="navLinks" aria-expanded="false">☰</button>
                 <div class="nav-links" id="navLinks" role="menubar">
-                    <button class="nav-item" onclick="navigateTo('home')" role="menuitem">Home</button>
-                    <button class="nav-item" onclick="navigateTo('browse')" role="menuitem">Departments</button>
+                    <button class="nav-item" type="button" onclick="navigateTo('home')" role="menuitem">Home</button>
+                    <button class="nav-item" type="button" onclick="navigateTo('browse')" role="menuitem">Departments</button>
                     <div class="search-container" role="search">
-                        <input type="text" id="searchInput" placeholder="Search code, subject or topic..." oninput="handleSearch()" aria-label="Search ACADRIX">
+                        <input type="search" id="searchInput" placeholder="Search code, subject or topic..." autocomplete="off" spellcheck="false" oninput="handleSearch()" aria-label="Search ACADRIX" aria-controls="searchResults">
                         <div id="searchResults" class="search-results" role="listbox" aria-label="Search results"></div>
                     </div>
-                    <button id="themeToggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
+                    <button id="themeToggle" class="theme-btn" type="button" aria-label="Switch to dark mode" aria-pressed="false">🌙</button>
                 </div>
             </div>
         </nav>
     </header>
-
     <main id="app" class="container">
         <!-- Content injected by script.js -->
     </main>
-
     <footer class="container">
         <div class="footer-content">
             <p><strong>ACADRIX</strong> — Engineering Study Hub</p>
@@ -59,7 +55,7 @@
             </div>
         </div>
     </footer>
-
     <script src="script.js"></script>
+    <script src="enhancements.js"></script>
 </body>
 </html>
