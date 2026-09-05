@@ -9,7 +9,7 @@
       {"name": "Design of Shafts and Keys", "notes": "data/mechanical/ME3591_Unit2_Notes.html"},
       {"name": "Design of Temporary and Permanent Joints", "notes": "data/mechanical/ME3591_Unit3_Notes.html"},
       {"name": "Design of Energy Storing Elements and Engine Components", "notes": "data/mechanical/ME3591_Unit4_Notes.html"},
-      {"name": "Design of Bearings and Miscellaneous Elements"}
+      {"name": "Design of Bearings and Miscellaneous Elements", "notes": "data/mechanical/ME3591_Unit5_Notes.html"}
     ],
     "pyqs": [
       {"year":"2024","session":"November/December","link":"data/mechanical/ACADRIX_ME3591_NovDec_2024.pdf"},
