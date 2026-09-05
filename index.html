@@ -3,36 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AU Notes | Anna University Engineering Resources</title>
-    <meta name="description" content="Free Anna University engineering notes, previous year question papers, important questions, and video resources for R2021 and R2025.">
-    <link rel="canonical" href="https://bharaninedu-Boss.github.io/MECH-KUTTY/">
+    <meta name="theme-color" content="#0f172a">
+    <title>ACADRIX | Anna University Engineering Resources</title>
+    <meta name="description" content="ACADRIX — free Anna University engineering notes, previous year question papers, question banks, important questions and study resources for R2021 and R2025 students.">
+    <meta name="robots" content="index,follow">
+    <link rel="canonical" href="https://bharaninedu-boss.github.io/Acadrix/">
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="AU Notes | Anna University Engineering Notes">
-    <meta property="og:description" content="Notes, previous year question papers, question banks and video resources for Anna University engineering students.">
+    <meta property="og:title" content="ACADRIX | Anna University Engineering Resources">
+    <meta property="og:description" content="Notes, PYQs, question banks and study resources for Anna University engineering students.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bharaninedu-boss.github.io/Acadrix/">
 
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style-extras.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body class="light-theme">
     <header>
         <nav class="container nav-bar" role="navigation" aria-label="Main navigation">
             <div class="left">
-                <div class="logo" role="button" tabindex="0" aria-label="Go to home" onclick="navigateTo('home')">
-                    <span class="logo-icon">⚙️</span>
-                    <span class="logo-text">AU <span class="highlight">Notes</span></span>
+                <div class="logo" role="button" tabindex="0" aria-label="Go to ACADRIX home" onclick="navigateTo('home')">
+                    <span class="logo-icon" aria-hidden="true">⚙️</span>
+                    <span class="logo-text">ACA<span class="highlight">DRIX</span></span>
                 </div>
             </div>
 
             <div class="right">
-                <button id="menuToggle" class="menu-btn" aria-label="Open menu" onclick="toggleMenu()">☰</button>
+                <button id="menuToggle" class="menu-btn" aria-label="Open menu" aria-controls="navLinks" aria-expanded="false">☰</button>
                 <div class="nav-links" id="navLinks" role="menubar">
                     <button class="nav-item" onclick="navigateTo('home')" role="menuitem">Home</button>
                     <button class="nav-item" onclick="navigateTo('browse')" role="menuitem">Departments</button>
                     <div class="search-container" role="search">
-                        <input type="text" id="searchInput" placeholder="Search code, subject or topic..." oninput="handleSearch()" aria-label="Search">
+                        <input type="text" id="searchInput" placeholder="Search code, subject or topic..." oninput="handleSearch()" aria-label="Search ACADRIX">
                         <div id="searchResults" class="search-results" role="listbox" aria-label="Search results"></div>
                     </div>
                     <button id="themeToggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
@@ -42,13 +46,13 @@
     </header>
 
     <main id="app" class="container">
-        <!-- Content will be injected here by script.js -->
+        <!-- Content injected by script.js -->
     </main>
 
     <footer class="container">
         <div class="footer-content">
-            <p><strong>AU Notes</strong> - Engineering Resource Portal</p>
-            <p class="disclaimer">AU Notes is an independent student resource and is NOT officially affiliated with Anna University. Third-party resources are linked to their original sources; we host or link only publicly available documents for educational use.</p>
+            <p><strong>ACADRIX</strong> — Engineering Study Hub</p>
+            <p class="disclaimer">ACADRIX is an independent student resource and is NOT officially affiliated with Anna University. Third-party resources are linked to their original sources and are provided for educational use.</p>
             <div class="footer-links">
                 <span>Regulation 2021</span>
                 <span>Regulation 2025</span>
