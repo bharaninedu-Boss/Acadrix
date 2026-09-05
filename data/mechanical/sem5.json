@@ -22,5 +22,25 @@
     "formulaSheet": "data/mechanical/ME3591_Formula_Sheet.html",
     "solvedProblems": "data/mechanical/ME3591_Solved_Problems.html",
     "lastDayRevision": "data/mechanical/ME3591_Last_Day_Revision.html"
+  },
+  {
+    "code": "ME3592",
+    "name": "Metrology and Measurements",
+    "updated": "2026-09-06",
+    "popular": true,
+    "units": [
+      {"name": "Basics of Metrology", "notes": "data/mechanical/ME3592_Unit1_Notes.html"},
+      {"name": "Measurement of Linear, Angular Dimensions, Assembly and Transmission Elements", "notes": null},
+      {"name": "Tolerance Analysis", "notes": null},
+      {"name": "Metrology of Surfaces", "notes": null},
+      {"name": "Advances in Metrology", "notes": null}
+    ],
+    "pyqs": [],
+    "videos": [],
+    "questionBank": null,
+    "importantQuestions": null,
+    "formulaSheet": null,
+    "solvedProblems": "data/mechanical/ME3592_Unit1_Solved_Problems.html",
+    "lastDayRevision": null
   }
 ]
