@@ -1,6 +1,11 @@
-
-/* Extra styles for search keyboard navigation (active), and download button */
+/* ACADRIX supplementary styles */
 .search-item.active { background: rgba(37,99,235,0.06); }
-
-.download-btn { padding: 6px 10px; border-radius: 6px; background: var(--accent-color); color: white; text-decoration: none; margin-left:8px; font-size:0.85rem; }
+.download-btn { display: inline-flex; align-items: center; justify-content: center; padding: 7px 11px; border-radius: 6px; background: var(--accent-color); color: #fff; text-decoration: none; margin-left: 8px; font-size: .85rem; }
 .download-btn:hover { background: var(--accent-hover); }
+
+/* Consistent section spacing */
+main > section { margin-bottom: 36px; }
+main h2 { margin-top: 28px; }
+
+/* Prevent long subject/resource text from breaking mobile layouts */
+.card h3, .resource-btn, .video-card { overflow-wrap: anywhere; }
