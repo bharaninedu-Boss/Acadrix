@@ -20,8 +20,6 @@ function navigateRegulation(regulation) {
     location.hash = `#/dept/mech/${regulation}`;
 }
 
-// Route parser: keep all existing R-2021 URLs working, while adding
-// regulation-aware Mechanical Engineering URLs.
 handleHashRoute = function () {
     const hash = (location.hash || '').replace(/^#/, '');
     if (!hash || hash === '/') {
@@ -41,13 +39,11 @@ handleHashRoute = function () {
         return;
     }
 
-    // Mechanical regulation selector: #/dept/mech
     if (!parts[2]) {
         navigateTo('semesters', { dept: deptId, regulation: isMechanical(deptId) ? null : 'r2021' }, true);
         return;
     }
 
-    // New regulation-aware routes: #/dept/mech/r2021/sem5/CODE
     if (isMechanical(deptId) && /^r202[15]$/i.test(parts[2])) {
         const regulation = parts[2].toLowerCase();
         if (!parts[3]) {
@@ -67,7 +63,8 @@ handleHashRoute = function () {
             return;
         }
 
-        navigateTo('details', {
+        navigateTo({
+            view: 'details',
             dept: deptId,
             sem,
             regulation,
@@ -76,7 +73,7 @@ handleHashRoute = function () {
         return;
     }
 
-    // Legacy route format is treated as R-2021 so existing shared links do not break.
+    // Existing links remain R-2021.
     const semMatch = parts[2].match(/^sem(\d+)$/i);
     if (semMatch) {
         const sem = parseInt(semMatch[1], 10);
@@ -97,6 +94,11 @@ handleHashRoute = function () {
 };
 
 navigateTo = function (view, params = {}, fromHash = false) {
+    // Accept both navigateTo('details', {...}) and an object defensively.
+    if (typeof view === 'object') {
+        params = view;
+        view = params.view;
+    }
     currentState = { view, ...params };
     closeMenu();
 
@@ -104,30 +106,23 @@ navigateTo = function (view, params = {}, fromHash = false) {
         if (view === 'home') {
             location.hash = '';
         } else if (view === 'semesters' && params.dept) {
-            if (isMechanical(params.dept) && params.regulation) {
-                location.hash = `#/dept/${params.dept}/${params.regulation}`;
-            } else {
-                location.hash = `#/dept/${params.dept}`;
-            }
+            location.hash = isMechanical(params.dept) && params.regulation
+                ? `#/dept/${params.dept}/${params.regulation}`
+                : `#/dept/${params.dept}`;
         } else if (view === 'subjects' && params.dept && params.sem) {
-            if (isMechanical(params.dept) && params.regulation) {
-                location.hash = `#/dept/${params.dept}/${params.regulation}/sem${params.sem}`;
-            } else {
-                location.hash = `#/dept/${params.dept}/sem${params.sem}`;
-            }
+            location.hash = isMechanical(params.dept) && params.regulation
+                ? `#/dept/${params.dept}/${params.regulation}/sem${params.sem}`
+                : `#/dept/${params.dept}/sem${params.sem}`;
         } else if (view === 'details' && params.dept && params.sem && params.subjectCode) {
-            if (isMechanical(params.dept) && params.regulation) {
-                location.hash = `#/dept/${params.dept}/${params.regulation}/sem${params.sem}/${params.subjectCode}`;
-            } else {
-                location.hash = `#/dept/${params.dept}/sem${params.sem}/${params.subjectCode}`;
-            }
+            location.hash = isMechanical(params.dept) && params.regulation
+                ? `#/dept/${params.dept}/${params.regulation}/sem${params.sem}/${params.subjectCode}`
+                : `#/dept/${params.dept}/sem${params.sem}/${params.subjectCode}`;
         }
     }
 
     render();
 };
 
-// Mechanical Engineering entry page now presents the two regulations separately.
 renderSemesters = function (container, deptId, regulation = null) {
     if (!isMechanical(deptId)) {
         return originalRenderSemesters(container, deptId);
@@ -195,7 +190,6 @@ renderSemesters = function (container, deptId, regulation = null) {
     `;
 };
 
-// Keep R-2021 loading exactly as before. R-2025 uses a separate path.
 loadSemesterData = async function (deptId, sem, regulation = null) {
     if (!isMechanical(deptId) || regulation !== 'r2025') {
         return originalLoadSemesterData(deptId, sem);
@@ -212,9 +206,10 @@ loadSemesterData = async function (deptId, sem, regulation = null) {
             return loadedData[key];
         }
         const json = await res.json();
-        let subjects = Array.isArray(json) ? json : (json && Array.isArray(json.subjects) ? json.subjects : []);
-        subjects = subjects.map(s => ({ ...s, dept: deptId, sem, regulation: 'r2025' }));
-        loadedData[key] = subjects;
+        const subjects = Array.isArray(json)
+            ? json
+            : (json && Array.isArray(json.subjects) ? json.subjects : []);
+        loadedData[key] = subjects.map(s => ({ ...s, dept: deptId, sem, regulation: 'r2025' }));
         return loadedData[key];
     } catch (e) {
         console.error('Failed to load R-2025 data', path, e);
@@ -224,7 +219,8 @@ loadSemesterData = async function (deptId, sem, regulation = null) {
 };
 
 renderSubjects = async function (container, deptId, sem, regulation = null) {
-    if (!isMechanical(deptId) || regulation !== 'r2025') {
+    const chosen = regulation || currentState.regulation || null;
+    if (!isMechanical(deptId) || chosen !== 'r2025') {
         return originalRenderSubjects(container, deptId, sem);
     }
 
@@ -264,7 +260,5 @@ renderSubjects = async function (container, deptId, sem, regulation = null) {
     `).join('');
 };
 
-// Ensure the initial render uses the regulation-aware route parser.
-if (location.hash) {
-    handleHashRoute();
-}
+// No new route is rendered here; the existing DOMContentLoaded handler in script.js
+// will use the overridden handleHashRoute after all scripts have loaded.
