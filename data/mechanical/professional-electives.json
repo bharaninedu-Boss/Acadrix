@@ -1,0 +1,36 @@
+{
+  "program": "B.E. Mechanical Engineering",
+  "regulation": "R-2021",
+  "title": "Professional Electives",
+  "officialSyllabus": "https://cac.annauniv.edu/aidetails/ai_ug_cands_2021ft.html",
+  "semesters": {
+    "5": {
+      "label": "Semester 5",
+      "slots": ["Professional Elective I", "Professional Elective II", "Professional Elective III"],
+      "description": "Three Professional Elective slots are listed in Semester V. Courses are selected from the official professional-elective verticals.",
+      "catalog": [
+        {"code":"CME341","name":"Design For X","vertical":"Product and Process Development","page":"professional-electives/CME341.html"},
+        {"code":"CME362","name":"Energy Conservation in Industries","vertical":"Clean and Green Energy Technologies","page":"professional-electives/CME362.html"},
+        {"code":"CME380","name":"Automobile Engineering","vertical":"Diversified Courses Group 1","page":"professional-electives/CME380.html"},
+        {"code":"CME387","name":"Non-traditional Machining Processes","vertical":"Diversified Courses Group 1","page":"professional-electives/CME387.html"}
+      ]
+    },
+    "6": {
+      "label": "Semester 6",
+      "slots": ["Professional Elective IV", "Professional Elective V", "Professional Elective VI", "Professional Elective VII"],
+      "description": "Professional Elective slots continue in Semester VI. The same official vertical catalogue is used for registration, subject to the University's vertical/row-wise selection rules.",
+      "catalog": [
+        {"code":"CME341","name":"Design For X","vertical":"Product and Process Development","page":"professional-electives/CME341.html"},
+        {"code":"CME362","name":"Energy Conservation in Industries","vertical":"Clean and Green Energy Technologies","page":"professional-electives/CME362.html"},
+        {"code":"CME380","name":"Automobile Engineering","vertical":"Diversified Courses Group 1","page":"professional-electives/CME380.html"},
+        {"code":"CME387","name":"Non-traditional Machining Processes","vertical":"Diversified Courses Group 1","page":"professional-electives/CME387.html"}
+      ]
+    },
+    "7": {
+      "label": "Semester 7",
+      "slots": [],
+      "description": "The standard R-2021 B.E. Mechanical Engineering curriculum lists Professional Electives in Semesters V and VI. Semester VII is retained here for the navigation structure and for future Honours/Minor or curriculum-specific additions; no standard Semester VII Professional Elective list is being invented.",
+      "catalog": []
+    }
+  }
+}
