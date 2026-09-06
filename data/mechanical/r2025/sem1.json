@@ -3,6 +3,19 @@
   "program": "B.E. Mechanical Engineering",
   "semester": 1,
   "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu/Mech/B.E.%20Mechanical%20Engineering.pdf",
-  "status": "structure-ready",
-  "subjects": []
+  "status": "curriculum-verified",
+  "subjects": [
+    {"code":"MA25C01","name":"Applied Calculus","type":"Theory","category":"BS","credits":4},
+    {"code":"ME25C03","name":"Introduction to Mechanical Engineering","type":"Theory","category":"ES (PC) – DIC","credits":3},
+    {"code":"ME25C01","name":"Engineering Drawing","type":"Laboratory Integrated Theory","category":"ES (G)","credits":4},
+    {"code":"PH25C01","name":"Applied Physics – I","type":"Laboratory Integrated Theory","category":"BS","credits":3},
+    {"code":"CY25C01","name":"Applied Chemistry – I","type":"Laboratory Integrated Theory","category":"BS","credits":3},
+    {"code":"UC25H01","name":"தமிழர் மரபு / Heritage of Tamils","type":"Theory","category":"HUM","credits":1},
+    {"code":"EN25C01","name":"English Essentials – I","type":"Laboratory","category":"HUM","credits":2},
+    {"code":"CS25C02","name":"Computer Programming: Python","type":"Laboratory Integrated Theory","category":"ES (PC)","credits":3},
+    {"code":"ME25C04","name":"Makerspace","type":"Laboratory","category":"SD","credits":2},
+    {"code":"UC25A01","name":"Life Skills for Engineers – I","type":"Audit Course","category":"HUM","credits":0},
+    {"code":"UC25A02","name":"Physical Education – I","type":"Audit/Activity Course","category":"HUM","credits":1},
+    {"code":"NCC/NSS/NSO","name":"NCC / NSS / NSO","type":"Activity","category":"—","credits":0}
+  ]
 }
