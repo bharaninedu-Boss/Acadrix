@@ -5,7 +5,7 @@
   "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu/Mech/B.E.%20Mechanical%20Engineering.pdf",
   "status": "curriculum-verified",
   "subjects": [
-    {"code":"MA25C01","name":"Applied Calculus","type":"Theory","category":"BS","credits":4,"resource":"MA25C01.html","units":[{"unit":1,"title":"Differential Calculus","notes":"MA25C01_Unit1_Notes.html"},{"unit":2,"title":"Functions of Several Variables","notes":"MA25C01_Unit2_Notes.html"},{"unit":3,"title":"Integral Calculus"},{"unit":4,"title":"Multiple Integrals"}]},
+    {"code":"MA25C01","name":"Applied Calculus","type":"Theory","category":"BS","credits":4,"resource":"MA25C01.html","units":[{"unit":1,"title":"Differential Calculus","notes":"MA25C01_Unit1_Notes.html"},{"unit":2,"title":"Functions of Several Variables","notes":"MA25C01_Unit2_Notes.html"},{"unit":3,"title":"Integral Calculus","notes":"MA25C01_Unit3_Notes.html"},{"unit":4,"title":"Multiple Integrals"}]},
     {"code":"ME25C03","name":"Introduction to Mechanical Engineering","type":"Theory","category":"ES (PC) – DIC","credits":3},
     {"code":"ME25C01","name":"Engineering Drawing","type":"Laboratory Integrated Theory","category":"ES (G)","credits":4},
     {"code":"PH25C01","name":"Applied Physics – I","type":"Laboratory Integrated Theory","category":"BS","credits":3},
