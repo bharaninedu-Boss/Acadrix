@@ -1,0 +1,43 @@
+.pe-entry-card {
+    text-decoration: none;
+    color: var(--text-primary);
+    border-color: color-mix(in srgb, var(--accent-color) 45%, var(--border-color));
+    background: linear-gradient(135deg, var(--card-bg), color-mix(in srgb, var(--accent-color) 6%, var(--card-bg)));
+}
+
+.pe-entry-label {
+    color: var(--accent-color) !important;
+    font-size: .75rem !important;
+    font-weight: 800;
+    letter-spacing: .08em;
+    margin-bottom: 6px !important;
+}
+
+.pe-entry-card h3 { margin-bottom: 8px; }
+
+.pe-entry-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-top: 14px;
+}
+
+.pe-entry-tags span {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    color: var(--text-secondary);
+    border-radius: 999px;
+    padding: 4px 9px;
+    font-size: .78rem;
+    font-weight: 600;
+}
+
+.pe-entry-card:hover {
+    text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pe-entry-card:hover { transform: none; }
+}
