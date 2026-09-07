@@ -1,10 +1,15 @@
 const CATALOGUE_URL = '../professional-electives.json';
 
 // Only link courses that have a verified ACADRIX page.
-// All other official catalogue entries remain visible without a fake/broken URL.
 const AVAILABLE_RESOURCES = {
+    CME338: 'CME338.html',
     CME341: 'CME341.html',
+    CME344: 'CME344.html',
+    CME356: 'CME356.html',
+    CME358: 'CME358.html',
     CME362: 'CME362.html',
+    CME365: 'CME365.html',
+    CME372: 'CME372.html',
     CME380: 'CME380.html',
     CME387: 'CME387.html'
 };
