@@ -3,18 +3,9 @@
   "regulation": "R-2021",
   "title": "Professional Electives",
   "officialSyllabus": "https://cac.annauniv.edu/aidetails/ai_ug_cands_2021ft.html",
-  "registration": {
-    "standardSemesters": [5, 6],
-    "slots": {"5": ["Professional Elective I", "Professional Elective II", "Professional Elective III"], "6": ["Professional Elective IV", "Professional Elective V", "Professional Elective VI", "Professional Elective VII"]},
-    "rule": "Professional Electives are registered in Semesters V and VI. Courses are arranged in verticals. Students may choose from one or different verticals, but only one course is selected from a row in a semester; two courses from the same row are permitted when one is taken in Semester V and the other in Semester VI.",
-    "honoursMinor": "Professional Elective registration for Honours/Minor follows the applicable R-2021 procedure from Semesters V to VIII."
-  },
-  "semesters": {
-    "5": {"label":"Semester 5", "slots":["Professional Elective I","Professional Elective II","Professional Elective III"]},
-    "6": {"label":"Semester 6", "slots":["Professional Elective IV","Professional Elective V","Professional Elective VI","Professional Elective VII"]},
-    "7": {"label":"Semester 7", "slots":[], "status":"Honours/Minor or future curriculum-specific navigation only; not a standard R-2021 Professional Elective semester."}
-  },
-  "verticals": [
+  "registration": {"standardSemesters":[5,6],"slots":{"5":["Professional Elective I","Professional Elective II","Professional Elective III"],"6":["Professional Elective IV","Professional Elective V","Professional Elective VI","Professional Elective VII"]},"rule":"Professional Electives are registered in Semesters V and VI. Courses are arranged in verticals. Students may choose from one or different verticals, but only one course is selected from a row in a semester; two courses from the same row are permitted when one is taken in Semester V and the other in Semester VI.","honoursMinor":"Professional Elective registration for Honours/Minor follows the applicable R-2021 procedure from Semesters V to VIII."},
+  "semesters":{"5":{"label":"Semester 5","slots":["Professional Elective I","Professional Elective II","Professional Elective III"]},"6":{"label":"Semester 6","slots":["Professional Elective IV","Professional Elective V","Professional Elective VI","Professional Elective VII"]},"7":{"label":"Semester 7","slots":[],"status":"Honours/Minor or future curriculum-specific navigation only; not a standard R-2021 Professional Elective semester."}},
+  "verticals":[
     {"id":1,"name":"Modern Mobility Systems","courses":[["CME331","Automotive Materials, Components, Design & Testing"],["CME332","Conventional and Futuristic Vehicle Technology"],["CME333","Renewable Powered Off Highway Vehicles and Emission Control Technology"],["CME334","Vehicle Health Monitoring, Maintenance and Safety"],["CME335","CAE and CFD Approach in Future Mobility"],["CME336","Hybrid and Electric Vehicle Technology"],["CME337","Thermal Management of Batteries and Fuel Cells"]]},
     {"id":2,"name":"Product and Process Development","courses":[["CME338","Value Engineering"],["CME339","Additive Manufacturing"],["CME340","CAD/CAM"],["CME341","Design For X"],["CME342","Ergonomics in Design"],["CME343","New Product Development"],["CME344","Product Life Cycle Management"]]},
     {"id":3,"name":"Robotics and Automation","courses":[["MR3491","Sensors and Instrumentation"],["MR3392","Electrical Drives and Actuators"],["MR3492","Embedded Systems and Programming"],["MR3691","Robotics"],["CMR338","Smart Mobility and Intelligent Vehicles"],["CME345","Haptics and Immersive Technologies"],["CRA332","Drone Technologies"]]},
@@ -27,5 +18,5 @@
     {"id":10,"name":"Diversified Courses Group 2","courses":[["CAE344","Turbo Machines"],["CME387","Non-traditional Machining Processes"],["CME388","Industrial safety"],["CME389","Design of Transmission System"],["CME390","Thermal Power Engineering"],["CME391","Design for Manufacturing"],["CME392","Power Generation Equipment Design"]]},
     {"id":11,"name":"Diversified Courses Group 3","courses":[["CME393","Advanced Vehicle Engineering"],["CME394","Advanced Internal Combustion Engineering"],["CME395","Casting and Welding Processes"],["CME396","Process Planning and Cost Estimation"],["CME397","Surface Engineering"],["CME398","Precision Manufacturing"],["CME400","Gas Dynamics and Jet Propulsion"],["CME399","Operational Research"]]}
   ],
-  "availableAcadrixResources": ["CME338","CME341","CME362","CME380","CME387"]
+  "availableAcadrixResources":["CME338","CME341","CME344","CME356","CME358","CME362","CME365","CME372","CME380","CME387"]
 }
