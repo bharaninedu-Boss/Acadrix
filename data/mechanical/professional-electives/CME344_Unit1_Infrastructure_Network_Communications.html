@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://bharaninedu-boss.github.io/Acadrix/data/mechanical/professional-electives/CME344_Unit1_Infrastructure_Network_Communications.html">
+<title>CME344 Unit I — PLM/PDM Infrastructure, Network and Communications | ACADRIX</title>
+<meta name="description" content="Detailed R-2021 CME344 notes on PLM/PDM infrastructure, network, communications, data management and heterogeneous data sources and applications, with diagrams and 2-mark and 12-mark preparation.">
+<style>
+body{font-family:Arial,sans-serif;max-width:1050px;margin:auto;padding:22px;line-height:1.78;color:#172033;background:#f8fafc}h1,h2,h3{color:#1d4ed8;line-height:1.3}.hero,.box,.answer,.q,.source,.diagram,.step,.example{background:#fff;border:1px solid #dbe3ef;border-radius:14px;padding:20px;margin:16px 0}.hero{border-left:5px solid #2563eb}.source{background:#eff6ff;border-left:4px solid #2563eb}.answer{border-left:5px solid #16a34a}.q{border-left:5px solid #f97316}.step{border-left:5px solid #2563eb}.example{border-left:5px solid #7c3aed}.diagram{overflow:auto;text-align:center}.diagram svg{max-width:100%;height:auto;border:1px solid #e2e8f0;border-radius:10px;background:#fff}.tag{display:inline-block;background:#e2e8f0;border-radius:999px;padding:4px 9px;margin:3px}.tip{background:#f0fdf4;border-left:4px solid #16a34a;padding:12px;margin:15px 0}.warn{background:#fff7ed;border-left:4px solid #f97316;padding:12px;margin:15px 0}table{width:100%;border-collapse:collapse;background:#fff;margin:14px 0}th,td{border:1px solid #cbd5e1;padding:10px;vertical-align:top;text-align:left}th{background:#eff6ff}a{color:#2563eb;font-weight:700;text-decoration:none}.small{font-size:.93rem}@media(max-width:650px){body{padding:14px;font-size:16px}.hero,.box,.answer,.q,.source,.diagram,.step,.example{padding:15px}h1{font-size:26px}h2{font-size:22px}table{font-size:14px}}
+</style>
+</head>
+<body>
+<a href="CME344.html">← CME344 Hub</a>
+<section class="hero">
+<h1>CME344 — Unit I: PLM/PDM Infrastructure, Network &amp; Communications</h1>
+<p><strong>R-2021 Professional Elective • Product Life Cycle Management</strong></p>
+<span class="tag">2-Mark</span><span class="tag">12-Mark</span><span class="tag">Detailed Working</span><span class="tag">Diagrams</span>
+<p>This topic explains the infrastructure needed to make PLM/PDM information available, controlled and usable across people, locations and engineering applications. It is written for study first and examination second.</p>
+</section>
+<section class="source"><strong>Syllabus boundary:</strong> CME344 Unit I explicitly includes <strong>PLM/PDM Infrastructure — Network and Communications, Data Management, Heterogeneous data sources and applications</strong>. The prescribed texts listed with the course are <em>Product Lifecycle Management for a Global Market</em> and <em>Product Life Cycles and Product Management</em>. This page expands those syllabus headings into exam-friendly explanations without claiming any generated question as an official PYQ.</section>
+
+<h2>1. What is PLM/PDM Infrastructure?</h2>
+<p>PLM/PDM infrastructure is the technical foundation that allows product information to be <strong>created, identified, stored, communicated, controlled, accessed and connected with other engineering or enterprise applications</strong>.</p>
+<p>A PLM system is useful only when engineers and other authorised users can reliably reach the right product information. Therefore, infrastructure includes more than the PLM application itself. It involves connectivity, communication facilities, data-management mechanisms, access control and interfaces to other systems.</p>
+<div class="tip"><strong>Easy idea:</strong> PLM is the controlled environment for product information; <strong>infrastructure is the foundation that allows that environment to operate.</strong></div>
+
+<h2>2. Why is Infrastructure Needed?</h2>
+<p>Modern products generate information in many departments and at many stages. For example, a mechanical product may have requirements, CAD models, drawings, bills of materials, specifications, analysis results, manufacturing documents, quality records and service information.</p>
+<ul>
+<li>Users may be located in different offices or plants.</li>
+<li>Different applications may create different types of information.</li>
+<li>Product information must be available to authorised users.</li>
+<li>Large files such as CAD models need dependable transfer and storage.</li>
+<li>Different applications may need to exchange related information.</li>
+<li>Access and revision control must be maintained while information is shared.</li>
+<li>The system should support collaboration without creating uncontrolled copies.</li>
+</ul>
+
+<h2>3. Basic PLM/PDM Infrastructure Architecture</h2>
+<div class="diagram">
+<svg viewBox="0 0 1000 570" role="img" aria-label="PLM PDM infrastructure architecture">
+<rect x="350" y="25" width="300" height="70" rx="15" fill="#f0fdf4" stroke="#166534" stroke-width="4"/>
+<text x="500" y="68" text-anchor="middle" font-size="25">PLM / PDM System</text>
+<rect x="55" y="155" width="190" height="75" rx="12" fill="#eff6ff" stroke="#334155" stroke-width="3"/><text x="150" y="200" text-anchor="middle" font-size="19">Network</text>
+<rect x="280" y="155" width="190" height="75" rx="12" fill="#eff6ff" stroke="#334155" stroke-width="3"/><text x="375" y="200" text-anchor="middle" font-size="19">Communication</text>
+<rect x="530" y="155" width="190" height="75" rx="12" fill="#eff6ff" stroke="#334155" stroke-width="3"/><text x="625" y="190" text-anchor="middle" font-size="18">Data</text><text x="625" y="212" text-anchor="middle" font-size="18">Management</text>
+<rect x="755" y="155" width="190" height="75" rx="12" fill="#eff6ff" stroke="#334155" stroke-width="3"/><text x="850" y="190" text-anchor="middle" font-size="18">Access /</text><text x="850" y="212" text-anchor="middle" font-size="18">Control</text>
+<rect x="105" y="370" width="200" height="75" rx="12" fill="#fff7ed" stroke="#9a3412" stroke-width="3"/><text x="205" y="414" text-anchor="middle" font-size="18">CAD / CAE</text>
+<rect x="400" y="370" width="200" height="75" rx="12" fill="#fff7ed" stroke="#9a3412" stroke-width="3"/><text x="500" y="414" text-anchor="middle" font-size="18">ERP / Enterprise</text>
+<rect x="695" y="370" width="200" height="75" rx="12" fill="#fff7ed" stroke="#9a3412" stroke-width="3"/><text x="795" y="414" text-anchor="middle" font-size="18">Legacy / Other Apps</text>
+<path d="M500 95v60M150 230v100M375 230v100M625 230v100M850 230v100" stroke="#2563eb" stroke-width="4"/>
+<path d="M205 370v-35M500 370v-35M795 370v-35" stroke="#7c3aed" stroke-width="4"/>
+<text x="500" y="505" text-anchor="middle" font-size="18">Controlled exchange of product information</text>
+<text x="500" y="535" text-anchor="middle" font-size="16">People → infrastructure → PLM/PDM → authorised applications and users</text>
+</svg>
+</div>
+<p>The exact implementation differs between organisations, but the important examination idea is the relationship between <strong>network, communications, data management and connected applications</strong>.</p>
+
+<h2>4. Network in PLM/PDM</h2>
+<p>A network provides connectivity between the people, computers, servers and locations that participate in product development and product information management.</p>
+<h3>4.1 Role of the Network</h3>
+<ul>
+<li>Connects users to PLM/PDM services.</li>
+<li>Connects distributed engineering teams.</li>
+<li>Provides a path for accessing product data.</li>
+<li>Supports communication between PLM/PDM and other applications.</li>
+<li>Allows product information to be used across departments and sites.</li>
+<li>Supports controlled sharing instead of uncontrolled manual transfer.</li>
+</ul>
+<h3>4.2 Example</h3>
+<p>Suppose a company has design engineers at one site and manufacturing engineers at another. The network provides connectivity so that authorised users can access the PLM/PDM environment and work with the required released product information.</p>
+<div class="example"><strong>Important distinction:</strong> The network provides the <em>connectivity path</em>. It does not by itself decide which drawing is approved or who may modify it. Those controls belong to the PLM/PDM application, data-management and access-control mechanisms.</div>
+
+<h2>5. Communications in PLM/PDM</h2>
+<p>Communication refers to the controlled exchange of information between users, PLM/PDM components and connected applications.</p>
+<h3>5.1 Why communication matters</h3>
+<p>Product development is collaborative. A change in one part of the product definition can affect design, analysis, manufacturing, purchasing, quality and service. The infrastructure therefore needs reliable information exchange.</p>
+<ul>
+<li>Exchange of product information between authorised users.</li>
+<li>Exchange between PLM/PDM and engineering applications.</li>
+<li>Communication of product status and changes.</li>
+<li>Transfer of required documents and data.</li>
+<li>Support for geographically distributed collaboration.</li>
+</ul>
+<h3>5.2 Network vs Communication</h3>
+<table><tr><th>Network</th><th>Communication</th></tr><tr><td>Provides connectivity between devices, users and systems.</td><td>Concerned with exchanging information through that connectivity.</td></tr><tr><td>Acts as the underlying connection infrastructure.</td><td>Supports information flow between people and applications.</td></tr><tr><td>Example: connection between a user workstation and PLM server.</td><td>Example: sending or retrieving controlled product information through the PLM environment.</td></tr></table>
+
+<h2>6. Data Management in PLM/PDM</h2>
+<p>Data management is the controlled handling of product information so that it can be stored, identified, related, retrieved and maintained throughout its required life-cycle context.</p>
+<h3>6.1 Types of Product Information</h3>
+<table><tr><th>Information</th><th>Example</th><th>Why it matters</th></tr><tr><td>CAD data</td><td>3D model of a gearbox housing</td><td>Defines geometry and design information.</td></tr><tr><td>Engineering drawing</td><td>Manufacturing drawing with dimensions</td><td>Communicates manufacturing requirements.</td></tr><tr><td>BOM</td><td>List of components in an assembly</td><td>Defines product structure.</td></tr><tr><td>Specification</td><td>Material or performance requirement</td><td>Defines required characteristics.</td></tr><tr><td>Analysis result</td><td>Structural or thermal result</td><td>Supports design decisions.</td></tr><tr><td>Quality information</td><td>Inspection record</td><td>Provides evidence of product conformity.</td></tr><tr><td>Service information</td><td>Maintenance instruction</td><td>Supports product use and service.</td></tr></table>
+
+<h3>6.2 What Data Management Controls</h3>
+<ol>
+<li><strong>Identification:</strong> gives product information a recognisable identity.</li>
+<li><strong>Storage:</strong> maintains information in the controlled environment.</li>
+<li><strong>Metadata:</strong> stores information about the product data, such as description, status or revision.</li>
+<li><strong>Relationships:</strong> connects related information such as a CAD model, drawing and BOM.</li>
+<li><strong>Revision:</strong> distinguishes successive versions of product information.</li>
+<li><strong>Status:</strong> indicates the state of information, such as being under development or released.</li>
+<li><strong>Retrieval:</strong> helps authorised users find the required information.</li>
+<li><strong>Traceability:</strong> preserves the history and relationships needed to understand changes.</li>
+</ol>
+
+<h2>7. Why Product Data Cannot Be Treated as Ordinary Files</h2>
+<p>A product file often has relationships with other product information. A CAD model may correspond to a drawing; the drawing may belong to a particular part number and revision; that part may occur in a BOM; the BOM may belong to an assembly; and the assembly may be used in a higher-level product.</p>
+<div class="diagram"><svg viewBox="0 0 1000 300" role="img" aria-label="Product data relationships">
+<rect x="30" y="100" width="170" height="65" rx="12" fill="#eff6ff" stroke="#334155" stroke-width="3"/><text x="115" y="138" text-anchor="middle" font-size="18">CAD Model</text>
+<rect x="245" y="100" width="170" height="65" rx="12" fill="#eff6ff" stroke="#334155" stroke-width="3"/><text x="330" y="138" text-anchor="middle" font-size="18">Drawing</text>
+<rect x="460" y="100" width="170" height="65" rx="12" fill="#eff6ff" stroke="#334155" stroke-width="3"/><text x="545" y="138" text-anchor="middle" font-size="18">Part / Revision</text>
+<rect x="675" y="100" width="170" height="65" rx="12" fill="#f0fdf4" stroke="#166534" stroke-width="3"/><text x="760" y="138" text-anchor="middle" font-size="18">BOM / Product</text>
+<path d="M200 132h45M415 132h45M630 132h45" stroke="#2563eb" stroke-width="4"/>
+<text x="500" y="225" text-anchor="middle" font-size="18">Data management preserves the relationships, not just the individual files</text>
+</svg></div>
+
+<h2>8. Heterogeneous Data Sources</h2>
+<p><strong>Heterogeneous data sources</strong> are sources that differ in application, format, structure, platform or method of storing information.</p>
+<h3>Examples in a Mechanical Engineering Environment</h3>
+<ul>
+<li>CAD system containing geometry.</li>
+<li>CAE system containing analysis models and results.</li>
+<li>ERP system containing enterprise or planning information.</li>
+<li>Legacy database containing older product records.</li>
+<li>Document repositories containing specifications and reports.</li>
+<li>Quality systems containing inspection information.</li>
+</ul>
+<h3>Problems Created by Heterogeneity</h3>
+<ul>
+<li>Different file formats.</li>
+<li>Different data structures.</li>
+<li>Different identification conventions.</li>
+<li>Different revision and status methods.</li>
+<li>Duplicate information.</li>
+<li>Difficulty maintaining a consistent product definition.</li>
+<li>Difficulty integrating older applications with newer systems.</li>
+</ul>
+
+<h2>9. Applications Connected to PLM/PDM</h2>
+<p>PLM/PDM can exist as a central environment while interacting with other engineering and enterprise applications.</p>
+<table><tr><th>Application/System</th><th>Typical product information relationship</th></tr><tr><td>CAD</td><td>Creates and uses product geometry, models and drawings.</td></tr><tr><td>CAE</td><td>Uses engineering models and produces analysis information.</td></tr><tr><td>ERP</td><td>Handles enterprise-level information that may need to relate to product definition and downstream activities.</td></tr><tr><td>Legacy systems</td><td>Contain older information that may need to remain accessible or be integrated.</td></tr><tr><td>Other applications</td><td>May contain manufacturing, quality, service or specialist information.</td></tr></table>
+<div class="tip"><strong>Exam memory:</strong> Think of PLM/PDM as the controlled centre and CAD, CAE, ERP and legacy systems as connected information environments.</div>
+
+<h2>10. How the Infrastructure Works as One System</h2>
+<div class="step"><h3>Step 1 — User creates or requests information</h3><p>An authorised engineer may create a CAD model or request an existing product document.</p></div>
+<div class="step"><h3>Step 2 — Network provides connectivity</h3><p>The user's workstation reaches the PLM/PDM environment through the available network infrastructure.</p></div>
+<div class="step"><h3>Step 3 — Communication enables exchange</h3><p>Product information and requests are exchanged between the user, PLM/PDM services and connected applications.</p></div>
+<div class="step"><h3>Step 4 — Data management identifies the information</h3><p>The system associates the information with the required product identity, attributes, relationships and lifecycle status.</p></div>
+<div class="step"><h3>Step 5 — Access control is applied</h3><p>The system determines whether the user is allowed to view, modify, review, approve or use the information.</p></div>
+<div class="step"><h3>Step 6 — Related applications exchange required information</h3><p>Where integration exists, the PLM/PDM environment can work with connected engineering or enterprise applications.</p></div>
+<div class="step"><h3>Step 7 — Controlled information is used</h3><p>Users work with the required product information instead of relying on uncontrolled personal copies.</p></div>
+<div class="step"><h3>Step 8 — Changes are managed</h3><p>When product information changes, the corresponding lifecycle and revision controls maintain the relationship between the old and new information.</p></div>
+
+<h2>11. Complete Practical Example — Gearbox Housing</h2>
+<div class="example">
+<p><strong>Situation:</strong> A design engineer creates a new gearbox housing.</p>
+<ol>
+<li>The engineer creates the CAD model.</li>
+<li>The model is identified with the required product/part information.</li>
+<li>The CAD data and related information are stored in the controlled PLM/PDM environment.</li>
+<li>The drawing and other related information are associated with the product definition.</li>
+<li>Authorised reviewers examine the design.</li>
+<li>After approval, the appropriate information is released for downstream use.</li>
+<li>Manufacturing and other authorised users access the released information.</li>
+<li>A design problem is later discovered and a change is required.</li>
+<li>The change is processed through the controlled lifecycle, producing a new revision as appropriate.</li>
+<li>The previous information remains traceable while users are directed toward the appropriate current status.</li>
+</ol>
+<p><strong>What the infrastructure contributes:</strong> network connectivity, communication, controlled data handling and connection with relevant applications. The PLM/PDM environment then applies product-information and process controls.</p>
+</div>
+
+<h2>12. Advantages of a Good PLM/PDM Infrastructure</h2>
+<ul>
+<li>Reliable access to controlled product information.</li>
+<li>Better collaboration between distributed teams.</li>
+<li>Improved information consistency.</li>
+<li>Better connection between engineering and enterprise applications.</li>
+<li>Improved traceability.</li>
+<li>Reduced uncontrolled duplication.</li>
+<li>Better support for product changes and revisions.</li>
+<li>Improved availability of information to authorised downstream users.</li>
+</ul>
+
+<h2>13. Problems and Challenges</h2>
+<ul>
+<li>Integration of heterogeneous applications can be difficult.</li>
+<li>Legacy data may have inconsistent structures or identification.</li>
+<li>Large engineering files require appropriate infrastructure.</li>
+<li>Distributed users require dependable connectivity.</li>
+<li>Access permissions must be maintained correctly.</li>
+<li>Users need training and process discipline.</li>
+<li>Data migration can require considerable effort.</li>
+</ul>
+
+<h2>14. Important 2-Mark Questions &amp; Answers</h2>
+<div class="q"><h3>Q1. What is PLM/PDM infrastructure?</h3><p><strong>Answer:</strong> PLM/PDM infrastructure is the technical foundation used to connect users and systems and to create, communicate, store, control and integrate product information.</p></div>
+<div class="q"><h3>Q2. State the role of a network in PLM.</h3><p><strong>Answer:</strong> A network provides connectivity between PLM/PDM users, servers, locations and connected applications so that authorised product information can be accessed and exchanged.</p></div>
+<div class="q"><h3>Q3. What is meant by communication in PLM/PDM?</h3><p><strong>Answer:</strong> Communication is the controlled exchange of product information between users, PLM/PDM components and connected applications.</p></div>
+<div class="q"><h3>Q4. What is data management in PLM?</h3><p><strong>Answer:</strong> Data management is the controlled handling of product information including its identification, storage, attributes, relationships, revision, retrieval and traceability.</p></div>
+<div class="q"><h3>Q5. Define heterogeneous data sources.</h3><p><strong>Answer:</strong> Heterogeneous data sources are information sources that differ in application, format, structure, platform or method of storing product information.</p></div>
+<div class="q"><h3>Q6. Give two examples of applications connected with PLM/PDM.</h3><p><strong>Answer:</strong> CAD and CAE are examples. ERP and legacy applications are also common connected environments.</p></div>
+<div class="q"><h3>Q7. Why is data management important in PLM?</h3><p><strong>Answer:</strong> It helps ensure that product information is correctly identified, stored, related, retrieved and maintained so users can work with the required product definition.</p></div>
+<div class="q"><h3>Q8. State two problems caused by heterogeneous data.</h3><p><strong>Answer:</strong> Different data formats and structures can make integration difficult; different identification or revision conventions can also create inconsistency and duplication.</p></div>
+
+<h2>15. Full 12-Mark Answer</h2>
+<section class="answer">
+<h3>Explain PLM/PDM infrastructure with network and communications, data management, and heterogeneous data sources and applications.</h3>
+<h3>Introduction</h3>
+<p>Product Life Cycle Management and Product Data Management require a technical environment in which product information can be created, stored, exchanged and controlled. This technical foundation is called the PLM/PDM infrastructure.</p>
+<h3>1. Network</h3>
+<p>The network connects users, servers, sites and applications. It provides the connectivity required for authorised users to access the PLM/PDM environment and product information.</p>
+<h3>2. Communications</h3>
+<p>Communication enables the exchange of product information between users, PLM/PDM services and connected applications. It supports collaboration and the movement of required information between participating systems.</p>
+<h3>3. Data Management</h3>
+<p>Data management controls product information by providing identification, storage, metadata, relationships, retrieval, revision/status control and traceability. It ensures that product data is treated as controlled product information rather than as unrelated files.</p>
+<h3>4. Heterogeneous Data Sources</h3>
+<p>Product information can originate from different applications and systems such as CAD, CAE, ERP, legacy databases and document systems. These sources may use different formats, structures and identification methods.</p>
+<h3>5. Application Integration</h3>
+<p>PLM/PDM may need to exchange information with engineering and enterprise applications. Integration helps maintain useful relationships between product definition and information held in other systems.</p>
+<h3>Working</h3>
+<p>A user creates or requests product information. The network provides connectivity and communication enables the exchange. The PLM/PDM environment identifies and manages the information, applies access controls and maintains relationships and lifecycle status. Connected applications exchange the information required for their activities. When changes occur, the controlled data-management mechanisms maintain revision and traceability.</p>
+<h3>Diagram to draw</h3>
+<p>Draw the architecture shown above: <strong>PLM/PDM Core → Network, Communication, Data Management, Access Control → CAD/CAE, ERP and Legacy/Other Applications.</strong></p>
+<h3>Advantages</h3>
+<ul><li>Controlled access to product information.</li><li>Improved collaboration.</li><li>Better information consistency.</li><li>Improved integration between applications.</li><li>Better revision and traceability.</li></ul>
+<h3>Conclusion</h3>
+<p>A PLM/PDM infrastructure provides the connectivity, communication and data-management foundation required to control product information across users and applications. It is especially important when product information comes from heterogeneous engineering and enterprise systems.</p>
+</section>
+
+<h2>16. How to Score Better in This 12-Mark Question</h2>
+<ol>
+<li>Start with a clear definition of PLM/PDM infrastructure.</li>
+<li>Draw the architecture diagram early.</li>
+<li>Use separate headings for Network, Communication, Data Management and Heterogeneous Data Sources.</li>
+<li>Explain the <strong>role</strong> of each component, not just its definition.</li>
+<li>Give a mechanical-engineering example such as CAD → PLM/PDM → manufacturing/enterprise use.</li>
+<li>Explain the complete information flow.</li>
+<li>Finish with advantages and a conclusion.</li>
+</ol>
+<div class="warn"><strong>Common mistake:</strong> Do not write only a list such as “network, communication, database, CAD, ERP.” For a 12-mark answer, explain how these components work together to control and exchange product information.</div>
+
+<h2>17. Quick Revision</h2>
+<div class="box">
+<strong>Infrastructure</strong> → foundation for PLM/PDM operation.<br><br>
+<strong>Network</strong> → provides connectivity.<br>
+<strong>Communication</strong> → enables information exchange.<br>
+<strong>Data management</strong> → identifies, stores, relates, retrieves and controls product information.<br>
+<strong>Heterogeneous sources</strong> → different applications, formats, structures or platforms.<br>
+<strong>Connected applications</strong> → CAD, CAE, ERP, legacy and other systems.<br><br>
+<strong>Memory line:</strong> Network connects → Communication exchanges → Data management controls → Applications use related information.
+</div>
+<p class="small"><strong>Exam pattern:</strong> R-2021 Professional Elective preparation on ACADRIX uses 2-mark and 12-mark questions only.</p>
+</body>
+</html>
