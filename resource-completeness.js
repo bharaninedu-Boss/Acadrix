@@ -1,5 +1,6 @@
 /* ACADRIX Subject Resource Completeness Checker
    Reports only resources explicitly present in the subject data schema.
+   Also highlights the highest-priority missing study resource.
 */
 (function () {
   'use strict';
@@ -10,12 +11,12 @@
   };
 
   const RESOURCE_DEFS = [
-    { key: 'units', label: 'Unit Notes', icon: '📘', isAvailable: s => Array.isArray(s.units) && s.units.some(u => u && u.notes) },
-    { key: 'importantQuestions', label: 'Important Questions', icon: '🎯', isAvailable: s => typeof s.importantQuestions === 'string' && s.importantQuestions.trim() },
-    { key: 'formulaSheet', label: 'Formula Sheet', icon: '📐', isAvailable: s => typeof s.formulaSheet === 'string' && s.formulaSheet.trim() },
-    { key: 'solvedProblems', label: 'Solved Problems', icon: '🧮', isAvailable: s => typeof s.solvedProblems === 'string' && s.solvedProblems.trim() },
-    { key: 'pyqs', label: 'PYQs', icon: '📄', isAvailable: s => Array.isArray(s.pyqs) && s.pyqs.length > 0 },
-    { key: 'lastDayRevision', label: 'Last-Day Revision', icon: '⚡', isAvailable: s => typeof s.lastDayRevision === 'string' && s.lastDayRevision.trim() }
+    { key: 'units', label: 'Unit Notes', icon: '📘', priority: 'Critical', weight: 6, isAvailable: s => Array.isArray(s.units) && s.units.some(u => u && u.notes) },
+    { key: 'importantQuestions', label: 'Important Questions', icon: '🎯', priority: 'High', weight: 5, isAvailable: s => typeof s.importantQuestions === 'string' && s.importantQuestions.trim() },
+    { key: 'formulaSheet', label: 'Formula Sheet', icon: '📐', priority: 'High', weight: 4, isAvailable: s => typeof s.formulaSheet === 'string' && s.formulaSheet.trim() },
+    { key: 'solvedProblems', label: 'Solved Problems', icon: '🧮', priority: 'High', weight: 4, isAvailable: s => typeof s.solvedProblems === 'string' && s.solvedProblems.trim() },
+    { key: 'pyqs', label: 'PYQs', icon: '📄', priority: 'High', weight: 4, isAvailable: s => Array.isArray(s.pyqs) && s.pyqs.length > 0 },
+    { key: 'lastDayRevision', label: 'Last-Day Revision', icon: '⚡', priority: 'Medium', weight: 2, isAvailable: s => typeof s.lastDayRevision === 'string' && s.lastDayRevision.trim() }
   ];
 
   let lastRoute = '';
@@ -67,12 +68,19 @@
     const states = RESOURCE_DEFS.map(def => ({ ...def, available: Boolean(def.isAvailable(subject)) }));
     const available = states.filter(x => x.available).length;
     const total = states.length;
+    const missing = states.filter(x => !x.available).sort((a, b) => b.weight - a.weight);
+    const topGap = missing[0] || null;
+    const regulationLabel = route.regulation === 'r2025' ? 'R-2025' : 'R-2021';
+
     const panel = document.createElement('section');
     panel.id = 'acadrx-resource-completeness';
     panel.className = 'resource-completeness card';
     panel.setAttribute('aria-labelledby', 'resource-completeness-title');
 
-    const regulationLabel = route.regulation === 'r2025' ? 'R-2025' : 'R-2021';
+    const gapHtml = topGap
+      ? `<div class="resource-priority-gap"><div><span class="resource-gap-kicker">NEXT PRIORITY</span><strong>${topGap.icon} ${escapeHtml(topGap.label)}</strong><p>Priority: <b>${escapeHtml(topGap.priority)}</b>. This resource is not present in the subject data yet.</p></div><span class="resource-gap-badge">Add next</span></div>`
+      : `<div class="resource-priority-gap is-complete"><div><span class="resource-gap-kicker">RESOURCE SET</span><strong>✅ Core study resources are complete</strong><p>All six tracked resource groups are present in the subject data.</p></div></div>`;
+
     panel.innerHTML = `
       <div class="resource-completeness-head">
         <div>
@@ -82,6 +90,7 @@
         </div>
         <div class="resource-completeness-score" aria-label="${available} of ${total} resource groups available"><strong>${available}/${total}</strong><span>available</span></div>
       </div>
+      ${gapHtml}
       <div class="resource-completeness-grid">
         ${states.map(item => {
           const href = item.key === 'units' ? '' : resourceHref(subject[item.key]);
