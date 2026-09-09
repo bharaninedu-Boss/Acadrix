@@ -1,1 +1,81 @@
-[]
+[
+  {
+    "code": "ME3791",
+    "name": "Mechatronics and IoT",
+    "credits": 3,
+    "category": "PCC",
+    "official": true
+  },
+  {
+    "code": "ME3792",
+    "name": "Computer Integrated Manufacturing",
+    "credits": 3,
+    "category": "PCC",
+    "official": true
+  },
+  {
+    "code": "GE3791",
+    "name": "Human Values and Ethics",
+    "credits": 2,
+    "category": "HSMC",
+    "official": true
+  },
+  {
+    "code": "GE3792",
+    "name": "Industrial Management",
+    "credits": 3,
+    "category": "HSMC",
+    "official": true
+  },
+  {
+    "code": "OE-II",
+    "name": "Open Elective – II",
+    "credits": 3,
+    "category": "OEC",
+    "official": true
+  },
+  {
+    "code": "OE-III",
+    "name": "Open Elective – III",
+    "credits": 3,
+    "category": "OEC",
+    "official": true
+  },
+  {
+    "code": "OE-IV",
+    "name": "Open Elective – IV",
+    "credits": 3,
+    "category": "OEC",
+    "official": true
+  },
+  {
+    "code": "ME3781",
+    "name": "Mechatronics and IoT Laboratory",
+    "credits": 2,
+    "category": "PCC",
+    "official": true
+  },
+  {
+    "code": "ME3711",
+    "name": "Summer Internship",
+    "credits": 1,
+    "category": "EEC",
+    "official": true
+  },
+  {
+    "code": "CME344",
+    "name": "Product Life Cycle Management",
+    "credits": 3,
+    "category": "Professional Elective Resource",
+    "official": false,
+    "resourceOnly": true,
+    "note": "Additional ACADRIX study resource requested for Semester VII. The supplied R-2021 Mechanical curriculum lists CME344 as a Professional Elective, but does not list it among the official Semester VII courses. It is therefore shown separately as a resource and not as an official Semester VII curriculum entry.",
+    "units": [
+      {"n":1,"title":"HISTORY, CONCEPTS AND TERMINOLOGY OF PLM","link":"professional-electives/CME344_Unit1_Notes.html"},
+      {"n":2,"title":"PLM/PDM FUNCTIONS AND FEATURES","link":"professional-electives/CME344_Unit2_Notes.html"},
+      {"n":3,"title":"DETAILS OF MODULES IN A PDM/PLM SOFTWARE","link":"professional-electives/CME344_Unit3_Notes.html"},
+      {"n":4,"title":"ROLE OF PLM IN INDUSTRIES","link":"professional-electives/CME344_Unit4_Notes.html"},
+      {"n":5,"title":"BASICS ON CUSTOMISATION/INTEGRATION OF PDM/PLM SOFTWARE","link":"professional-electives/CME344_Unit5_Notes.html"}
+    ]
+  }
+]
