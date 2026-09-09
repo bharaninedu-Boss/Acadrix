@@ -11,31 +11,43 @@
       note: 'Based only on the three papers currently listed in sem5.json: Apr/May 2024, Nov/Dec 2024 and Nov/Dec 2023. This is a revision guide, not a prediction of the next paper.',
       papers: 3,
       patterns: [
-        ['Shafts & shaft design', '3/3 papers', 'Very High'],
-        ['Couplings', '3/3 papers', 'Very High'],
-        ['Springs', '3/3 papers', 'Very High'],
-        ['Bearings / hydrodynamic bearings', '3/3 papers', 'Very High'],
-        ['Joints: welded / riveted / cotter / knuckle', '3/3 papers', 'Very High'],
-        ['Flywheels', '3/3 papers', 'Very High'],
-        ['Keys & splines', '3/3 papers', 'High'],
-        ['Failure theories / stresses', '3/3 papers', 'High'],
-        ['Design fundamentals / material selection', '3/3 papers', 'High'],
-        ['Connecting rod', '2/3 papers', 'High'],
-        ['Power screws', '1/3 papers', 'Moderate'],
-        ['Fatigue / variable loading', '1/3 papers', 'Moderate']
+        ['Shafts & shaft design', '3/3 papers', 'Very High', 2],
+        ['Couplings', '3/3 papers', 'Very High', 3],
+        ['Springs', '3/3 papers', 'Very High', 4],
+        ['Bearings / hydrodynamic bearings', '3/3 papers', 'Very High', 5],
+        ['Joints: welded / riveted / cotter / knuckle', '3/3 papers', 'Very High', 3],
+        ['Flywheels', '3/3 papers', 'Very High', 4],
+        ['Keys & splines', '3/3 papers', 'High', 2],
+        ['Failure theories / stresses', '3/3 papers', 'High', 1],
+        ['Design fundamentals / material selection', '3/3 papers', 'High', 1],
+        ['Connecting rod', '2/3 papers', 'High', 5],
+        ['Power screws', '1/3 papers', 'Moderate', 3],
+        ['Fatigue / variable loading', '1/3 papers', 'Moderate', 1]
       ],
       units: [
-        ['Unit I', 'Design fundamentals, stresses, failure theories, fatigue, crane hook / C-frame', 'High'],
-        ['Unit II', 'Shafts, keys, splines', 'Very High'],
-        ['Unit III', 'Couplings, power screws, welded/riveted joints', 'Very High'],
-        ['Unit IV', 'Springs, flywheels, bearings', 'Very High'],
-        ['Unit V', 'Machine joints and components such as cotter/knuckle/connecting rod', 'High']
-      ]
+        ['Unit I', 'Design fundamentals, stresses, failure theories, fatigue, crane hook / C-frame', 'High', 1],
+        ['Unit II', 'Shafts, keys, splines', 'Very High', 2],
+        ['Unit III', 'Couplings, power screws, welded/riveted joints', 'Very High', 3],
+        ['Unit IV', 'Springs, flywheels, bearings', 'Very High', 4],
+        ['Unit V', 'Machine joints and components such as cotter/knuckle/connecting rod', 'High', 5]
+      ],
+      unitLinks: {
+        1: 'data/mechanical/ME3591_Unit1_Notes.html',
+        2: 'data/mechanical/ME3591_Unit2_Notes.html',
+        3: 'data/mechanical/ME3591_Unit3_Notes.html',
+        4: 'data/mechanical/ME3591_Unit4_Notes.html',
+        5: 'data/mechanical/ME3591_Unit5_Notes.html'
+      }
     }
   };
 
   function priorityClass(value) {
     return String(value).toLowerCase().replace(/\s+/g, '-');
+  }
+
+  function unitLink(data, unit) {
+    const href = data.unitLinks && data.unitLinks[unit];
+    return href ? `<a class="analysis-unit-link" href="${escapeAttr(href)}">Unit ${unit} Notes ↗</a>` : '';
   }
 
   function init() {
@@ -65,20 +77,20 @@
       </div>
       <div class="exam-intelligence-callout">
         <strong>📌 Study First</strong>
-        <span>Start with the Very High topics, then cover High-priority units. Moderate topics remain revision items.</span>
+        <span>Use the recurring-topic evidence to choose revision order. The links below take you directly to the corresponding unit notes.</span>
       </div>
       <h3>Most recurring topics</h3>
       <div class="analysis-table-wrap">
         <table class="analysis-table">
-          <thead><tr><th>Topic</th><th>Coverage</th><th>Priority</th></tr></thead>
-          <tbody>${data.patterns.map(r => `<tr><td>${escapeHtml(r[0])}</td><td>${escapeHtml(r[1])}</td><td><span class="priority priority-${priorityClass(r[2])}">${escapeHtml(r[2])}</span></td></tr>`).join('')}</tbody>
+          <thead><tr><th>Topic</th><th>Coverage</th><th>Priority</th><th>Notes</th></tr></thead>
+          <tbody>${data.patterns.map(r => `<tr><td>${escapeHtml(r[0])}</td><td>${escapeHtml(r[1])}</td><td><span class="priority priority-${priorityClass(r[2])}">${escapeHtml(r[2])}</span></td><td>${unitLink(data, r[3])}</td></tr>`).join('')}</tbody>
         </table>
       </div>
       <h3>Unit-wise revision priority</h3>
       <div class="unit-priority-grid">
-        ${data.units.map(u => `<article><div class="unit-priority-title"><strong>${escapeHtml(u[0])}</strong><span class="priority priority-${priorityClass(u[2])}">${escapeHtml(u[2])}</span></div><p>${escapeHtml(u[1])}</p></article>`).join('')}
+        ${data.units.map(u => `<article><div class="unit-priority-title"><strong>${escapeHtml(u[0])}</strong><span class="priority priority-${priorityClass(u[2])}">${escapeHtml(u[2])}</span></div><p>${escapeHtml(u[1])}</p>${unitLink(data, u[3])}</article>`).join('')}
       </div>
-      <p class="analysis-disclaimer"><strong>Evidence rule:</strong> frequency is calculated only from the explicitly listed verified papers. It does not mean a topic is guaranteed to appear again.</p>
+      <p class="analysis-disclaimer"><strong>Evidence rule:</strong> frequency is calculated only from the explicitly listed verified papers. Topic-to-unit links identify the corresponding syllabus unit; they do not claim that every individual paper question has been manually mapped.</p>
     `;
 
     anchor.parentNode.insertBefore(section, anchor);
@@ -86,6 +98,10 @@
 
   function escapeHtml(v) {
     return String(v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function escapeAttr(v) {
+    return escapeHtml(v).replace(/`/g, '&#96;');
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
