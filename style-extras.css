@@ -79,7 +79,26 @@ main h2 { margin-top: 28px; }
 .exam-intelligence-callout strong { color:var(--accent-color); white-space:nowrap; }
 .exam-intelligence-callout span { color:var(--text-secondary); font-size:.86rem; line-height:1.45; }
 .analysis-disclaimer { margin:18px 0 0; padding-top:12px; border-top:1px solid var(--border-color); color:var(--text-secondary); font-size:.8rem; line-height:1.5; }
-@media (max-width: 1050px) { .study-first-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (max-width: 768px) { .subject-tabs { top: 58px; margin-left: -2px; margin-right: -2px; } .subject-tab { padding: 9px 11px; font-size: .82rem; } .study-path { font-size: .78rem; gap: 6px; } .quick-access-grid { grid-template-columns: 1fr; } .section-heading-row { align-items: flex-start; } .semester-helper { flex-direction: column; align-items: flex-start; } .pyq-analysis-head { flex-direction: column; } .analysis-stat { align-self: flex-start; } .study-first-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .unit-priority-grid { grid-template-columns: 1fr; } }
+.resource-completeness { border-left: 4px solid var(--accent-color); padding: 18px; }
+.resource-completeness-head { display:flex; justify-content:space-between; gap:18px; align-items:flex-start; }
+.resource-completeness-kicker { font-size:.7rem; font-weight:800; letter-spacing:.08em; color:var(--accent-color); }
+.resource-completeness-head h2 { margin:4px 0 6px; }
+.resource-completeness-head p { margin:0; color:var(--text-secondary); font-size:.84rem; line-height:1.5; max-width:760px; }
+.resource-completeness-score { min-width:76px; padding:10px; border:1px solid var(--border-color); border-radius:10px; background:var(--bg-color); text-align:center; }
+.resource-completeness-score strong { display:block; color:var(--accent-color); font-size:1.3rem; }
+.resource-completeness-score span { display:block; color:var(--text-secondary); font-size:.68rem; }
+.resource-completeness-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:15px; }
+.resource-check-item { display:grid; grid-template-columns:auto 1fr auto; gap:10px; align-items:start; padding:12px; border:1px solid var(--border-color); border-radius:10px; background:var(--bg-color); }
+.resource-check-item.is-missing { opacity:.78; }
+.resource-check-icon { font-size:1.2rem; }
+.resource-check-main strong { display:block; font-size:.84rem; }
+.resource-check-main > span { display:block; margin-top:3px; font-size:.72rem; color:var(--text-secondary); }
+.resource-check-main small { display:block; margin-top:7px; font-size:.72rem; line-height:1.35; color:var(--text-secondary); }
+.resource-check-main a { color:var(--accent-color); font-weight:700; text-decoration:none; }
+.resource-check-main a:hover { text-decoration:underline; }
+.resource-check-mark { font-size:.9rem; color:var(--accent-color); }
+.is-missing .resource-check-mark { color:var(--text-secondary); }
+@media (max-width: 1050px) { .study-first-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .resource-completeness-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width: 768px) { .subject-tabs { top: 58px; margin-left: -2px; margin-right: -2px; } .subject-tab { padding: 9px 11px; font-size: .82rem; } .study-path { font-size: .78rem; gap: 6px; } .quick-access-grid { grid-template-columns: 1fr; } .section-heading-row { align-items: flex-start; } .semester-helper { flex-direction: column; align-items: flex-start; } .pyq-analysis-head { flex-direction: column; } .analysis-stat { align-self: flex-start; } .study-first-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .unit-priority-grid { grid-template-columns: 1fr; } .resource-completeness-head { flex-direction:column; } .resource-completeness-grid { grid-template-columns:1fr; } }
 @media (max-width: 460px) { .study-first-grid { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .nav-links.open, .back-to-top, .quick-card, .study-first-card { animation: none; transition: none; } }
