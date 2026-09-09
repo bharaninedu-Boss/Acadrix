@@ -1,0 +1,104 @@
+{
+  "program": "B.E. Mechanical Engineering",
+  "regulation": "R-2021",
+  "source": {
+    "authority": "Anna University Centre for Academic Courses",
+    "url": "https://cac.annauniv.edu/aidetails/afug_2021_fu/Revised/Mech/B.E.Mech.pdf",
+    "note": "Topic entries should be populated only from the official R-2021 Mechanical Engineering syllabus. This file is intentionally structured for verified topic-by-topic coverage checking."
+  },
+  "subjects": {
+    "ME3592": {
+      "name": "Metrology and Measurements",
+      "units": [
+        {
+          "unit": 1,
+          "title": "Basics of Metrology",
+          "topics": [
+            "Measurement – Need, Process, Role in quality control",
+            "Factors affecting measurement – SWIPE",
+            "Errors in Measurements – Types – Control",
+            "Measurement uncertainty – Types, Estimation",
+            "Problems on Estimation of Uncertainty",
+            "Statistical analysis of measurement data",
+            "Measurement system analysis",
+            "Calibration of measuring instruments",
+            "Principle of air gauging",
+            "ISO standards"
+          ]
+        },
+        {
+          "unit": 2,
+          "title": "Measurement of Linear, Angular Dimensions, Assembly and Transmission Elements",
+          "topics": [
+            "Linear Measuring Instruments – Vernier caliper, Micrometer, Vernier height gauge, Depth Micrometer, Bore gauge, Telescoping gauge",
+            "Gauge blocks – Use and precautions",
+            "Comparators – Working and advantages",
+            "Opto-mechanical measurements using measuring microscope and Profile projector",
+            "Angular measuring instruments – Bevel protractor, Clinometer, Angle gauges, Precision level, Sine bar, Autocollimator, Angle dekkor, Alignment telescope",
+            "Measurement of Screw threads – Single element measurements – Pitch Diameter, Lead, Pitch",
+            "Measurement of Gears – purpose – Analytical measurement – Runout, Pitch variation, Tooth profile, Tooth thickness, Lead",
+            "Functional checking – Rolling gear test"
+          ]
+        },
+        {
+          "unit": 3,
+          "title": "Tolerance Analysis",
+          "topics": [
+            "Tolerancing – Interchangeability, Selective assembly",
+            "Tolerance representation",
+            "Tolerance terminology",
+            "Limits and Fits",
+            "Problems using tables IS919",
+            "Design of Limit gauges",
+            "Tolerance analysis in manufacturing",
+            "Process capability",
+            "Tolerance stackup",
+            "Tolerance charting"
+          ]
+        },
+        {
+          "unit": 4,
+          "title": "Metrology of Surfaces",
+          "topics": [
+            "Fundamentals of GD & T",
+            "Conventional vs Geometric tolerance",
+            "Datums",
+            "Inspection of geometric deviations – straightness, flatness, roundness",
+            "Simple problems",
+            "Measurement of Surface finish – Functionality of surfaces",
+            "Surface finish parameters",
+            "Comparative measurement techniques",
+            "Stylus based measurement techniques",
+            "Optical measurement techniques",
+            "Filters",
+            "Introduction to 3D surface metrology – Parameters"
+          ]
+        },
+        {
+          "unit": 5,
+          "title": "Advances in Metrology",
+          "topics": [
+            "Lasers in metrology – Advantages of lasers",
+            "Laser scan micrometers",
+            "Laser interferometers – Applications – Straightness, Alignment",
+            "Ball bar tests",
+            "Computer Aided Metrology – Basic concept of CMM",
+            "Types of CMM",
+            "Constructional features of CMM",
+            "CMM Probes",
+            "CMM Accessories",
+            "CMM Software",
+            "CMM Applications",
+            "Multi-sensor CMMs",
+            "Machine Vision – Basic concepts of Machine Vision System",
+            "Elements of Machine Vision System",
+            "Applications of Machine Vision",
+            "On-line and in-process monitoring in production",
+            "Computed tomography",
+            "White light Scanners"
+          ]
+        }
+      ]
+    }
+  }
+}
