@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "departments": {
+    "mech": {
+      "name": "Mechanical Engineering",
+      "regulations": {
+        "r2021": {
+          "label": "Regulation 2021",
+          "dataRoot": "data/mechanical",
+          "semesterPattern": "sem{semester}.json",
+          "status": "active"
+        },
+        "r2025": {
+          "label": "Regulation 2025",
+          "dataRoot": "data/mechanical/r2025",
+          "semesterPattern": "sem{semester}.json",
+          "status": "active"
+        }
+      }
+    },
+    "cse": {
+      "name": "Computer Science",
+      "r2021DataRoot": "data/cse"
+    },
+    "ece": {
+      "name": "Electronics & Communication",
+      "r2021DataRoot": "data/electronics"
+    },
+    "eee": {
+      "name": "Electrical & Electronics",
+      "r2021DataRoot": "data/electrical"
+    },
+    "it": {
+      "name": "Information Technology",
+      "r2021DataRoot": "data/it"
+    },
+    "civil": {
+      "name": "Civil Engineering",
+      "r2021DataRoot": "data/civil"
+    }
+  },
+  "subjectSchema": {
+    "required": ["code", "name"],
+    "optional": [
+      "type", "category", "credits", "units", "pyqs", "videos",
+      "questionBank", "importantQuestions", "formulaSheet",
+      "solvedProblems", "lastDayRevision", "updated", "popular", "resource"
+    ],
+    "unitShape": {
+      "required": ["name"],
+      "optional": ["unit", "title", "notes"]
+    }
+  }
+}
