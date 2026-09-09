@@ -77,7 +77,10 @@
       </div>
       <div class="exam-intelligence-callout">
         <strong>📌 Study First</strong>
-        <span>Use the recurring-topic evidence to choose revision order. The links below take you directly to the corresponding unit notes.</span>
+        <span>Start with the Very High units, then High units. Use the direct note links below; Moderate topics are revision items.</span>
+      </div>
+      <div class="study-first-grid">
+        ${data.units.map(u => `<a class="study-first-card" href="${escapeAttr(data.unitLinks[u[3]])}"><div class="study-first-top"><span class="study-step">${escapeHtml(u[3])}</span><strong>${escapeHtml(u[0])}</strong><span class="priority priority-${priorityClass(u[2])}">${escapeHtml(u[2])}</span></div><p>${escapeHtml(u[1])}</p><span class="study-first-action">Open Unit Notes →</span></a>`).join('')}
       </div>
       <h3>Most recurring topics</h3>
       <div class="analysis-table-wrap">
