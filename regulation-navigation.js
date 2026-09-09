@@ -1,6 +1,6 @@
 /* ACADRIX regulation-aware navigation
-   R-2021 remains the existing data set.
-   R-2025 is a separate navigation/data namespace.
+   R-2021 and R-2025 use separate data namespaces.
+   data/catalog.json defines the shared content schema and regulation roots.
 */
 
 const originalRenderSemesters = renderSemesters;
@@ -9,9 +9,45 @@ const originalLoadSemesterData = loadSemesterData;
 const originalRenderSubjectDetails = renderSubjectDetails;
 const originalRenderHome = renderHome;
 
+let acadrxCatalog = null;
+let acadrxCatalogPromise = null;
+
+async function getAcadrxCatalog() {
+    if (acadrxCatalog) return acadrxCatalog;
+    if (!acadrxCatalogPromise) {
+        acadrxCatalogPromise = fetch('data/catalog.json')
+            .then(r => r.ok ? r.json() : null)
+            .then(data => { acadrxCatalog = data; return data; })
+            .catch(err => { console.error('ACADRIX catalog load failed', err); return null; });
+    }
+    return acadrxCatalogPromise;
+}
+
 function isMechanical(deptId) { return deptId === 'mech'; }
 function regulationLabel(regulation) { return regulation === 'r2025' ? 'Regulation 2025' : 'Regulation 2021'; }
 function navigateRegulation(regulation) { location.hash = `#/dept/mech/${regulation}`; }
+
+function normalizeResourcePath(path, regulation = 'r2021') {
+    if (!path) return path;
+    if (/^(https?:|#|\/)/i.test(path) || path.startsWith('data/')) return path;
+    if (regulation === 'r2025') return `data/mechanical/r2025/${path.replace(/^\.\//, '')}`;
+    return path;
+}
+
+function normalizeSubject(subject, deptId, sem, regulation) {
+    const copy = { ...subject, dept: deptId, sem, regulation };
+    if (copy.resource) copy.resource = normalizeResourcePath(copy.resource, regulation);
+    if (Array.isArray(copy.units)) {
+        copy.units = copy.units.map(unit => ({
+            ...unit,
+            notes: unit.notes ? normalizeResourcePath(unit.notes, regulation) : unit.notes
+        }));
+    }
+    ['importantQuestions','formulaSheet','solvedProblems','lastDayRevision','questionBank'].forEach(key => {
+        if (typeof copy[key] === 'string') copy[key] = normalizeResourcePath(copy[key], regulation);
+    });
+    return copy;
+}
 
 handleHashRoute = function () {
     const hash = (location.hash || '').replace(/^#/, '');
@@ -31,7 +67,6 @@ handleHashRoute = function () {
         return navigateTo('details', { dept: deptId, sem, regulation, subjectCode: parts[4] }, true);
     }
 
-    // Existing department links continue to mean R-2021.
     const semMatch = (parts[2] || '').match(/^sem(\d+)$/i);
     if (semMatch) {
         const sem = parseInt(semMatch[1], 10);
@@ -88,20 +123,29 @@ renderSemesters = function (container, deptId, regulation = null) {
         <section><h2>Select Semester</h2><div class="grid">${[1,2,3,4,5,6,7,8].map(num => `<div class="card" role="button" tabindex="0" onclick="navigateTo('subjects',{dept:'mech',sem:${num},regulation:'${chosen}'})"><div><h3>Semester ${num}</h3><p style="margin:0;color:var(--text-secondary)">Mechanical Engineering · ${label}</p></div><div class="arrow">→</div></div>`).join('')}</div></section>`;
 };
 
-// Regulation-aware data loader. R-2025 is isolated; CSE uses its actual data/cse directory.
 loadSemesterData = async function (deptId, sem, regulation = null) {
-    if (isMechanical(deptId) && regulation === 'r2025') {
-        const key = `${deptId}-r2025-sem${sem}`;
+    if (isMechanical(deptId) && (regulation === 'r2025' || regulation === 'r2021')) {
+        const catalog = await getAcadrxCatalog();
+        const config = catalog?.departments?.[deptId]?.regulations?.[regulation];
+        const fallbackRoot = regulation === 'r2025' ? 'data/mechanical/r2025' : 'data/mechanical';
+        const root = config?.dataRoot || fallbackRoot;
+        const pattern = config?.semesterPattern || 'sem{semester}.json';
+        const path = `${root}/${pattern.replace('{semester}', sem)}`;
+        const key = `${deptId}-${regulation}-sem${sem}`;
         if (loadedData[key]) return loadedData[key];
-        const path = `data/mechanical/r2025/sem${sem}.json`;
         try {
             const res = await fetch(path);
             if (!res.ok) return (loadedData[key] = []);
             const json = await res.json();
             const subjects = Array.isArray(json) ? json : (json && Array.isArray(json.subjects) ? json.subjects : []);
-            return (loadedData[key] = subjects.map(s => ({ ...s, dept: deptId, sem, regulation: 'r2025' })));
-        } catch (e) { console.error('Failed to load R-2025 data', path, e); return (loadedData[key] = []); }
+            return (loadedData[key] = subjects.map(s => normalizeSubject(s, deptId, sem, regulation)));
+        } catch (e) {
+            console.error('Failed to load', path, e);
+            return (loadedData[key] = []);
+        }
     }
+
+    // CSE's existing R-2021 data is stored under data/cse.
     if (deptId === 'cse') {
         const key = `${deptId}-r2021-sem${sem}`;
         if (loadedData[key]) return loadedData[key];
@@ -111,7 +155,7 @@ loadSemesterData = async function (deptId, sem, regulation = null) {
             if (!res.ok) return (loadedData[key] = []);
             const json = await res.json();
             const subjects = Array.isArray(json) ? json : (json && Array.isArray(json.subjects) ? json.subjects : []);
-            return (loadedData[key] = subjects.map(s => ({ ...s, dept: deptId, sem, regulation: 'r2021' })));
+            return (loadedData[key] = subjects.map(s => normalizeSubject(s, deptId, sem, 'r2021')));
         } catch (e) { console.error('Failed to load CSE data', path, e); return (loadedData[key] = []); }
     }
     return originalLoadSemesterData(deptId, sem);
@@ -127,17 +171,18 @@ renderSubjects = async function (container, deptId, sem, regulation = null) {
     grid.innerHTML = subjects.map(s => `<div class="card" role="button" tabindex="0" onclick="navigateTo('details',{dept:'mech',sem:${sem},regulation:'r2025',subjectCode:'${s.code}'})"><div><p style="color:var(--accent-color);font-weight:bold;margin:0">${s.code || ''}</p><h3 style="margin:6px 0">${s.name || ''}</h3><p style="margin:0;color:var(--text-secondary)">${s.resource ? 'Open Study Dashboard →' : 'Curriculum entry · resources coming soon'}</p></div><div class="arrow">→</div></div>`).join('');
 };
 
-// Direct R-2025 subject URLs now work without requiring a previous SPA load.
 renderSubjectDetails = async function (container, code) {
     const regulation = currentState.regulation || 'r2021';
-    if (!(currentState.dept === 'mech' && regulation === 'r2025')) return originalRenderSubjectDetails(container, code);
-    const subjects = await loadSemesterData('mech', currentState.sem || 1, 'r2025');
+    if (!(currentState.dept === 'mech' && (regulation === 'r2025' || regulation === 'r2021'))) return originalRenderSubjectDetails(container, code);
+    const subjects = await loadSemesterData('mech', currentState.sem || 1, regulation);
     const subject = subjects.find(s => s.code && s.code.toLowerCase() === String(code).toLowerCase());
     if (!subject) {
-        container.innerHTML = `<div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> › <span>R-2025 Subject</span></div><div class="card"><h2>Subject not found</h2><p>The requested R-2025 subject is not present in this semester's verified data.</p></div>`;
+        container.innerHTML = `<div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> › <span>${regulationLabel(regulation)} Subject</span></div><div class="card"><h2>Subject not found</h2><p>The requested subject is not present in this semester's verified data.</p></div>`;
         return;
     }
+    if (regulation === 'r2021') return originalRenderSubjectDetails(container, code);
+
     const units = Array.isArray(subject.units) ? subject.units : [];
-    const unitHtml = units.map(u => `<div class="card"><strong>Unit ${u.unit || ''} — ${u.title || 'Unit'}</strong>${u.notes ? `<br><a href="${u.notes}">📘 Open Unit Notes →</a>` : '<p style="color:var(--text-secondary)">Notes coming soon.</p>'}</div>`).join('');
-    container.innerHTML = `<div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> › <span onclick="navigateTo('semesters',{dept:'mech'})">Mechanical Engineering</span> › <span onclick="navigateTo('semesters',{dept:'mech',regulation:'r2025'})">R-2025</span> › <span>Semester ${currentState.sem}</span></div><section class="hero"><h1>${subject.code} — ${subject.name}</h1><p><strong>Mechanical Engineering · Regulation 2025 · Semester ${currentState.sem}</strong></p><p>R-2025 resources are maintained independently from R-2021.</p></section><h2>Study Dashboard</h2><div class="grid">${subject.resource ? `<a class="card" href="${subject.resource}"><strong>📚 Course Hub</strong><p>Open the dedicated subject resource page.</p></a>` : ''}<a class="card" href="#"><strong>📝 Exam Preparation</strong><p>Priority questions and exam resources will be added as the subject is developed.</p></a></div>${units.length ? `<h2>Unit-wise Notes</h2><div class="grid">${unitHtml}</div>` : '<div class="note">No unit-level notes have been published yet.</div>'}`;
+    const unitHtml = units.map(u => `<div class="card"><strong>Unit ${u.unit || ''} — ${u.title || u.name || 'Unit'}</strong>${u.notes ? `<br><a href="${u.notes}">📘 Open Unit Notes →</a>` : '<p style="color:var(--text-secondary)">Notes coming soon.</p>'}</div>`).join('');
+    container.innerHTML = `<div class="breadcrumb"><span onclick="navigateTo('home')">Home</span> › <span onclick="navigateTo('semesters',{dept:'mech'})">Mechanical Engineering</span> › <span onclick="navigateTo('semesters',{dept:'mech',regulation:'r2025'})">R-2025</span> › <span>Semester ${currentState.sem}</span></div><section class="hero"><h1>${subject.code} — ${subject.name}</h1><p><strong>Mechanical Engineering · Regulation 2025 · Semester ${currentState.sem}</strong></p><p>R-2025 resources are maintained independently from R-2021.</p></section><h2>Study Dashboard</h2><div class="grid">${subject.resource ? `<a class="card" href="${subject.resource}"><strong>📚 Course Hub</strong><p>Open the dedicated subject resource page.</p></a>` : ''}</div>${units.length ? `<h2>Unit-wise Notes</h2><div class="grid">${unitHtml}</div>` : '<div class="note">No unit-level notes have been published yet.</div>'}`;
 };
