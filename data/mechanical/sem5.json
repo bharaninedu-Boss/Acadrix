@@ -26,12 +26,12 @@
   {
     "code": "ME3592",
     "name": "Metrology and Measurements",
-    "updated": "2026-09-06",
+    "updated": "2026-09-09",
     "popular": true,
     "units": [
       {"name": "Basics of Metrology", "notes": "data/mechanical/ME3592_Unit1_Notes.html"},
       {"name": "Measurement of Linear, Angular Dimensions, Assembly and Transmission Elements", "notes": "data/mechanical/ME3592_Unit2_Notes.html"},
-      {"name": "Tolerance Analysis", "notes": null},
+      {"name": "Tolerance Analysis", "notes": "data/mechanical/ME3592_Unit3_Notes.html"},
       {"name": "Metrology of Surfaces", "notes": null},
       {"name": "Advances in Metrology", "notes": null}
     ],
