@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ME3591 Unit I Solved Problems | ACADRIX</title>
+<link rel="stylesheet" href="../../style.css"><link rel="stylesheet" href="../../style-extras.css">
+<style>
+body{padding:22px 0}.wrap{max-width:950px;margin:auto;padding:0 16px}.hero,.card,.note{border:1px solid var(--border-color);border-radius:14px;padding:18px;margin:14px 0;background:var(--card-bg)}.hero{padding:26px}.note{background:var(--bg-color)}.formula{padding:12px 14px;border-left:4px solid var(--accent-color);background:var(--bg-color);margin:10px 0;overflow-x:auto}.step{margin:12px 0;padding:12px;border-radius:10px;background:var(--bg-color)}.tag{display:inline-block;font-size:.75rem;font-weight:700;padding:4px 8px;border-radius:999px;background:var(--bg-color);color:var(--accent-color)}.answer{font-weight:700}.back{color:var(--accent-color);font-weight:700;text-decoration:none}.practice{border-left:4px solid #16a34a}.small{font-size:.92rem;color:var(--text-secondary)}
+</style></head>
+<body><div class="wrap">
+<a class="back" href="ME3591_Numerical_Practice.html">← Back to Numerical Practice</a>
+<section class="hero"><h1>ME3591 — Unit I Solved Problems</h1><p><strong>Fundamental Concepts in Design • R-2021 • Semester 5</strong></p><p>Step-by-step numerical practice for direct, bending and torsional loading, eccentric loading, principal stresses, factor of safety and fluctuating stresses.</p></section>
+<div class="note"><strong>Evidence label:</strong> The worked examples below are <strong>✦ ACADRIX Practice</strong>. They are constructed for learning from the Unit I syllabus/formulas; they are <strong>not</strong> claimed to be university PYQs. Use an explicitly identified paper only when practising verified PYQs.</div>
+
+<section class="card"><span class="tag">Example 1 • ACADRIX Practice</span><h2>Direct + Bending Stress</h2><p><strong>Problem:</strong> A rectangular section has width 40 mm and thickness 20 mm. It carries an axial tensile load of 20 kN and a bending moment of 1.2 kN·m about the axis associated with the 40 mm width. Determine the direct stress, bending stress and maximum tensile stress.</p>
+<div class="step"><strong>Step 1 — Given</strong><br>P = 20 kN = 20,000 N<br>M = 1.2 kN·m = 1.2 × 10<sup>6</sup> N·mm<br>b = 40 mm, h = 20 mm</div>
+<div class="step"><strong>Step 2 — Area</strong><div class="formula">A = bh = 40 × 20 = 800 mm²</div></div>
+<div class="step"><strong>Step 3 — Direct stress</strong><div class="formula">σ<sub>d</sub> = P/A = 20,000/800 = 25 N/mm²</div></div>
+<div class="step"><strong>Step 4 — Section modulus</strong><div class="formula">Z = bh²/6 = (40 × 20²)/6 = 2666.67 mm³</div></div>
+<div class="step"><strong>Step 5 — Bending stress</strong><div class="formula">σ<sub>b</sub> = M/Z = (1.2 × 10<sup>6</sup>)/2666.67 = 450 N/mm²</div></div>
+<div class="step"><strong>Step 6 — Maximum tensile stress</strong><div class="formula">σ<sub>max</sub> = σ<sub>d</sub> + σ<sub>b</sub> = 25 + 450 = 475 N/mm²</div></div>
+<p class="answer">Answer: Direct stress = 25 MPa; bending stress = 450 MPa; maximum tensile stress = 475 MPa.</p>
+</section>
+
+<section class="card"><span class="tag">Example 2 • ACADRIX Practice</span><h2>Eccentric Loading</h2><p><strong>Problem:</strong> A component carries a load P = 12 kN with an eccentricity e = 50 mm. If the resisting section has area A = 1000 mm² and section modulus Z = 5000 mm³, determine the direct stress, eccentric moment and extreme bending stress.</p>
+<div class="step"><strong>Step 1 — Direct stress</strong><div class="formula">σ<sub>d</sub> = P/A = 12,000/1000 = 12 MPa</div></div>
+<div class="step"><strong>Step 2 — Eccentric moment</strong><div class="formula">M = P × e = 12,000 × 50 = 600,000 N·mm</div></div>
+<div class="step"><strong>Step 3 — Bending stress</strong><div class="formula">σ<sub>b</sub> = M/Z = 600,000/5000 = 120 MPa</div></div>
+<div class="step"><strong>Step 4 — Extreme stresses</strong><div class="formula">σ<sub>max</sub> = σ<sub>d</sub> + σ<sub>b</sub> = 132 MPa</div><div class="formula">σ<sub>min</sub> = σ<sub>d</sub> − σ<sub>b</sub> = −108 MPa</div></div>
+<p class="answer">Answer: Direct stress = 12 MPa; moment = 600 N·m; extreme stresses = 132 MPa and −108 MPa.</p>
+</section>
+
+<section class="card"><span class="tag">Example 3 • ACADRIX Practice</span><h2>Principal Stresses under Plane Stress</h2><p><strong>Problem:</strong> At a point in a machine component, σ<sub>x</sub> = 80 MPa, σ<sub>y</sub> = 20 MPa and τ<sub>xy</sub> = 30 MPa. Determine the principal stresses and maximum shear stress.</p>
+<div class="formula">σ<sub>1,2</sub> = (σ<sub>x</sub> + σ<sub>y</sub>)/2 ± √[((σ<sub>x</sub> − σ<sub>y</sub>)/2)² + τ<sub>xy</sub>²]</div>
+<div class="step"><strong>Step 1</strong><br>Mean normal stress = (80 + 20)/2 = 50 MPa.</div>
+<div class="step"><strong>Step 2</strong><br>Radius = √[(30)² + (30)²] = 42.43 MPa.</div>
+<div class="step"><strong>Step 3</strong><div class="formula">σ<sub>1</sub> = 50 + 42.43 = 92.43 MPa</div><div class="formula">σ<sub>2</sub> = 50 − 42.43 = 7.57 MPa</div></div>
+<div class="step"><strong>Step 4 — Maximum shear stress</strong><div class="formula">τ<sub>max</sub> = (σ<sub>1</sub> − σ<sub>2</sub>)/2 = 42.43 MPa</div></div>
+<p class="answer">Answer: σ<sub>1</sub> = 92.43 MPa, σ<sub>2</sub> = 7.57 MPa, τ<sub>max</sub> = 42.43 MPa.</p>
+</section>
+
+<section class="card"><span class="tag">Example 4 • ACADRIX Practice</span><h2>Fluctuating Stress Parameters</h2><p><strong>Problem:</strong> A component experiences σ<sub>max</sub> = 180 MPa and σ<sub>min</sub> = −60 MPa. Determine mean stress, alternating stress and stress ratio.</p>
+<div class="formula">σ<sub>m</sub> = (σ<sub>max</sub> + σ<sub>min</sub>)/2 = (180 − 60)/2 = 60 MPa</div>
+<div class="formula">σ<sub>a</sub> = (σ<sub>max</sub> − σ<sub>min</sub>)/2 = (180 + 60)/2 = 120 MPa</div>
+<div class="formula">R = σ<sub>min</sub>/σ<sub>max</sub> = −60/180 = −0.333</div>
+<p class="answer">Answer: Mean stress = 60 MPa; alternating stress = 120 MPa; stress ratio R = −0.333.</p></section>
+
+<section class="card practice"><span class="tag">Practice • Solve Yourself</span><h2>Exam-Style Practice Set</h2><ol><li>A member carries a direct load and bending moment. Calculate direct, bending and extreme stresses for the given section dimensions.</li><li>A load acts at an eccentricity from the centroidal axis. Determine the direct stress, eccentric moment and extreme stresses.</li><li>Given σ<sub>x</sub>, σ<sub>y</sub> and τ<sub>xy</sub>, determine the principal stresses and maximum shear stress.</li><li>Given maximum and minimum fluctuating stresses, determine mean stress, alternating stress and stress ratio.</li><li>For a design problem, apply the failure theory explicitly specified in the question and include the required factor of safety.</li></ol></section>
+
+<section class="card"><h2>12-Mark Answer Workflow</h2><ol><li>Write Given and Find.</li><li>Draw the loading/geometry sketch where required.</li><li>Convert all quantities to consistent units.</li><li>Write the governing equations before substitution.</li><li>Show intermediate calculations clearly.</li><li>Apply the specified failure theory; do not silently substitute another theory.</li><li>Check strength/stiffness requirements where applicable.</li><li>State the final answer with units and practical design selection where required.</li></ol></section>
+
+<div class="note"><strong>Unit I coverage:</strong> direct/bending/torsional loading, factor of safety, combined loading, principal stresses, eccentric loading and fluctuating stresses are directly supported by the existing Unit I notes. Curved-beam calculations, fatigue-life calculations and stress-concentration numerical work should be added only with the required prescribed design relations/data-book information rather than inventing table values.</div>
+</div></body></html>
