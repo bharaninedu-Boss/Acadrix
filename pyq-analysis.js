@@ -38,6 +38,39 @@
         4: 'data/mechanical/ME3591_Unit4_Notes.html',
         5: 'data/mechanical/ME3591_Unit5_Notes.html'
       }
+    },
+    ME3592: {
+      title: 'ME3592 Exam Intelligence',
+      note: 'Based on the supplied Apr/May 2024, Nov/Dec 2024 and Nov/Dec 2023 university papers. Recurrence is used for revision priority only; it is not a prediction of the next paper.',
+      papers: 3,
+      patterns: [
+        ['Linear/angular measuring instruments', '3/3 papers', 'Very High', 2],
+        ['Fits, tolerances and tolerance specification', '3/3 papers', 'Very High', 3],
+        ['Surface roughness / surface metrology', '3/3 papers', 'Very High', 4],
+        ['CMM and coordinate measurement', '3/3 papers', 'Very High', 5],
+        ['Machine vision', '3/3 papers', 'Very High', 5],
+        ['Laser interferometer / alignment', '3/3 papers', 'Very High', 5],
+        ['Calibration', '2/3 papers', 'High', 1],
+        ['Errors and uncertainty', '2/3 papers', 'High', 1],
+        ['GD&T / form tolerances', '2/3 papers', 'High', 4],
+        ['Autocollimator', '2/3 papers', 'High', 2],
+        ['Sine bar / angular measurement', '2/3 papers', 'High', 2],
+        ['Pneumatic comparator / back-pressure gauge', '2/3 papers', 'High', 2]
+      ],
+      units: [
+        ['Unit I', 'Measurement process, SWIPE, errors, uncertainty, statistics, MSA, calibration and air gauging', 'High', 1],
+        ['Unit II', 'Linear/angular instruments, comparators, optical measurement, threads and gears', 'Very High', 2],
+        ['Unit III', 'Interchangeability, fits, gauges, tolerance analysis, process capability and stack-up', 'Very High', 3],
+        ['Unit IV', 'GD&T, datums, form deviations, surface finish and 3D surface metrology', 'Very High', 4],
+        ['Unit V', 'Lasers, interferometers, CMM, machine vision, in-process monitoring, CT and white-light scanners', 'Very High', 5]
+      ],
+      unitLinks: {
+        1: 'data/mechanical/ME3592_Unit1_Notes.html',
+        2: 'data/mechanical/ME3592_Unit2_Notes.html',
+        3: 'data/mechanical/ME3592_Unit3_Notes.html',
+        4: 'data/mechanical/ME3592_Unit4_Notes.html',
+        5: 'data/mechanical/ME3592_Unit5_Notes.html'
+      }
     }
   };
 
