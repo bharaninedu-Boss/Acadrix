@@ -1,104 +1,90 @@
-/* ACADRIX — regulation-aware search enhancement
-   Keeps the existing search UI but adds R-2025 awareness and richer metadata.
+/* ACADRIX — regulation-aware unified search
+   Builds one cached index for R-2021 + R-2025 and searches subjects, units and resource labels.
 */
 (function () {
   'use strict';
+  let cachedIndex = null;
+  let buildingIndex = null;
 
-  const originalHandleSearch = window.handleSearch;
+  const DEPTS = [
+    { id:'mech', name:'Mechanical Engineering', folder:'mechanical' },
+    { id:'cse', name:'Computer Science', folder:'cse' },
+    { id:'ece', name:'Electronics & Communication', folder:'electronics' },
+    { id:'eee', name:'Electrical & Electronics', folder:'electrical' },
+    { id:'it', name:'Information Technology', folder:'it' },
+    { id:'civil', name:'Civil Engineering', folder:'civil' }
+  ];
 
-  function escapeHtml(value) {
-    return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function esc(v) { return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function normPath(path, deptId, regulation) {
+    if (!path) return '';
+    if (/^(https?:|#|\/)/i.test(path)) return path;
+    if (regulation === 'r2025' && !path.startsWith('data/')) return `data/mechanical/r2025/${path}`;
+    if (deptId === 'mech' && !path.startsWith('data/')) return `data/mechanical/${path}`;
+    return path.startsWith('data/') ? path : `data/${path}`;
   }
 
-  async function buildUnifiedIndex() {
-    const index = [];
-    const departments = Array.isArray(window.ACADRIX_DEPARTMENTS) ? window.ACADRIX_DEPARTMENTS : [
-      { id:'mech', name:'Mechanical Engineering', folder:'mechanical' },
-      { id:'cse', name:'Computer Science', folder:'cse' },
-      { id:'ece', name:'Electronics & Communication', folder:'electronics' },
-      { id:'eee', name:'Electrical & Electronics', folder:'electrical' },
-      { id:'it', name:'Information Technology', folder:'it' },
-      { id:'civil', name:'Civil Engineering', folder:'civil' }
-    ];
+  async function semester(path, dept, sem, regulation) {
+    try {
+      const res = await fetch(path);
+      if (!res.ok) return;
+      const json = await res.json();
+      const subjects = Array.isArray(json) ? json : (json && Array.isArray(json.subjects) ? json.subjects : []);
+      subjects.forEach(s => {
+        const units = Array.isArray(s.units) ? s.units : [];
+        const topics = units.map((u, i) => ({ title: typeof u === 'string' ? u : (u.title || u.name || `Unit ${i+1}`), unit:i+1 }));
+        const resources = [];
+        [['Notes',s.resource],['Important Questions',s.importantQuestions],['Formula Sheet',s.formulaSheet],['Solved Problems',s.solvedProblems],['Last-Day Revision',s.lastDayRevision]].forEach(([label,p]) => { if (p) resources.push(label); });
+        index.push({ code:s.code || '', name:s.name || '', dept:dept.id, deptName:dept.name, sem, regulation, topics, resources, resource:s.resource || '' });
+      });
+    } catch (_) {}
+  }
 
-    for (const dept of departments) {
-      for (let sem = 1; sem <= 8; sem++) {
-        let json;
-        try {
-          const path = dept.id === 'mech' ? `data/mechanical/sem${sem}.json` : `data/${dept.folder}/sem${sem}.json`;
-          const res = await fetch(path);
-          if (!res.ok) continue;
-          json = await res.json();
-        } catch (_) { continue; }
-        const subjects = Array.isArray(json) ? json : (json && Array.isArray(json.subjects) ? json.subjects : []);
-        subjects.forEach(s => index.push(normalizeSubject(s, dept, sem, 'r2021')));
+  async function buildIndex() {
+    if (cachedIndex) return cachedIndex;
+    if (buildingIndex) return buildingIndex;
+    buildingIndex = (async () => {
+      const index = [];
+      globalThis.index = index;
+      for (const d of DEPTS) for (let sem=1; sem<=8; sem++) {
+        await semester(d.id === 'mech' ? `data/mechanical/sem${sem}.json` : `data/${d.folder}/sem${sem}.json`, d, sem, 'r2021');
       }
-    }
-
-    // R-2025 Mechanical Engineering is intentionally indexed separately.
-    for (let sem = 1; sem <= 8; sem++) {
-      try {
-        const res = await fetch(`data/mechanical/r2025/sem${sem}.json`);
-        if (!res.ok) continue;
-        const json = await res.json();
-        const subjects = Array.isArray(json) ? json : (json && Array.isArray(json.subjects) ? json.subjects : []);
-        subjects.forEach(s => index.push(normalizeSubject(s, {id:'mech',name:'Mechanical Engineering'}, sem, 'r2025')));
-      } catch (_) {}
-    }
-    return index;
+      for (let sem=1; sem<=8; sem++) await semester(`data/mechanical/r2025/sem${sem}.json`, DEPTS[0], sem, 'r2025');
+      cachedIndex = globalThis.index;
+      delete globalThis.index;
+      return cachedIndex;
+    })();
+    return buildingIndex;
   }
 
-  function normalizeSubject(s, dept, sem, regulation) {
-    const units = Array.isArray(s.units) ? s.units : [];
-    const unitTopics = units.flatMap((u, i) => {
-      if (typeof u === 'string') return [{ title:u, index:i }];
-      return [{ title:u.name || u.title || `Unit ${i+1}`, index:i }];
+  function score(item, q) {
+    const tests = [
+      [item.code,120],[item.name,90],[...item.topics.map(t=>t.title),60],
+      [item.deptName,35],[item.regulation,35],[`semester ${item.sem}`,30],[...item.resources,25]
+    ];
+    let total=0;
+    tests.forEach(([value,weight]) => {
+      const values = Array.isArray(value) ? value : [value];
+      values.forEach(v => { const t=String(v||'').toLowerCase(); if (t===q) total+=weight*2; else if (t.includes(q)) total+=weight; });
     });
-    return {
-      code: s.code || '', name: s.name || '', dept: dept.id, deptName: dept.name,
-      sem, regulation, units, unitTopics,
-      resource: s.resource || '', importantQuestions: s.importantQuestions || '',
-      formulaSheet: s.formulaSheet || '', solvedProblems: s.solvedProblems || ''
-    };
+    return total;
   }
 
   async function enhancedSearch() {
-    const input = document.getElementById('searchInput');
-    const results = document.getElementById('searchResults');
-    if (!input || !results) return originalHandleSearch && originalHandleSearch();
-    const q = input.value.trim().toLowerCase();
-    if (q.length < 2) { results.style.display = 'none'; return; }
-
-    const index = await buildUnifiedIndex();
-    const scored = [];
-    index.forEach(item => {
-      const fields = [item.code, item.name, item.deptName, item.regulation, `semester ${item.sem}`, ...item.unitTopics.map(u => u.title)];
-      let score = 0;
-      fields.forEach((field, i) => {
-        const text = String(field).toLowerCase();
-        if (!text.includes(q)) return;
-        score += i === 0 ? 100 : i === 1 ? 80 : i < 4 ? 35 : 50;
-      });
-      if (score) scored.push({item, score});
-    });
-    scored.sort((a,b) => b.score - a.score);
-    const unique = [];
-    const seen = new Set();
-    scored.forEach(x => {
-      const key = `${x.item.regulation}|${x.item.dept}|${x.item.sem}|${x.item.code}`;
-      if (!seen.has(key) && unique.length < 12) { seen.add(key); unique.push(x.item); }
-    });
-
-    if (!unique.length) {
-      results.innerHTML = '<div class="search-item"><strong>No results found</strong><br><small>Try a subject code, subject name, unit topic, regulation or semester.</small></div>';
-    } else {
-      results.innerHTML = unique.map(s => {
-        const route = `#/dept/${s.dept}/${s.regulation}/sem${s.sem}/${encodeURIComponent(s.code)}`;
-        return `<a class="search-item" href="${route}" role="option"><strong>${escapeHtml(s.code || s.name)}</strong><br><small>${escapeHtml(s.name)} · ${escapeHtml(s.regulation.toUpperCase())} · Semester ${s.sem}</small></a>`;
-      }).join('');
-    }
-    results.style.display = 'block';
+    const input=document.getElementById('searchInput'), results=document.getElementById('searchResults');
+    if (!input || !results) return;
+    const q=input.value.trim().toLowerCase();
+    if(q.length<2){results.style.display='none';return;}
+    results.innerHTML='<div class="search-item"><small>Searching ACADRIX…</small></div>'; results.style.display='block';
+    const index=await buildIndex();
+    const ranked=index.map(item=>({item,score:score(item,q)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+    const seen=new Set(), unique=[];
+    ranked.forEach(x=>{const k=`${x.item.regulation}|${x.item.dept}|${x.item.sem}|${x.item.code}`;if(!seen.has(k)&&unique.length<12){seen.add(k);unique.push(x.item);}});
+    results.innerHTML=unique.length ? unique.map(s=>{
+      const route=`#/dept/${s.dept}/${s.regulation}/sem${s.sem}/${encodeURIComponent(s.code)}`;
+      const matchedTopic=s.topics.find(t=>t.title.toLowerCase().includes(q));
+      return `<a class="search-item" href="${route}" role="option"><strong>${esc(s.code||s.name)}</strong><br><small>${esc(s.name)} · ${s.regulation.toUpperCase()} · Semester ${s.sem}${matchedTopic ? ` · Unit ${matchedTopic.unit}` : ''}</small></a>`;
+    }).join('') : '<div class="search-item"><strong>No results found</strong><br><small>Try a subject code, subject name, unit topic, regulation, semester or resource.</small></div>';
   }
-
-  window.handleSearch = enhancedSearch;
+  window.handleSearch=enhancedSearch;
 })();
