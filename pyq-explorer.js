@@ -1,34 +1,51 @@
 /* ACADRIX PYQ Explorer
-   Search/filter previous-year papers from the subject's semester JSON.
+   Regulation/semester-aware previous-year paper explorer.
+   Reads only PYQs explicitly present in the subject's semester JSON.
 */
 (function () {
   'use strict';
 
+  function getRouteContext() {
+    const hash = location.hash.replace(/^#\/?/, '');
+    const parts = hash.split('/').filter(Boolean);
+    const dept = parts[1] || '';
+    const regulation = parts[2] || 'r2021';
+    const semMatch = (parts.find(p => /^sem\d+$/i.test(p)) || '').match(/sem(\d+)/i);
+    const sem = semMatch ? Number(semMatch[1]) : null;
+    return { dept, regulation: regulation.toLowerCase(), sem };
+  }
+
+  function dataPath(ctx) {
+    if (!ctx.sem || !ctx.dept) return '';
+    if (ctx.dept === 'mech' && ctx.regulation === 'r2025') return `data/mechanical/r2025/sem${ctx.sem}.json`;
+    const folder = { mech:'mechanical', cse:'cse', ece:'electronics', eee:'electrical', it:'it', civil:'civil' }[ctx.dept];
+    return folder ? `data/${folder}/sem${ctx.sem}.json` : '';
+  }
+
   async function init() {
     const details = document.querySelector('.subject-header');
     if (!details) return;
-
-    const headerText = details.textContent || '';
-    const codeMatch = headerText.match(/[A-Z]{2}\d{4}/i);
+    const codeMatch = (details.textContent || '').match(/[A-Z]{2}\d{4}/i);
     if (!codeMatch) return;
     const code = codeMatch[0].toUpperCase();
-
     const section = document.getElementById('acadrx-pyqs');
     if (!section || section.dataset.explorerReady === '1') return;
 
-    // The current subject renderer does not expose its object globally,
-    // so load the semester data directly. This also works on direct links.
+    const ctx = getRouteContext();
+    const path = dataPath(ctx);
+    if (!path) return;
+
     let pyqs = [];
     try {
-      const res = await fetch('data/mechanical/sem5.json');
-      if (res.ok) {
-        const json = await res.json();
-        const subjects = Array.isArray(json) ? json : (json && Array.isArray(json.subjects) ? json.subjects : []);
-        const subject = subjects.find(s => String(s.code || '').toUpperCase() === code);
-        if (subject && Array.isArray(subject.pyqs)) pyqs = subject.pyqs;
-      }
+      const res = await fetch(path);
+      if (!res.ok) return;
+      const json = await res.json();
+      const subjects = Array.isArray(json) ? json : (json && Array.isArray(json.subjects) ? json.subjects : []);
+      const subject = subjects.find(s => String(s.code || '').toUpperCase() === code);
+      if (subject && Array.isArray(subject.pyqs)) pyqs = subject.pyqs;
     } catch (e) {
       console.warn('ACADRIX PYQ Explorer could not load PYQ data.', e);
+      return;
     }
 
     if (!pyqs.length) return;
@@ -61,10 +78,10 @@
         const hay = `${p.year || ''} ${p.session || ''} ${p.topic || ''} ${p.title || ''}`.toLowerCase();
         return (!q || hay.includes(q)) && (!year.value || String(p.year) === year.value) && (!session.value || p.session === session.value);
       });
-      wrapper.querySelector('#pyqCount').textContent = `${filtered.length} paper${filtered.length === 1 ? '' : 's'} found`;
+      wrapper.querySelector('#pyqCount').textContent = `${filtered.length} verified paper${filtered.length === 1 ? '' : 's'} found`;
       const list = wrapper.querySelector('#pyqList');
       if (!filtered.length) {
-        list.innerHTML = '<div class="pyq-empty">No matching question papers.</div>';
+        list.innerHTML = '<div class="pyq-empty">No matching verified question papers.</div>';
         return;
       }
       list.innerHTML = filtered.map(p => `
@@ -85,6 +102,10 @@
   }
   function escapeAttr(v) { return escapeHtml(v).replace(/`/g, '&#96;'); }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
-  else init();
+  function boot() {
+    init();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+  else boot();
 })();
