@@ -38,8 +38,8 @@
     "pyqs": [],
     "videos": [],
     "questionBank": null,
-    "importantQuestions": null,
-    "formulaSheet": null,
+    "importantQuestions": "data/mechanical/ME3592_Important_Questions.html",
+    "formulaSheet": "data/mechanical/ME3592_Formula_Sheet.html",
     "solvedProblems": "data/mechanical/ME3592_Unit1_Solved_Problems.html",
     "lastDayRevision": null
   }
