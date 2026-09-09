@@ -1,14 +1,14 @@
 /* ACADRIX PYQ Analysis
-   Exam-pattern insights for subjects with verified PYQ coverage.
-   The ME3591 analysis below is based only on the three papers currently listed in sem5.json.
+   Evidence-based exam intelligence for subjects with verified PYQ coverage.
+   Never treats practice questions or predictions as university PYQs.
 */
 (function () {
   'use strict';
 
   const ANALYSIS = {
     ME3591: {
-      title: 'ME3591 Exam Pattern',
-      note: 'Based on the available Apr/May 2024, Nov/Dec 2024 and Nov/Dec 2023 papers. Use this as a revision guide, not a prediction of the next paper.',
+      title: 'ME3591 Exam Intelligence',
+      note: 'Based only on the three papers currently listed in sem5.json: Apr/May 2024, Nov/Dec 2024 and Nov/Dec 2023. This is a revision guide, not a prediction of the next paper.',
       papers: 3,
       patterns: [
         ['Shafts & shaft design', '3/3 papers', 'Very High'],
@@ -20,9 +20,9 @@
         ['Keys & splines', '3/3 papers', 'High'],
         ['Failure theories / stresses', '3/3 papers', 'High'],
         ['Design fundamentals / material selection', '3/3 papers', 'High'],
+        ['Connecting rod', '2/3 papers', 'High'],
         ['Power screws', '1/3 papers', 'Moderate'],
-        ['Fatigue / variable loading', '1/3 papers', 'Moderate'],
-        ['Connecting rod', '2/3 papers', 'High']
+        ['Fatigue / variable loading', '1/3 papers', 'Moderate']
       ],
       units: [
         ['Unit I', 'Design fundamentals, stresses, failure theories, fatigue, crane hook / C-frame', 'High'],
@@ -33,6 +33,10 @@
       ]
     }
   };
+
+  function priorityClass(value) {
+    return String(value).toLowerCase().replace(/\s+/g, '-');
+  }
 
   function init() {
     const header = document.querySelector('.subject-header');
@@ -57,19 +61,24 @@
           <h2>${escapeHtml(data.title)}</h2>
           <p>${escapeHtml(data.note)}</p>
         </div>
-        <div class="analysis-stat"><strong>${data.papers}</strong><span>papers analysed</span></div>
+        <div class="analysis-stat"><strong>${data.papers}</strong><span>verified papers analysed</span></div>
+      </div>
+      <div class="exam-intelligence-callout">
+        <strong>📌 Study First</strong>
+        <span>Start with the Very High topics, then cover High-priority units. Moderate topics remain revision items.</span>
       </div>
       <h3>Most recurring topics</h3>
       <div class="analysis-table-wrap">
         <table class="analysis-table">
           <thead><tr><th>Topic</th><th>Coverage</th><th>Priority</th></tr></thead>
-          <tbody>${data.patterns.map(r => `<tr><td>${escapeHtml(r[0])}</td><td>${escapeHtml(r[1])}</td><td><span class="priority priority-${r[2].toLowerCase().replace(/\s+/g,'-')}">${escapeHtml(r[2])}</span></td></tr>`).join('')}</tbody>
+          <tbody>${data.patterns.map(r => `<tr><td>${escapeHtml(r[0])}</td><td>${escapeHtml(r[1])}</td><td><span class="priority priority-${priorityClass(r[2])}">${escapeHtml(r[2])}</span></td></tr>`).join('')}</tbody>
         </table>
       </div>
       <h3>Unit-wise revision priority</h3>
       <div class="unit-priority-grid">
-        ${data.units.map(u => `<article><div class="unit-priority-title"><strong>${escapeHtml(u[0])}</strong><span class="priority priority-${u[2].toLowerCase().replace(/\s+/g,'-')}">${escapeHtml(u[2])}</span></div><p>${escapeHtml(u[1])}</p></article>`).join('')}
+        ${data.units.map(u => `<article><div class="unit-priority-title"><strong>${escapeHtml(u[0])}</strong><span class="priority priority-${priorityClass(u[2])}">${escapeHtml(u[2])}</span></div><p>${escapeHtml(u[1])}</p></article>`).join('')}
       </div>
+      <p class="analysis-disclaimer"><strong>Evidence rule:</strong> frequency is calculated only from the explicitly listed verified papers. It does not mean a topic is guaranteed to appear again.</p>
     `;
 
     anchor.parentNode.insertBefore(section, anchor);
