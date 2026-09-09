@@ -4,9 +4,111 @@
   "source": {
     "authority": "Anna University Centre for Academic Courses",
     "url": "https://cac.annauniv.edu/aidetails/afug_2021_fu/Revised/Mech/B.E.Mech.pdf",
-    "note": "Topic entries should be populated only from the official R-2021 Mechanical Engineering syllabus. This file is intentionally structured for verified topic-by-topic coverage checking."
+    "note": "Topic entries are populated only from the official R-2021 Mechanical Engineering syllabus. This file is intentionally structured for verified topic-by-topic coverage checking."
   },
   "subjects": {
+    "ME3591": {
+      "name": "Design of Machine Elements",
+      "units": [
+        {
+          "unit": 1,
+          "title": "Fundamental Concepts in Design",
+          "topics": [
+            "Introduction to the design process",
+            "Factors influencing machine design",
+            "Selection of materials based on mechanical properties",
+            "Preferred numbers",
+            "Direct loading",
+            "Bending loading",
+            "Torsional loading",
+            "Modes of failure",
+            "Factor of safety",
+            "Combined loads",
+            "Principal stresses",
+            "Eccentric loading",
+            "Curved beams",
+            "Crane hook",
+            "C frame",
+            "Theories of failure",
+            "Design based on strength",
+            "Design based on stiffness",
+            "Stress concentration",
+            "Fluctuating stresses",
+            "Endurance limit",
+            "Design for finite life under variable loading",
+            "Design for infinite life under variable loading",
+            "Exposure to standards"
+          ]
+        },
+        {
+          "unit": 2,
+          "title": "Design of Shafts and Couplings",
+          "topics": [
+            "Shafts and axles",
+            "Design of solid shafts based on strength",
+            "Design of hollow shafts based on strength",
+            "Design of shafts based on rigidity",
+            "Design of shafts based on critical speed",
+            "Keys",
+            "Splines",
+            "Rigid couplings",
+            "Flexible couplings"
+          ]
+        },
+        {
+          "unit": 3,
+          "title": "Design of Temporary and Permanent Joints",
+          "topics": [
+            "Threaded fasteners",
+            "Bolted joints",
+            "Bolted joints under eccentric loading",
+            "Knuckle joints",
+            "Cotter joints",
+            "Welded joints",
+            "Butt welds",
+            "Fillet welds",
+            "Parallel transverse fillet welds",
+            "Welded joints subjected to bending loads",
+            "Welded joints subjected to torsional loads",
+            "Welded joints subjected to eccentric loads",
+            "Riveted joints for structures",
+            "Theory of bonded joints"
+          ]
+        },
+        {
+          "unit": 4,
+          "title": "Design of Energy Storing Elements and Engine Components",
+          "topics": [
+            "Types of springs",
+            "Design of helical springs",
+            "Design of concentric springs",
+            "Surge in springs",
+            "Design of laminated springs",
+            "Rubber springs",
+            "Flywheels considering stresses in rims and arms for engines",
+            "Flywheels for punching machines",
+            "Solid flywheels",
+            "Rimmed flywheels",
+            "Connecting rods",
+            "Crank shafts"
+          ]
+        },
+        {
+          "unit": 5,
+          "title": "Design of Bearings and Miscellaneous Elements",
+          "topics": [
+            "Sliding contact bearings",
+            "Rolling contact bearings",
+            "Hydrodynamic journal bearings",
+            "Sommerfeld number",
+            "Raimondi and Boyd graphs",
+            "Selection of rolling contact bearings",
+            "Design of seals",
+            "Design of gaskets"
+          ]
+        }
+      ]
+    },
     "ME3592": {
       "name": "Metrology and Measurements",
       "units": [
@@ -95,7 +197,7 @@
             "Applications of Machine Vision",
             "On-line and in-process monitoring in production",
             "Computed tomography",
-            "White light Scanners"
+            "White light scanners"
           ]
         }
       ]
