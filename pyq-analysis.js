@@ -41,6 +41,10 @@
     }
   };
 
+  // Expose the verified dataset so future subjects can register their own
+  // evidence without rewriting the rendering engine.
+  window.ACADRIX_PYQ_ANALYSIS = ANALYSIS;
+
   function priorityClass(value) {
     return String(value).toLowerCase().replace(/\s+/g, '-');
   }
@@ -57,7 +61,7 @@
     const match = codeText.match(/[A-Z]{2}\d{4}/i);
     if (!match) return;
     const code = match[0].toUpperCase();
-    const data = ANALYSIS[code];
+    const data = window.ACADRIX_PYQ_ANALYSIS[code];
     if (!data || document.getElementById('acadrx-pyq-analysis')) return;
 
     const anchor = document.getElementById('acadrx-pyqs');
