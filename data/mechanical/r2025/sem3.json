@@ -3,6 +3,17 @@
   "program": "B.E. Mechanical Engineering",
   "semester": 3,
   "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu/Mech/B.E.%20Mechanical%20Engineering.pdf",
-  "status": "structure-ready",
-  "subjects": []
+  "status": "curriculum-verified",
+  "totalContactPeriods": 27,
+  "totalCredits": 24,
+  "subjects": [
+    {"code":"MA25C03","name":"Computational Differential Equations","type":"Theory","category":"BS","credits":4,"periods":"3-1-0","tcp":4},
+    {"code":"ME25C07","name":"Applied Engineering Mechanics","type":"Theory","category":"ES (PC)","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"ME25301","name":"Engineering Thermodynamics","type":"Theory","category":"ES (PC)","credits":4,"periods":"4-0-0","tcp":4},
+    {"code":"CE25C11","name":"Strength of Materials","type":"Laboratory Integrated Theory","category":"ES (PC)","credits":4,"periods":"3-0-2","tcp":5},
+    {"code":"ME25C08","name":"Metallurgy and Materials Science","type":"Theory","category":"ES (PC)","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"EC25C17","name":"Embedded Systems","type":"Theory","category":"ES (G)","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"EN25C03","name":"English Communication Skills Laboratory – I","type":"Laboratory","category":"HUM","credits":1,"periods":"0-0-2","tcp":2},
+    {"code":"SDC-I","name":"Skill Development Course – I","type":"Laboratory Integrated Theory","category":"SD","credits":2,"periods":"1-0-2","tcp":3}
+  ]
 }
