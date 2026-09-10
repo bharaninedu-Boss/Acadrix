@@ -14,8 +14,14 @@ const AVAILABLE_RESOURCES = {
     CME387: 'CME387.html'
 };
 
-// Anna University R-2021 Mechanical Engineering Semester VII.
-// Semester VII is not a standard Professional Elective semester.
+// Verified R-2021 Semester VII subject hubs created for ACADRIX.
+const SEM7_RESOURCES = {
+    ME3791: 'ME3791.html',
+    ME3792: 'ME3792.html',
+    GE3791: 'GE3791.html',
+    GE3792: 'GE3792.html'
+};
+
 const SEM7_SUBJECTS = [
     ['ME3791', 'Mechatronics and IoT', 'Theory'],
     ['ME3792', 'Computer Integrated Manufacturing', 'Theory'],
@@ -51,171 +57,93 @@ async function initProfessionalElectivesPage() {
 function renderCatalogue(verticals, query = '', status = 'all', verticalId = 'all') {
     const catalogue = document.getElementById('verticalCatalogue');
     if (!catalogue) return;
-
     const search = query.trim().toLowerCase();
     let visibleCourses = 0;
 
     catalogue.innerHTML = verticals.map(vertical => {
         if (verticalId !== 'all' && String(vertical.id) !== String(verticalId)) return '';
-
         const courses = (vertical.courses || []).filter(course => {
             const code = String(course[0] || '').toLowerCase();
             const title = String(course[1] || '').toLowerCase();
             const available = Boolean(AVAILABLE_RESOURCES[String(course[0])]);
-            const matchesSearch = !search || code.includes(search) || title.includes(search);
-            const matchesStatus = status === 'all' || (status === 'available' && available) || (status === 'coming' && !available);
-            return matchesSearch && matchesStatus;
+            return (!search || code.includes(search) || title.includes(search)) &&
+                (status === 'all' || (status === 'available' && available) || (status === 'coming' && !available));
         });
-
         if (!courses.length) return '';
         visibleCourses += courses.length;
-
         return `
             <details ${search ? 'open' : ''}>
-                <summary>
-                    <span>Vertical ${escapeHtml(vertical.id)} — ${escapeHtml(vertical.name)}</span>
-                    <small>${courses.length} matching ${courses.length === 1 ? 'course' : 'courses'}</small>
-                </summary>
-                <div class="vertical-body">
-                    <div class="course-grid">
-                        ${courses.map(course => renderCourse(course, (vertical.courses || []).indexOf(course))).join('')}
-                    </div>
-                </div>
-            </details>
-        `;
+                <summary><span>Vertical ${escapeHtml(vertical.id)} — ${escapeHtml(vertical.name)}</span><small>${courses.length} matching ${courses.length === 1 ? 'course' : 'courses'}</small></summary>
+                <div class="vertical-body"><div class="course-grid">${courses.map(course => renderCourse(course, (vertical.courses || []).indexOf(course))).join('')}</div></div>
+            </details>`;
     }).join('');
 
-    if (!visibleCourses) {
-        catalogue.innerHTML = '<div class="error-box">No professional electives match your search or filter.</div>';
-    }
-
+    if (!visibleCourses) catalogue.innerHTML = '<div class="error-box">No professional electives match your search or filter.</div>';
     updateCatalogueCount(visibleCourses);
 }
 
 function injectCatalogueFilters(catalogue) {
     if (document.getElementById('peCatalogueFilters')) return;
-
     const wrapper = document.createElement('div');
     wrapper.id = 'peCatalogueFilters';
     wrapper.className = 'pe-filter-panel';
     wrapper.innerHTML = `
-        <div class="pe-filter-row">
-            <label class="pe-search-label" for="peSearch">Search electives</label>
-            <input id="peSearch" class="pe-search" type="search" placeholder="Search by subject code or title…" autocomplete="off">
-        </div>
-        <div class="pe-filter-row pe-filter-controls">
-            <label for="peStatus">Availability</label>
-            <select id="peStatus" class="pe-select">
-                <option value="all">All resources</option>
-                <option value="available">Available on ACADRIX</option>
-                <option value="coming">Resources coming soon</option>
-            </select>
-            <label for="peVertical">Vertical</label>
-            <select id="peVertical" class="pe-select">
-                <option value="all">All verticals</option>
-                ${catalogueData.map(v => `<option value="${escapeHtml(v.id)}">Vertical ${escapeHtml(v.id)} — ${escapeHtml(v.name)}</option>`).join('')}
-            </select>
-            <button type="button" class="pe-clear" id="peClear">Clear</button>
-        </div>
-        <div class="pe-filter-meta" id="peFilterCount" aria-live="polite"></div>
-    `;
-
+        <div class="pe-filter-row"><label class="pe-search-label" for="peSearch">Search electives</label><input id="peSearch" class="pe-search" type="search" placeholder="Search by subject code or title…" autocomplete="off"></div>
+        <div class="pe-filter-row pe-filter-controls"><label for="peStatus">Availability</label><select id="peStatus" class="pe-select"><option value="all">All resources</option><option value="available">Available on ACADRIX</option><option value="coming">Resources coming soon</option></select><label for="peVertical">Vertical</label><select id="peVertical" class="pe-select"><option value="all">All verticals</option>${catalogueData.map(v => `<option value="${escapeHtml(v.id)}">Vertical ${escapeHtml(v.id)} — ${escapeHtml(v.name)}</option>`).join('')}</select><button type="button" class="pe-clear" id="peClear">Clear</button></div>
+        <div class="pe-filter-meta" id="peFilterCount" aria-live="polite"></div>`;
     catalogue.parentNode.insertBefore(wrapper, catalogue);
 
     const search = document.getElementById('peSearch');
     const status = document.getElementById('peStatus');
     const vertical = document.getElementById('peVertical');
     const clear = document.getElementById('peClear');
-
     const apply = () => renderCatalogue(catalogueData, search.value, status.value, vertical.value);
     search.addEventListener('input', apply);
     status.addEventListener('change', apply);
     vertical.addEventListener('change', apply);
-    clear.addEventListener('click', () => {
-        search.value = '';
-        status.value = 'all';
-        vertical.value = 'all';
-        apply();
-        search.focus();
-    });
-
+    clear.addEventListener('click', () => { search.value = ''; status.value = 'all'; vertical.value = 'all'; apply(); search.focus(); });
     injectFilterStyles();
 }
 
 function updateCatalogueCount(count) {
     const counter = document.getElementById('peFilterCount');
-    if (!counter) return;
-    counter.textContent = `${count} ${count === 1 ? 'elective' : 'electives'} shown`;
+    if (counter) counter.textContent = `${count} ${count === 1 ? 'elective' : 'electives'} shown`;
 }
 
 function injectFilterStyles() {
     if (document.getElementById('peFilterStyles')) return;
-
     const style = document.createElement('style');
     style.id = 'peFilterStyles';
-    style.textContent = `
-        .pe-filter-panel{margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(127,127,127,.22);border-radius:14px;background:rgba(127,127,127,.06)}
-        .pe-filter-row{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap}
-        .pe-search-label{font-weight:700;display:block;width:100%}
-        .pe-search{width:100%;padding:.75rem .9rem;border:1px solid rgba(127,127,127,.3);border-radius:10px;background:inherit;color:inherit;font:inherit;box-sizing:border-box}
-        .pe-filter-controls label{font-size:.9rem;font-weight:650}
-        .pe-select,.pe-clear{padding:.65rem .75rem;border:1px solid rgba(127,127,127,.3);border-radius:9px;background:inherit;color:inherit;font:inherit}
-        .pe-clear{cursor:pointer;font-weight:650}
-        .pe-filter-meta{margin-top:.7rem;font-size:.85rem;opacity:.72}
-        @media (max-width:640px){.pe-filter-controls>*{width:100%}.pe-filter-controls label{margin-top:.2rem}.pe-clear{width:auto}}
-    `;
+    style.textContent = `.pe-filter-panel{margin:1rem 0 1.25rem;padding:1rem;border:1px solid rgba(127,127,127,.22);border-radius:14px;background:rgba(127,127,127,.06)}.pe-filter-row{display:flex;gap:.65rem;align-items:center;flex-wrap:wrap}.pe-search-label{font-weight:700;display:block;width:100%}.pe-search{width:100%;padding:.75rem .9rem;border:1px solid rgba(127,127,127,.3);border-radius:10px;background:inherit;color:inherit;font:inherit;box-sizing:border-box}.pe-filter-controls label{font-size:.9rem;font-weight:650}.pe-select,.pe-clear{padding:.65rem .75rem;border:1px solid rgba(127,127,127,.3);border-radius:9px;background:inherit;color:inherit;font:inherit}.pe-clear{cursor:pointer;font-weight:650}.pe-filter-meta{margin-top:.7rem;font-size:.85rem;opacity:.72}@media (max-width:640px){.pe-filter-controls>*{width:100%}.pe-filter-controls label{margin-top:.2rem}.pe-clear{width:auto}}`;
     document.head.appendChild(style);
 }
 
 function renderSemester7() {
     const section = document.getElementById('sem7');
     if (!section) return;
-
     section.innerHTML = `
         <h2>Semester 7 — R-2021 Curriculum</h2>
         <p class="semester-intro">The standard Anna University R-2021 Mechanical Engineering Semester VII curriculum contains core theory subjects, open electives, a laboratory and summer internship. Professional Electives are registered in Semesters V and VI, not as standard Semester VII subjects.</p>
-        <div class="sem7-grid">
-            ${SEM7_SUBJECTS.map(([code, title, type]) => `
-                <div class="sem7-subject">
-                    <div class="sem7-code">${escapeHtml(code)}</div>
-                    <h3>${escapeHtml(title)}</h3>
-                    <span class="sem7-tag">${escapeHtml(type)}</span>
-                </div>
-            `).join('')}
-        </div>
-        <div class="rule">
-            <strong>R-2021 note:</strong> Professional Elective Courses are registered in Semesters V and VI. Honours/Minor course registration may extend from Semester V to VIII under the applicable R-2021 rules.
-        </div>
-    `;
+        <div class="sem7-grid">${SEM7_SUBJECTS.map(([code, title, type]) => renderSem7Subject(code, title, type)).join('')}</div>
+        <div class="rule"><strong>R-2021 note:</strong> Professional Elective Courses are registered in Semesters V and VI. Honours/Minor course registration may extend from Semester V to VIII under the applicable R-2021 rules.</div>`;
+}
+
+function renderSem7Subject(code, title, type) {
+    const url = SEM7_RESOURCES[code];
+    const inner = `<div class="sem7-code">${escapeHtml(code)}</div><h3>${escapeHtml(title)}</h3><span class="sem7-tag">${escapeHtml(type)}</span>${url ? '<small class="sem7-action">Open subject hub →</small>' : '<small class="sem7-action muted">Resource hub coming soon</small>'}`;
+    return url ? `<a class="sem7-subject sem7-link" href="${url}" aria-label="Open ${escapeHtml(code)} — ${escapeHtml(title)}">${inner}</a>` : `<div class="sem7-subject">${inner}</div>`;
 }
 
 function renderCourse(course, index) {
     const code = String(course[0]);
     const title = String(course[1]);
     const resourceUrl = AVAILABLE_RESOURCES[code];
-
-    if (resourceUrl) {
-        return `
-            <a class="course course-available" href="${resourceUrl}" aria-label="Open ACADRIX resources for ${escapeHtml(code)} — ${escapeHtml(title)}">
-                <div class="course-topline"><b>Row ${index + 1} · ${escapeHtml(code)}</b><span class="status status-available">Available on ACADRIX</span></div>
-                <span>${escapeHtml(title)}</span>
-                <small class="course-action">Open subject hub →</small>
-            </a>
-        `;
-    }
-
-    return `
-        <div class="course course-coming-soon">
-            <div class="course-topline"><b>Row ${index + 1} · ${escapeHtml(code)}</b><span class="status status-coming">Resources coming soon</span></div>
-            <span>${escapeHtml(title)}</span>
-        </div>
-    `;
+    if (resourceUrl) return `<a class="course course-available" href="${resourceUrl}" aria-label="Open ACADRIX resources for ${escapeHtml(code)} — ${escapeHtml(title)}"><div class="course-topline"><b>Row ${index + 1} · ${escapeHtml(code)}</b><span class="status status-available">Available on ACADRIX</span></div><span>${escapeHtml(title)}</span><small class="course-action">Open subject hub →</small></a>`;
+    return `<div class="course course-coming-soon"><div class="course-topline"><b>Row ${index + 1} · ${escapeHtml(code)}</b><span class="status status-coming">Resources coming soon</span></div><span>${escapeHtml(title)}</span></div>`;
 }
 
 function escapeHtml(value) {
-    return String(value).replace(/[&<>'"]/g, character => ({
-        '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;'
-    }[character]));
+    return String(value).replace(/[&<>'"]/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[character]));
 }
 
 document.addEventListener('DOMContentLoaded', initProfessionalElectivesPage);
