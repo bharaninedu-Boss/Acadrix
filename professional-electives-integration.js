@@ -11,6 +11,15 @@
         return hash === '#/dept/mech/r2021' || hash.startsWith('#/dept/mech/r2021/');
     }
 
+    function isR2021MechanicalPage() {
+        if (!isR2021MechanicalRoute()) return false;
+        const app = document.getElementById('app');
+        const breadcrumb = app && app.querySelector('.breadcrumb');
+        // Use the rendered regulation label as a second hard guard. This prevents
+        // an R-2021 PE card from surviving an SPA route/render transition into R-2025.
+        return !!breadcrumb && breadcrumb.textContent.includes('Regulation 2021');
+    }
+
     function removeProfessionalElectivesCard() {
         const app = document.getElementById('app');
         if (!app) return;
@@ -24,7 +33,7 @@
 
         // Professional Electives currently belong to the R-2021 work only.
         // Never show this card while browsing the R-2025 curriculum.
-        if (!isR2021MechanicalRoute()) {
+        if (!isR2021MechanicalPage()) {
             removeProfessionalElectivesCard();
             return;
         }
@@ -34,13 +43,10 @@
         );
         if (!semesterHeading) return;
 
-        const breadcrumb = app.querySelector('.breadcrumb');
-        const isMechanical = breadcrumb && breadcrumb.textContent.includes('Mechanical Engineering');
-        if (!isMechanical) return;
-        if (app.querySelector('[data-acadrix-pe-card]')) return;
-
         const grid = semesterHeading.nextElementSibling;
         if (!grid || !grid.classList.contains('grid')) return;
+
+        if (app.querySelector('[data-acadrix-pe-card]')) return;
 
         const card = document.createElement('a');
         card.href = PE_URL;
