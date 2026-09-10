@@ -7,7 +7,8 @@ const AVAILABLE_RESOURCES = {
 };
 
 const SEM7_RESOURCES = {
-    ME3791: 'ME3791.html', ME3792: 'ME3792.html', GE3791: 'GE3791.html', GE3792: 'GE3792.html'
+    ME3791: 'ME3791.html', ME3792: 'ME3792.html', GE3791: 'GE3791.html', GE3792: 'GE3792.html',
+    ME3781: 'ME3781.html', ME3711: 'ME3711.html'
 };
 
 const SEM7_SUBJECTS = [
@@ -18,7 +19,6 @@ const SEM7_SUBJECTS = [
     ['ME3711', 'Summer Internship', 'Internship']
 ];
 
-// R-2021 source-supported OE structure. Actual offerings vary by institution/semester.
 const OE_PROGRAMMES = [
     ['CSE', 'Computer Science & Engineering', 'Programming, AI, data and computing-related electives'],
     ['IT', 'Information Technology', 'Software, information systems and emerging digital technologies'],
