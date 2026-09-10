@@ -10,18 +10,19 @@
   {"code":"ME3711","name":"Summer Internship","credits":1,"category":"EEC","official":true},
   {
     "code":"CME344",
-    "name":"Product Life Cycle Management — Additional Elective Resource",
+    "name":"Product Life Cycle Management",
     "credits":3,
-    "category":"Professional Elective Resource",
+    "category":"Professional Elective Study Resource",
     "official":false,
     "resourceOnly":true,
-    "note":"Additional ACADRIX study resource requested for Semester VII. The supplied R-2021 Mechanical curriculum lists CME344 as a Professional Elective, but does not list it among the official Semester VII courses. It is therefore shown separately as a resource and not as an official Semester VII curriculum entry.",
+    "link":"professional-electives/CME344.html",
+    "note":"Additional ACADRIX study resource for Semester VII. CME344 is listed in the R-2021 Professional Elective catalogue, but it is not an official Semester VII curriculum entry in the supplied Mechanical curriculum. It is therefore displayed separately from the official Semester VII subjects.",
     "units":[
       {"n":1,"title":"HISTORY, CONCEPTS AND TERMINOLOGY OF PLM","link":"professional-electives/CME344_Unit1_Notes.html"},
       {"n":2,"title":"PLM/PDM FUNCTIONS AND FEATURES"},
       {"n":3,"title":"DETAILS OF MODULES IN A PDM/PLM SOFTWARE"},
       {"n":4,"title":"ROLE OF PLM IN INDUSTRIES"},
-      {"n":5,"title":"BASICS ON CUSTOMISATION/INTEGRATION OF PDM/PLM SOFTWARE"}
+      {"n":5,"title":"CUSTOMISATION AND INTEGRATION OF PDM/PLM SOFTWARE"}
     ]
   }
 ]
