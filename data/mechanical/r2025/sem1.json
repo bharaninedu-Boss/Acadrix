@@ -4,18 +4,20 @@
   "semester": 1,
   "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu/Mech/B.E.%20Mechanical%20Engineering.pdf",
   "status": "curriculum-verified",
+  "totalContactPeriods": 39,
+  "totalCredits": 26,
   "subjects": [
-    {"code":"MA25C01","name":"Applied Calculus","type":"Theory","category":"BS","credits":4,"resource":"MA25C01.html","units":[{"unit":1,"title":"Differential Calculus","notes":"MA25C01_Unit1_Notes.html"},{"unit":2,"title":"Functions of Several Variables","notes":"MA25C01_Unit2_Notes.html"},{"unit":3,"title":"Integral Calculus","notes":"MA25C01_Unit3_Notes.html"},{"unit":4,"title":"Multiple Integrals","notes":"MA25C01_Unit4_Notes.html"}]},
-    {"code":"ME25C03","name":"Introduction to Mechanical Engineering","type":"Theory","category":"ES (PC) – DIC","credits":3,"resource":"ME25C03.html"},
-    {"code":"ME25C01","name":"Engineering Drawing","type":"Laboratory Integrated Theory","category":"ES (G)","credits":4},
-    {"code":"PH25C01","name":"Applied Physics – I","type":"Laboratory Integrated Theory","category":"BS","credits":3},
-    {"code":"CY25C01","name":"Applied Chemistry – I","type":"Laboratory Integrated Theory","category":"BS","credits":3},
-    {"code":"UC25H01","name":"தமிழர் மரபு / Heritage of Tamils","type":"Theory","category":"HUM","credits":1},
-    {"code":"EN25C01","name":"English Essentials – I","type":"Laboratory","category":"HUM","credits":2},
-    {"code":"CS25C02","name":"Computer Programming: Python","type":"Laboratory Integrated Theory","category":"ES (PC)","credits":3},
-    {"code":"ME25C04","name":"Makerspace","type":"Laboratory","category":"SD","credits":2},
-    {"code":"UC25A01","name":"Life Skills for Engineers – I","type":"Audit Course","category":"HUM","credits":0},
-    {"code":"UC25A02","name":"Physical Education – I","type":"Audit/Activity Course","category":"HUM","credits":1},
-    {"code":"NCC/NSS/NSO","name":"NCC / NSS / NSO","type":"Activity","category":"—","credits":0}
+    {"code":"MA25C01","name":"Applied Calculus","type":"Theory","category":"BS","credits":4,"periods":"3-1-0","tcp":4},
+    {"code":"ME25C03","name":"Introduction to Mechanical Engineering","type":"Theory","category":"ES (PC) – DIC","credits":3,"periods":"2-1-0","tcp":3},
+    {"code":"ME25C01","name":"Engineering Drawing","type":"Laboratory Integrated Theory","category":"ES (G)","credits":4,"periods":"2-0-4","tcp":6},
+    {"code":"PH25C01","name":"Applied Physics – I","type":"Laboratory Integrated Theory","category":"BS","credits":3,"periods":"2-0-2","tcp":4},
+    {"code":"CY25C01","name":"Applied Chemistry – I","type":"Laboratory Integrated Theory","category":"BS","credits":3,"periods":"2-0-2","tcp":4},
+    {"code":"UC25H01","name":"தமிழர் மரபு / Heritage of Tamils","type":"Theory","category":"HUM","credits":1,"periods":"1-0-0","tcp":1},
+    {"code":"EN25C01","name":"English Essentials – I","type":"Laboratory","category":"HUM","credits":2,"periods":"2-0-0","tcp":2},
+    {"code":"CS25C02","name":"Computer Programming: Python","type":"Laboratory Integrated Theory","category":"ES (PC)","credits":3,"periods":"2-0-2","tcp":4},
+    {"code":"ME25C04","name":"Makerspace","type":"Laboratory","category":"SD","credits":2,"periods":"0-0-4","tcp":4},
+    {"code":"UC25A01","name":"Life Skills for Engineers – I","type":"Audit Course","category":"HUM","credits":0,"periods":"1-0-2","tcp":3,"audit":true},
+    {"code":"UC25A02","name":"Physical Education – I","type":"Audit/Activity Course","category":"HUM","credits":1,"periods":"0-0-4","tcp":4,"audit":true},
+    {"code":"NCC/NSS/NSO","name":"NCC / NSS / NSO","type":"Activity","category":"—","credits":0,"periods":"—","tcp":0,"optional":true}
   ]
 }
