@@ -14,8 +14,23 @@ const AVAILABLE_RESOURCES = {
     CME387: 'CME387.html'
 };
 
+// Anna University R-2021 Mechanical Engineering Semester VII.
+// Semester VII is not a standard Professional Elective semester.
+const SEM7_SUBJECTS = [
+    ['ME3791', 'Mechatronics and IoT', 'Theory'],
+    ['ME3792', 'Computer Integrated Manufacturing', 'Theory'],
+    ['GE3791', 'Human Values and Ethics', 'Theory'],
+    ['GE3792', 'Industrial Management', 'Theory'],
+    ['OE-II', 'Open Elective - II', 'Open Elective'],
+    ['OE-III', 'Open Elective - III', 'Open Elective'],
+    ['OE-IV', 'Open Elective - IV', 'Open Elective'],
+    ['ME3781', 'Mechatronics and IoT Laboratory', 'Laboratory'],
+    ['ME3711', 'Summer Internship', 'Internship']
+];
+
 async function initProfessionalElectivesPage() {
     const catalogue = document.getElementById('verticalCatalogue');
+    renderSemester7();
     if (!catalogue) return;
 
     try {
@@ -40,6 +55,28 @@ async function initProfessionalElectivesPage() {
         console.error('Failed to load Professional Elective catalogue:', error);
         catalogue.innerHTML = '<div class="error-box">The elective catalogue could not be loaded. Please refresh the page.</div>';
     }
+}
+
+function renderSemester7() {
+    const section = document.getElementById('sem7');
+    if (!section) return;
+
+    section.innerHTML = `
+        <h2>Semester 7 — R-2021 Curriculum</h2>
+        <p class="semester-intro">The standard Anna University R-2021 Mechanical Engineering Semester VII curriculum contains core theory subjects, open electives, a laboratory and summer internship. Professional Electives are registered in Semesters V and VI, not as standard Semester VII subjects.</p>
+        <div class="sem7-grid">
+            ${SEM7_SUBJECTS.map(([code, title, type]) => `
+                <div class="sem7-subject">
+                    <div class="sem7-code">${escapeHtml(code)}</div>
+                    <h3>${escapeHtml(title)}</h3>
+                    <span class="sem7-tag">${escapeHtml(type)}</span>
+                </div>
+            `).join('')}
+        </div>
+        <div class="rule">
+            <strong>R-2021 note:</strong> Professional Elective Courses are registered in Semesters V and VI. Honours/Minor course registration may extend from Semester V to VIII under the applicable R-2021 rules.
+        </div>
+    `;
 }
 
 function renderCourse(course, index) {
