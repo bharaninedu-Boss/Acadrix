@@ -3,6 +3,25 @@
   "program": "B.E. Mechanical Engineering",
   "semester": 2,
   "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu/Mech/B.E.%20Mechanical%20Engineering.pdf",
-  "status": "structure-ready",
-  "subjects": []
+  "status": "curriculum-verified",
+  "totalContactPeriods": 34,
+  "totalCredits": 22,
+  "notes": [
+    "Foreign Language is Deutsch / Japanese / Korean and the official curriculum leaves its credit value blank.",
+    "Life Skills for Engineers – II is an audit course.",
+    "Physical Education – II is marked as an audit course in the official curriculum."
+  ],
+  "subjects": [
+    {"code":"MA25C02","name":"Linear Algebra","type":"Theory","category":"BS","credits":4,"periods":"3-1-0","tcp":4},
+    {"code":"ME25C02","name":"Engineering Mechanics","type":"Theory","category":"ES (G)","credits":4,"periods":"3-1-0","tcp":4},
+    {"code":"EE25C01","name":"Basic Electrical and Electronics Engineering","type":"Theory","category":"ES (G)","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"PH25C05","name":"Applied Physics (ME) – II","type":"Theory","category":"BS","credits":3,"periods":"2-1-0","tcp":3},
+    {"code":"CY25C03","name":"Applied Chemistry (ME) – II","type":"Theory","category":"BS","credits":2,"periods":"2-0-0","tcp":2},
+    {"code":"UC25H02","name":"தமிழர்களும் தொழில்நுட்பமும் / Tamils and Technology","type":"Theory","category":"HUM","credits":1,"periods":"1-0-0","tcp":1},
+    {"code":"ME25C05","name":"Re-Engineering for Innovation","type":"Laboratory","category":"SD","credits":2,"periods":"0-0-4","tcp":4},
+    {"code":"EN25C02","name":"English Essentials – II","type":"Laboratory Integrated Theory","category":"HUM","credits":2,"periods":"1-0-2","tcp":3},
+    {"code":"UC25A03","name":"Life Skills for Engineers – II","type":"Audit Course","category":"HUM","credits":0,"periods":"1-0-2","tcp":3,"audit":true},
+    {"code":"UC25A04","name":"Physical Education – II","type":"Audit/Activity Course","category":"HUM","credits":1,"periods":"0-0-4","tcp":4,"audit":true},
+    {"code":"FOREIGN-LANGUAGE","name":"Foreign Language (Deutsch / Japanese / Korean)","type":"Laboratory Integrated Theory","category":"HUM","credits":0,"periods":"1-0-2","tcp":3,"optional":true,"creditValue":"Not specified in the official curriculum table"}
+  ]
 }
