@@ -3,6 +3,18 @@
   "program": "B.E. Mechanical Engineering",
   "semester": 4,
   "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu/Mech/B.E.%20Mechanical%20Engineering.pdf",
-  "status": "structure-ready",
-  "subjects": []
+  "status": "curriculum-verified",
+  "totalContactPeriods": 30,
+  "totalCredits": 27,
+  "subjects": [
+    {"code":"CS25C16","name":"Applied Data Science","type":"Theory","category":"ES (ET)","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"ME25C09","name":"Kinematics and Dynamics of Machines","type":"Laboratory Integrated Theory","category":"ES (PC)","credits":3,"periods":"3-0-2","tcp":3},
+    {"code":"CE25C12","name":"Fluid Mechanics & Machinery","type":"Laboratory Integrated Theory","category":"ES (PC)","credits":4,"periods":"3-0-2","tcp":4},
+    {"code":"ME25402","name":"Manufacturing Processes – II","type":"Laboratory Integrated Theory","category":"ES (PC)","credits":4,"periods":"2-0-2","tcp":5},
+    {"code":"ME25401","name":"Thermal Engineering – I","type":"Theory","category":"ES (PC)","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"Power-Generation-Technologies","name":"Power Generation Technologies","type":"Theory","category":"ES (PC)","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"ME25C10","name":"Standards in Mechanical Engineering","type":"Theory","category":"ES (PC)","credits":1,"periods":"1-0-0","tcp":2},
+    {"code":"EN25C04","name":"English Communication Skills Laboratory – III","type":"Laboratory","category":"HUM","credits":2,"periods":"0-0-2","tcp":3},
+    {"code":"SDC-II","name":"Skill Development Course – II","type":"Laboratory Integrated Theory","category":"SD","credits":4,"periods":"1-0-2","tcp":4}
+  ]
 }
