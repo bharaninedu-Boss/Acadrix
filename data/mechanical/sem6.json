@@ -1,1 +1,12 @@
-[]
+[
+  {"code":"ME3691","name":"Heat and Mass Transfer","credits":4,"category":"PCC","official":true,"popular":true},
+  {"code":"PE-IV","name":"Professional Elective IV","credits":3,"category":"PEC","official":true},
+  {"code":"PE-V","name":"Professional Elective V","credits":3,"category":"PEC","official":true},
+  {"code":"PE-VI","name":"Professional Elective VI","credits":3,"category":"PEC","official":true},
+  {"code":"PE-VII","name":"Professional Elective VII","credits":3,"category":"PEC","official":true},
+  {"code":"OE-I","name":"Open Elective – I","credits":3,"category":"OEC","official":true,"note":"Chosen from emerging technologies."},
+  {"code":"MC-II","name":"Mandatory Course-II","credits":0,"category":"MC","official":true,"note":"Non-credit course; student selects one course from the MC-II list."},
+  {"code":"NCC Credit Course Level 3","name":"NCC Credit Course Level 3","credits":3,"category":"NCC","official":true,"conditional":true,"note":"Offered for NCC students only; not considered for CGPA computation."},
+  {"code":"ME3681","name":"CAD/CAM Laboratory","credits":2,"category":"PCC","official":true},
+  {"code":"ME3682","name":"Heat Transfer Laboratory","credits":2,"category":"PCC","official":true}
+]
