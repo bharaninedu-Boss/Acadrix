@@ -125,13 +125,31 @@ function renderSemester7() {
         <h2>Semester 7 — R-2021 Curriculum</h2>
         <p class="semester-intro">The standard Anna University R-2021 Mechanical Engineering Semester VII curriculum contains core theory subjects, open electives, a laboratory and summer internship. Professional Electives are registered in Semesters V and VI, not as standard Semester VII subjects.</p>
         <div class="sem7-grid">${SEM7_SUBJECTS.map(([code, title, type]) => renderSem7Subject(code, title, type)).join('')}</div>
-        <div class="rule"><strong>R-2021 note:</strong> Professional Elective Courses are registered in Semesters V and VI. Honours/Minor course registration may extend from Semester V to VIII under the applicable R-2021 rules.</div>`;
+        <div class="oe-panel">
+            <h3>Open Electives — R-2021</h3>
+            <div class="oe-grid">
+                <div class="oe-card"><strong>OE-II</strong><h4>Emerging Technologies</h4><p>Open Elective II shall be chosen from the emerging technologies list.</p><span>3 credits</span></div>
+                <div class="oe-card"><strong>OE-III</strong><h4>Other Programme Electives</h4><p>Choose from open electives offered by other programmes, subject to eligibility.</p><span>3 credits</span></div>
+                <div class="oe-card"><strong>OE-IV</strong><h4>Other Programme Electives</h4><p>Choose from open electives offered by other programmes, subject to eligibility.</p><span>3 credits</span></div>
+            </div>
+            <div class="oe-note"><strong>Important:</strong> ACADRIX will list actual eligible OE course names only when the corresponding programme-wise offering list is available. This avoids presenting an unverified list as the official R-2021 choice.</div>
+        </div>
+        <div class="rule"><strong>R-2021 note:</strong> The curriculum identifies OE-II as an emerging-technologies elective, while OE-III and OE-IV are chosen from open electives offered by other programmes.</div>`;
+    injectSemester7Styles();
 }
 
 function renderSem7Subject(code, title, type) {
     const url = SEM7_RESOURCES[code];
     const inner = `<div class="sem7-code">${escapeHtml(code)}</div><h3>${escapeHtml(title)}</h3><span class="sem7-tag">${escapeHtml(type)}</span>${url ? '<small class="sem7-action">Open subject hub →</small>' : '<small class="sem7-action muted">Resource hub coming soon</small>'}`;
     return url ? `<a class="sem7-subject sem7-link" href="${url}" aria-label="Open ${escapeHtml(code)} — ${escapeHtml(title)}">${inner}</a>` : `<div class="sem7-subject">${inner}</div>`;
+}
+
+function injectSemester7Styles() {
+    if (document.getElementById('sem7Styles')) return;
+    const style = document.createElement('style');
+    style.id = 'sem7Styles';
+    style.textContent = `.sem7-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:15px 0}.sem7-subject{display:block;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;color:var(--text);text-decoration:none}.sem7-subject:hover{border-color:#93c5fd;background:var(--soft);text-decoration:none}.sem7-code{font-weight:800;color:var(--accent);font-size:.85rem}.sem7-subject h3{margin:4px 0 8px}.sem7-tag{display:inline-block;border-radius:999px;background:#e2e8f0;padding:3px 8px;font-size:.72rem;color:#475569}.sem7-action{display:block;margin-top:9px;color:var(--accent);font-weight:700;font-size:.78rem}.oe-panel{margin:18px 0;padding:16px;border:1px solid var(--border);border-radius:14px;background:var(--card)}.oe-panel h3{margin-top:0;color:var(--accent)}.oe-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.oe-card{border:1px solid var(--border);border-radius:10px;padding:13px}.oe-card strong{color:var(--accent)}.oe-card h4{margin:4px 0}.oe-card p{color:var(--muted);margin:6px 0}.oe-card span{font-size:.78rem;color:var(--muted);font-weight:700}.oe-note{margin-top:12px;padding:11px 13px;border-left:4px solid #f59e0b;background:#fff7ed;border-radius:8px;font-size:.86rem}`;
+    document.head.appendChild(style);
 }
 
 function renderCourse(course, index) {
