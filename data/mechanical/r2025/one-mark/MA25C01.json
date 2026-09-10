@@ -1,0 +1,15 @@
+{
+  "code": "MA25C01",
+  "regulation": "R-2025",
+  "subject": "Applied Calculus",
+  "status": "framework",
+  "quizReady": false,
+  "units": {
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": []
+  },
+  "note": "Question bank will be populated from the verified R-2025 syllabus and actual exam-pattern evidence. Empty arrays are intentional and are not fake questions."
+}
