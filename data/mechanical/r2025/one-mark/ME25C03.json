@@ -1,0 +1,16 @@
+{
+  "code": "ME25C03",
+  "regulation": "R-2025",
+  "subject": "Introduction to Mechanical Engineering",
+  "status": "framework",
+  "quizReady": false,
+  "units": {
+    "1": [],
+    "2": [],
+    "3": [],
+    "4": [],
+    "5": []
+  },
+  "sourceBasis": "Prescribed book(s) and verified R-2025 syllabus are to be used as the primary basis when populating questions.",
+  "note": "Empty arrays are intentional. No unverified or fabricated questions are included."
+}
