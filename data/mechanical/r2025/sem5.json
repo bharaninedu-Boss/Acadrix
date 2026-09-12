@@ -1,8 +1,25 @@
 {
   "regulation": "R-2025",
-  "program": "B.E. Mechanical Engineering",
+  "program": "B.E. Mechanical Engineering (specialised in Smart Manufacturing)",
   "semester": 5,
-  "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu/Mech/B.E.%20Mechanical%20Engineering.pdf",
-  "status": "structure-ready",
-  "subjects": []
+  "source": "https://cac.annauniv.edu/aidetails/afug_2025_fu/Mech/B.E.%2C%20Mechanical%20Engineering%20%28specialised%20in%20Smart%20Mfg..pdf",
+  "status": "curriculum-verified",
+  "totalCredits": 23,
+  "totalCreditsWithHonoursOption": 23,
+  "subjects": [
+    {"code":"R25-S5-01","officialCode":null,"name":"Design of Machine Elements","type":"Theory","category":"ES (PC)","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"R25-S5-02","officialCode":null,"name":"Metallurgy and Materials Science","type":"Theory","category":"ES (PC)","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"R25-S5-03","officialCode":null,"name":"CNC Machining and Programming","type":"Laboratory Integrated Theory","category":"ES (PC)","credits":4,"periods":"3-0-2","tcp":5},
+    {"code":"R25-S5-04","officialCode":null,"name":"Computer Aided Design","type":"Laboratory Integrated Theory","category":"ES (PC)","credits":4,"periods":"3-0-2","tcp":5},
+    {"code":"R25-S5-05","officialCode":null,"name":"Open Elective","type":"Theory","category":"OE","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"R25-S5-06","officialCode":null,"name":"Programme Elective – I","type":"Theory","category":"ES (PE)","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"R25-S5-07","officialCode":null,"name":"Skill Development Course – III","type":"Laboratory Integrated Theory","category":"SD","credits":2,"periods":"1-0-2","tcp":3},
+    {"code":"R25-S5-08","officialCode":null,"name":"Industry Oriented Course – I","type":"Laboratory Integrated Theory","category":"SD","credits":1,"periods":"1-0-2","tcp":3}
+  ],
+  "honours": [
+    {"code":"R25-S5-H1","officialCode":null,"name":"Capstone Design Project – Level I","type":"Capstone Design Project","category":"SD","credits":6,"periods":"0-0-12","tcp":12},
+    {"code":"R25-S5-H2","officialCode":null,"name":"Honours Elective – I","type":"Theory","category":"Honours","credits":3,"periods":"3-0-0","tcp":3},
+    {"code":"R25-S5-H3","officialCode":null,"name":"Honours Elective – II","type":"Theory","category":"Honours","credits":3,"periods":"3-0-0","tcp":3}
+  ],
+  "note": "Course codes were not exposed in the retrieved Anna University curriculum table, so ACADRIX uses internal route IDs (R25-S5-xx) and keeps officialCode null rather than inventing official codes."
 }
