@@ -224,6 +224,10 @@
             color: #666;
         }
 
+        .load-preview-btn {
+            margin-top: 1rem;
+        }
+
         body.dark-theme .loading {
             color: #aaa;
         }
@@ -257,9 +261,11 @@
         </div>
 
         <div class="pdf-viewer-container">
-            <div class="loading">📄 Loading PDF viewer...</div>
+            <div class="loading" id="pdfLoading">📄 PDF preview is paused to improve page load. Click below to load viewer.</div>
+            <button id="loadPdfPreview" class="btn load-preview-btn" type="button">Load PDF Preview</button>
             <iframe id="pdfViewer" 
-                    src="https://mozilla.github.io/pdf.js/web/viewer.html?file=https://raw.githubusercontent.com/bharaninedu-Boss/Acadrix/main/B.E.Mech.pdf"
+                    loading="lazy"
+                    data-src="https://mozilla.github.io/pdf.js/web/viewer.html?file=https://raw.githubusercontent.com/bharaninedu-Boss/Acadrix/main/B.E.Mech.pdf"
                     allowfullscreen>
             </iframe>
         </div>
@@ -319,6 +325,16 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
             initTheme();
+            const loadBtn = document.getElementById('loadPdfPreview');
+            const viewer = document.getElementById('pdfViewer');
+            const loading = document.getElementById('pdfLoading');
+            if (loadBtn && viewer) {
+                loadBtn.addEventListener('click', () => {
+                    if (!viewer.src) viewer.src = viewer.dataset.src || '';
+                    if (loading) loading.textContent = '📄 Loading PDF viewer...';
+                    loadBtn.remove();
+                });
+            }
         });
     </script>
 </body>

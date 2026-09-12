@@ -16,6 +16,7 @@ function enhance(){
  panel.innerHTML=`<div class="study-mode-header"><div><strong>Study Mode</strong><small> Learn → Practice → Verify → Revise</small></div><span>${completed}/${units.length} units · ${pct}%</span></div><div class="study-progress-bar"><span style="width:${pct}%"></span></div>`;
  units.forEach(card=>{const id=card.dataset.studyUnit,b=document.createElement('button');b.type='button';b.className='study-complete-btn';b.textContent=done.has(id)?'✓ Completed':'Mark unit complete';b.setAttribute('aria-pressed',done.has(id));b.onclick=()=>{const next=read(),set=new Set(next[subjectKey()]||[]);set.has(id)?set.delete(id):set.add(id);next[subjectKey()]=[...set];write(next);enhance();};card.appendChild(b);});
 }
-new MutationObserver(enhance).observe(document.getElementById('app')||document.body,{childList:true,subtree:true});
+document.addEventListener('acadrx:rendered', enhance);
+window.addEventListener('hashchange', enhance);
 enhance();
 })();

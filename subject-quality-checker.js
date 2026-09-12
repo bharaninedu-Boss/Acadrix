@@ -25,8 +25,9 @@
     return r.regulation==='r2021' && ROOTS[r.dept] ? `${ROOTS[r.dept]}/sem${r.sem}.json` : null;
   }
   async function load(r) {
+    if (window.ACADRIX_DATA?.getSubjectByRoute) return window.ACADRIX_DATA.getSubjectByRoute(r);
     const p=path(r); if(!p) return null;
-    try { const x=await fetch(p,{cache:'no-store'}); if(!x.ok)return null; const d=await x.json(); const a=Array.isArray(d)?d:(Array.isArray(d.subjects)?d.subjects:[]); return a.find(s=>String(s.code||'').toUpperCase()===r.code)||null; } catch(e){return null;}
+    try { const x=await fetch(p); if(!x.ok)return null; const d=await x.json(); const a=Array.isArray(d)?d:(Array.isArray(d.subjects)?d.subjects:[]); return a.find(s=>String(s.code||'').toUpperCase()===r.code)||null; } catch(e){return null;}
   }
   function textScore(html) {
     const doc=new DOMParser().parseFromString(html,'text/html');
@@ -49,13 +50,19 @@
   }
   async function check(subject) {
     const units=Array.isArray(subject.units)?subject.units:[];
-    const results=[];
-    for(let i=0;i<units.length;i++){
-      const u=units[i]||{}; const href=typeof u.notes==='string'?u.notes.trim():'';
-      if(!href){results.push({unit:i+1,title:u.title||`Unit ${i+1}`,status:'missing',score:0});continue;}
-      try { const x=await fetch(href,{cache:'no-store'}); if(!x.ok){results.push({unit:i+1,title:u.title||`Unit ${i+1}`,status:'broken',score:0});continue;} const html=await x.text(); const s=textScore(html); results.push({unit:i+1,title:u.title||`Unit ${i+1}`,status:s.score>=80?'strong':s.score>=60?'developing':'thin',...s}); } catch(e){results.push({unit:i+1,title:u.title||`Unit ${i+1}`,status:'broken',score:0});}
-    }
-    return results;
+    const tasks = units.map(async (unit, index) => {
+      const u=unit||{}; const href=typeof u.notes==='string'?u.notes.trim():'';
+      if(!href)return {unit:index+1,title:u.title||`Unit ${index+1}`,status:'missing',score:0};
+      try {
+        const html = window.ACADRIX_DATA?.fetchTextCached ? await window.ACADRIX_DATA.fetchTextCached(href) : await fetch(href).then(x => x.ok ? x.text() : '').catch(() => '');
+        if (!html) return {unit:index+1,title:u.title||`Unit ${index+1}`,status:'broken',score:0};
+        const s=textScore(html);
+        return {unit:index+1,title:u.title||`Unit ${index+1}`,status:s.score>=80?'strong':s.score>=60?'developing':'thin',...s};
+      } catch(e){
+        return {unit:index+1,title:u.title||`Unit ${index+1}`,status:'broken',score:0};
+      }
+    });
+    return Promise.all(tasks);
   }
   function render(subject,route,results){
     const app=document.getElementById('app'); if(!app)return; document.getElementById('acadrx-quality-check')?.remove();
@@ -69,5 +76,5 @@
   function label(s){return {strong:'Strong structure',developing:'Could be expanded',thin:'Needs more content',missing:'No note link',broken:'Note could not be loaded'}[s]||s;}
   function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   async function refresh(){const r=routeInfo(); if(!r){document.getElementById('acadrx-quality-check')?.remove();return;} const key=`${r.dept}/${r.regulation}/${r.sem}/${r.code}`; if(key===lastKey&&document.getElementById('acadrx-quality-check'))return; lastKey=key; const s=await load(r); if(s&&routeInfo()&&JSON.stringify(routeInfo())===JSON.stringify(r))render(s,r,await check(s));}
-  function schedule(){clearTimeout(timer);timer=setTimeout(refresh,120);} window.addEventListener('hashchange',()=>{lastKey='';schedule();}); const app=document.getElementById('app'); if(app)new MutationObserver(schedule).observe(app,{childList:true,subtree:true}); schedule();
+  function schedule(){clearTimeout(timer);timer=setTimeout(refresh,120);} window.addEventListener('hashchange',()=>{lastKey='';schedule();}); document.addEventListener('acadrx:rendered', schedule); schedule();
 })();

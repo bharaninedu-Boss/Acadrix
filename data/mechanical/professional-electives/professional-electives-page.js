@@ -37,7 +37,7 @@ async function initProfessionalElectivesPage() {
     renderSemester7();
     if (!catalogue) return;
     try {
-        const response = await fetch(CATALOGUE_URL, { cache: 'no-store' });
+        const response = await fetch(CATALOGUE_URL);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
         catalogueData = Array.isArray(data.verticals) ? data.verticals : [];

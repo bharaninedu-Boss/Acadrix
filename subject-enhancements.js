@@ -1,6 +1,8 @@
 /* ACADRIX subject-page navigation — reusable study dashboard for every subject. */
 (function () {
   'use strict';
+  let sectionObserver = null;
+  let lastHeaderText = '';
 
   function enhanceSubjectPage() {
     const header = document.querySelector('.subject-header');
@@ -59,7 +61,8 @@
     path.innerHTML = '<span>1. Learn</span><b>→</b><span>2. Practice</span><b>→</b><span>3. Verify</span><b>→</b><span>4. Revise</span>';
     nav.after(path);
 
-    const observer = new IntersectionObserver(entries => {
+    if (sectionObserver) sectionObserver.disconnect();
+    sectionObserver = new IntersectionObserver(entries => {
       const visible = entries.filter(e => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (!visible) return;
       const labels = { 'acadrx-units': '📚 Units', 'acadrx-pyqs': '📝 PYQs', 'acadrx-exam': '🎯 Exam Prep', 'acadrx-videos': '🎥 Videos' };
@@ -68,20 +71,20 @@
 
     targets.forEach(([, id]) => {
       const el = document.getElementById(id);
-      if (el) observer.observe(el);
+      if (el) sectionObserver.observe(el);
     });
   }
 
-  const app = document.getElementById('app') || document.body;
-  let lastHeaderText = '';
-  const observer = new MutationObserver(() => {
+  function handleLifecycle() {
     const header = document.querySelector('.subject-header');
     const text = header ? header.textContent || '' : '';
     if (text !== lastHeaderText) {
       lastHeaderText = text;
       enhanceSubjectPage();
     }
-  });
-  observer.observe(app, { childList: true, subtree: true });
+  }
+
+  document.addEventListener('acadrx:rendered', handleLifecycle);
+  window.addEventListener('hashchange', handleLifecycle);
   enhanceSubjectPage();
 })();

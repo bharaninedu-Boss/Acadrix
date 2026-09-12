@@ -71,10 +71,8 @@
 
     function init() {
         addProfessionalElectivesCard();
-        const app = document.getElementById('app');
-        if (!app) return;
-        new MutationObserver(addProfessionalElectivesCard).observe(app, { childList: true, subtree: true });
         window.addEventListener('hashchange', addProfessionalElectivesCard);
+        document.addEventListener('acadrx:rendered', addProfessionalElectivesCard);
     }
 
     if (document.readyState === 'loading') {

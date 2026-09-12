@@ -14,7 +14,7 @@ let acadrxCatalogPromise = null;
 
 async function getAcadrxCatalog() {
     if (acadrxCatalog) return acadrxCatalog;
-    if (!acadrxCatalogPromise) acadrxCatalogPromise = fetch('data/catalog.json').then(r => r.ok ? r.json() : null).then(data => { acadrxCatalog = data; return data; }).catch(err => { console.error('ACADRIX catalog load failed', err); return null; });
+    if (!acadrxCatalogPromise) acadrxCatalogPromise = (window.ACADRIX_DATA?.fetchJsonCached ? window.ACADRIX_DATA.fetchJsonCached('data/catalog.json') : fetch('data/catalog.json').then(r => r.ok ? r.json() : null).catch(() => null)).then(data => { acadrxCatalog = data; return data; }).catch(err => { console.error('ACADRIX catalog load failed', err); return null; });
     return acadrxCatalogPromise;
 }
 function isMechanical(deptId) { return deptId === 'mech'; }
@@ -75,8 +75,8 @@ renderSemesters=function(container,deptId,regulation=null){
 };
 
 loadSemesterData=async function(deptId,sem,regulation=null){
-    if(isMechanical(deptId)&&(regulation==='r2025'||regulation==='r2021')){const catalog=await getAcadrxCatalog();const cfg=catalog?.departments?.[deptId]?.regulations?.[regulation];const root=cfg?.dataRoot||(regulation==='r2025'?'data/mechanical/r2025':'data/mechanical');const pattern=cfg?.semesterPattern||'sem{semester}.json';const path=`${root}/${pattern.replace('{semester}',sem)}`,key=`${deptId}-${regulation}-sem${sem}`;if(loadedData[key])return loadedData[key];try{const r=await fetch(path);if(!r.ok)return loadedData[key]=[];const j=await r.json(),ss=Array.isArray(j)?j:(j&&Array.isArray(j.subjects)?j.subjects:[]);return loadedData[key]=ss.map(s=>normalizeSubject(s,deptId,sem,regulation));}catch(e){console.error('Failed to load',path,e);return loadedData[key]=[];}}
-    if(deptId==='cse'){const key=`${deptId}-r2021-sem${sem}`;if(loadedData[key])return loadedData[key];try{const r=await fetch(`data/cse/sem${sem}.json`);if(!r.ok)return loadedData[key]=[];const j=await r.json(),ss=Array.isArray(j)?j:(j&&Array.isArray(j.subjects)?j.subjects:[]);return loadedData[key]=ss.map(s=>normalizeSubject(s,deptId,sem,'r2021'));}catch(e){return loadedData[key]=[];}}
+    if(isMechanical(deptId)&&(regulation==='r2025'||regulation==='r2021')){const catalog=await getAcadrxCatalog();const cfg=catalog?.departments?.[deptId]?.regulations?.[regulation];const root=cfg?.dataRoot||(regulation==='r2025'?'data/mechanical/r2025':'data/mechanical');const pattern=cfg?.semesterPattern||'sem{semester}.json';const path=`${root}/${pattern.replace('{semester}',sem)}`,key=`${deptId}-${regulation}-sem${sem}`;if(loadedData[key])return loadedData[key];try{const j=window.ACADRIX_DATA?.fetchJsonCached?await window.ACADRIX_DATA.fetchJsonCached(path):await fetch(path).then(r=>r.ok?r.json():null).catch(()=>null);const ss=Array.isArray(j)?j:(j&&Array.isArray(j.subjects)?j.subjects:[]);return loadedData[key]=ss.map(s=>normalizeSubject(s,deptId,sem,regulation));}catch(e){console.error('Failed to load',path,e);return loadedData[key]=[];}}
+    if(deptId==='cse'){const key=`${deptId}-r2021-sem${sem}`;if(loadedData[key])return loadedData[key];try{const j=window.ACADRIX_DATA?.fetchJsonCached?await window.ACADRIX_DATA.fetchJsonCached(`data/cse/sem${sem}.json`):await fetch(`data/cse/sem${sem}.json`).then(r=>r.ok?r.json():null).catch(()=>null);const ss=Array.isArray(j)?j:(j&&Array.isArray(j.subjects)?j.subjects:[]);return loadedData[key]=ss.map(s=>normalizeSubject(s,deptId,sem,'r2021'));}catch(e){return loadedData[key]=[];}}
     return originalLoadSemesterData(deptId,sem);
 };
 
