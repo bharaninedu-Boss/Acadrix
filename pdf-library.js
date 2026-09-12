@@ -22,15 +22,16 @@
   async function renderCategory(cat,folder){
     const files=await getFiles(`${folder}/${cat.id}`);
     const cards=files.sort((a,b)=>a.name.localeCompare(b.name)).map(f=>{const href=pdfUrl(f.path);return `<article class="pdf-library-card"><div class="pdf-icon">📄</div><strong>${esc(pretty(f.name))}</strong><p class="pdf-muted">PDF • ${(f.size/1024/1024).toFixed(2)} MB</p><div class="pdf-actions"><a class="pdf-open" href="${href}" target="_blank" rel="noopener">Open PDF →</a><a href="${href}" download>Download</a></div></article>`;}).join('');
-    return `<section class="pdf-category" data-category="${cat.id}"><div class="pdf-category-head"><div><h3>${cat.icon} ${cat.title}</h3><p class="pdf-muted">${cat.help}</p></div><code>${esc(folder+'/'+cat.id)}/</code></div><div class="pdf-library-grid">${cards||`<div class="pdf-library-card empty"><strong>No PDFs uploaded yet.</strong><p class="pdf-muted">Upload PDFs to the folder shown above. They will appear automatically after GitHub Pages updates.</p></div>`}</div></section>`;
+    return {html:`<section class="pdf-category" data-category="${cat.id}" hidden><div class="pdf-category-head"><div><h3>${cat.icon} ${cat.title} <span class="pdf-count">(${files.length})</span></h3><p class="pdf-muted">${cat.help}</p></div><code>${esc(folder+'/'+cat.id)}/</code></div><div class="pdf-library-grid">${cards||`<div class="pdf-library-card empty"><strong>No PDFs uploaded yet.</strong><p class="pdf-muted">Upload PDFs to the folder shown above. They will appear automatically after GitHub Pages updates.</p></div>`}</div></section>`,count:files.length};
   }
   async function mount(container,code){
     const s=routeState(code);if(s.dept!=='mech'||!/^r202[15]$/i.test(String(s.regulation))||!s.subjectCode)return;
     const folder=`data/pdfs/mechanical/${s.regulation.toLowerCase()}/sem${s.sem}/${s.subjectCode}`;
     let host=document.getElementById('acadrxPdfLibrary');if(!host){host=document.createElement('section');host.id='acadrxPdfLibrary';container.appendChild(host);}
-    host.innerHTML=`<h2>📚 PDF Study Library</h2><div class="pdf-library-note"><strong>PDF-first:</strong> Choose a category below. Each category reads its own GitHub folder automatically. No JSON editing is needed for PDFs.</div><nav class="pdf-category-tabs" aria-label="PDF resource categories">${CATEGORIES.map((c,i)=>`<button type="button" class="pdf-tab${i===0?' active':''}" data-category="${c.id}">${c.icon} ${c.title}</button>`).join('')}</nav><div id="pdfCategories">Loading…</div>`;
-    const target=host.querySelector('#pdfCategories');const html=await Promise.all(CATEGORIES.map(c=>renderCategory(c,folder)));target.innerHTML=html.join('');
+    host.innerHTML=`<h2>📚 PDF Study Library</h2><div class="pdf-library-note"><strong>PDF-first:</strong> Choose a category below. Each category reads its own GitHub folder automatically. No JSON editing is needed for PDFs.</div><nav class="pdf-category-tabs" aria-label="PDF resource categories">${CATEGORIES.map(c=>`<button type="button" class="pdf-tab" data-category="${c.id}">${c.icon} ${c.title} <span class="pdf-tab-count">…</span></button>`).join('')}</nav><div id="pdfCategories">Loading resources…</div>`;
+    const results=await Promise.all(CATEGORIES.map(c=>renderCategory(c,folder)));const target=host.querySelector('#pdfCategories');target.innerHTML=results.map(r=>r.html).join('');
     const sections=[...host.querySelectorAll('.pdf-category')],tabs=[...host.querySelectorAll('.pdf-tab')];
+    tabs.forEach((t,i)=>{t.querySelector('.pdf-tab-count').textContent=`${results[i].count}`;});
     function show(id){sections.forEach(x=>x.hidden=x.dataset.category!==id);tabs.forEach(x=>x.classList.toggle('active',x.dataset.category===id));}
     tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.category)));show(CATEGORIES[0].id);
   }
