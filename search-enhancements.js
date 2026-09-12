@@ -5,6 +5,8 @@
   'use strict';
   let cachedIndex = null;
   let buildingIndex = null;
+  let debounceTimer = null;
+  let activeRun = 0;
 
   const DEPTS = [
     { id:'mech', name:'Mechanical Engineering', folder:'mechanical' },
@@ -26,32 +28,36 @@
 
   async function semester(path, dept, sem, regulation) {
     try {
-      const res = await fetch(path);
-      if (!res.ok) return;
-      const json = await res.json();
+      const json = window.ACADRIX_DATA?.fetchJsonCached
+        ? await window.ACADRIX_DATA.fetchJsonCached(path)
+        : await fetch(path).then(res => (res.ok ? res.json() : null)).catch(() => null);
+      if (!json) return [];
       const subjects = Array.isArray(json) ? json : (json && Array.isArray(json.subjects) ? json.subjects : []);
-      subjects.forEach(s => {
+      return subjects.map(s => {
         const units = Array.isArray(s.units) ? s.units : [];
         const topics = units.map((u, i) => ({ title: typeof u === 'string' ? u : (u.title || u.name || `Unit ${i+1}`), unit:i+1 }));
         const resources = [];
         [['Notes',s.resource],['Important Questions',s.importantQuestions],['Formula Sheet',s.formulaSheet],['Solved Problems',s.solvedProblems],['Last-Day Revision',s.lastDayRevision]].forEach(([label,p]) => { if (p) resources.push(label); });
-        index.push({ code:s.code || '', name:s.name || '', dept:dept.id, deptName:dept.name, sem, regulation, topics, resources, resource:s.resource || '' });
+        return { code:s.code || '', name:s.name || '', dept:dept.id, deptName:dept.name, sem, regulation, topics, resources, resource:s.resource || '' };
       });
-    } catch (_) {}
+    } catch (_) {
+      return [];
+    }
   }
 
   async function buildIndex() {
     if (cachedIndex) return cachedIndex;
     if (buildingIndex) return buildingIndex;
     buildingIndex = (async () => {
-      const index = [];
-      globalThis.index = index;
-      for (const d of DEPTS) for (let sem=1; sem<=8; sem++) {
-        await semester(d.id === 'mech' ? `data/mechanical/sem${sem}.json` : `data/${d.folder}/sem${sem}.json`, d, sem, 'r2021');
+      const tasks = [];
+      for (const d of DEPTS) {
+        for (let sem=1; sem<=8; sem++) {
+          tasks.push(semester(d.id === 'mech' ? `data/mechanical/sem${sem}.json` : `data/${d.folder}/sem${sem}.json`, d, sem, 'r2021'));
+        }
       }
-      for (let sem=1; sem<=8; sem++) await semester(`data/mechanical/r2025/sem${sem}.json`, DEPTS[0], sem, 'r2025');
-      cachedIndex = globalThis.index;
-      delete globalThis.index;
+      for (let sem=1; sem<=8; sem++) tasks.push(semester(`data/mechanical/r2025/sem${sem}.json`, DEPTS[0], sem, 'r2025'));
+      const batches = await Promise.all(tasks);
+      cachedIndex = batches.flat().filter(Boolean);
       return cachedIndex;
     })();
     return buildingIndex;
@@ -70,21 +76,33 @@
     return total;
   }
 
-  async function enhancedSearch() {
+  async function runEnhancedSearch(runId) {
     const input=document.getElementById('searchInput'), results=document.getElementById('searchResults');
     if (!input || !results) return;
     const q=input.value.trim().toLowerCase();
     if(q.length<2){results.style.display='none';return;}
     results.innerHTML='<div class="search-item"><small>Searching ACADRIX…</small></div>'; results.style.display='block';
     const index=await buildIndex();
+    if (runId !== activeRun) return;
     const ranked=index.map(item=>({item,score:score(item,q)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
     const seen=new Set(), unique=[];
     ranked.forEach(x=>{const k=`${x.item.regulation}|${x.item.dept}|${x.item.sem}|${x.item.code}`;if(!seen.has(k)&&unique.length<12){seen.add(k);unique.push(x.item);}});
-    results.innerHTML=unique.length ? unique.map(s=>{
+    const nextHtml = unique.length ? unique.map(s=>{
       const route=`#/dept/${s.dept}/${s.regulation}/sem${s.sem}/${encodeURIComponent(s.code)}`;
       const matchedTopic=s.topics.find(t=>t.title.toLowerCase().includes(q));
       return `<a class="search-item" href="${route}" role="option"><strong>${esc(s.code||s.name)}</strong><br><small>${esc(s.name)} · ${s.regulation.toUpperCase()} · Semester ${s.sem}${matchedTopic ? ` · Unit ${matchedTopic.unit}` : ''}</small></a>`;
     }).join('') : '<div class="search-item"><strong>No results found</strong><br><small>Try a subject code, subject name, unit topic, regulation, semester or resource.</small></div>';
+    if (results.innerHTML !== nextHtml) results.innerHTML = nextHtml;
   }
-  window.handleSearch=enhancedSearch;
+
+  function enhancedSearch() {
+    activeRun += 1;
+    const runId = activeRun;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      runEnhancedSearch(runId);
+    }, 150);
+  }
+
+  window.handleSearch = enhancedSearch;
 })();

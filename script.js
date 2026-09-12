@@ -16,6 +16,90 @@ const DEPARTMENTS = [
 // key: `${deptId}-r2021-sem${sem}` => array of subject objects augmented with dept and sem
 const loadedData = {}; // { key: [ {code,name,units,pyqs,...,dept,sem,updated,popular} ] }
 let searchIndex = null; // built lazily from all departments
+window.ACADRIX_CACHE_VERSION = window.ACADRIX_CACHE_VERSION || '20260912';
+const sharedResponseCache = new Map();
+const sharedSemesterPromiseCache = new Map();
+const deferredScriptRegistry = {};
+
+function withCacheBust(url) {
+    const version = (window.ACADRIX_CACHE_VERSION || '').trim();
+    if (!version) return url;
+    return url.includes('?') ? `${url}&v=${encodeURIComponent(version)}` : `${url}?v=${encodeURIComponent(version)}`;
+}
+
+function normalizeRegulation(regulation) {
+    return (regulation || 'r2021').toLowerCase();
+}
+
+async function fetchJsonCached(path) {
+    const key = `json:${path}`;
+    if (sharedResponseCache.has(key)) return sharedResponseCache.get(key);
+    const promise = fetch(withCacheBust(path))
+        .then(res => (res.ok ? res.json() : null))
+        .catch(() => null);
+    sharedResponseCache.set(key, promise);
+    return promise;
+}
+
+async function fetchTextCached(path) {
+    const key = `text:${path}`;
+    if (sharedResponseCache.has(key)) return sharedResponseCache.get(key);
+    const promise = fetch(withCacheBust(path))
+        .then(res => (res.ok ? res.text() : ''))
+        .catch(() => '');
+    sharedResponseCache.set(key, promise);
+    return promise;
+}
+
+async function getSemesterDataShared(deptId, sem, regulation = 'r2021') {
+    const normalizedReg = normalizeRegulation(regulation);
+    const key = `${deptId}|${normalizedReg}|${sem}`;
+    if (sharedSemesterPromiseCache.has(key)) return sharedSemesterPromiseCache.get(key);
+    const loader = typeof window.loadSemesterData === 'function' ? window.loadSemesterData : loadSemesterData;
+    const promise = Promise.resolve(loader(deptId, sem, normalizedReg)).then(arr => Array.isArray(arr) ? arr : []);
+    sharedSemesterPromiseCache.set(key, promise);
+    return promise;
+}
+
+async function getSubjectByRoute(route) {
+    if (!route || !route.dept || !route.sem || !route.code) return null;
+    const list = await getSemesterDataShared(route.dept, route.sem, route.regulation || 'r2021');
+    return list.find(s => String(s.code || '').toUpperCase() === String(route.code || '').toUpperCase()) || null;
+}
+
+function emitRenderEvent() {
+    document.dispatchEvent(new CustomEvent('acadrx:rendered', { detail: { state: { ...currentState } } }));
+}
+
+function ensureScript(path) {
+    if (deferredScriptRegistry[path]) return deferredScriptRegistry[path];
+    deferredScriptRegistry[path] = new Promise((resolve, reject) => {
+        const el = document.createElement('script');
+        el.src = withCacheBust(path);
+        el.async = true;
+        el.onload = () => resolve();
+        el.onerror = reject;
+        document.body.appendChild(el);
+    });
+    return deferredScriptRegistry[path];
+}
+
+function loadDeferredEnhancements(view) {
+    if (view === 'semesters') {
+        ensureScript('professional-electives-integration.js').catch(() => {});
+    }
+    if (view === 'details') {
+        [
+            'pyq-explorer.js',
+            'pyq-analysis.js',
+            'study-mode.js',
+            'exam-mode.js',
+            'resource-completeness.js',
+            'subject-quality-checker.js',
+            'syllabus-coverage-checker.js'
+        ].forEach(path => ensureScript(path).catch(() => {}));
+    }
+}
 
 // State Management
 let currentState = {
@@ -29,12 +113,24 @@ let currentState = {
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initMenuToggle();
+    initSearchInputBridge();
     handleHashRoute();
     render();
 
     window.addEventListener('hashchange', () => {
         handleHashRoute();
     });
+
+    function initSearchInputBridge() {
+        const input = document.getElementById('searchInput');
+        if (!input) return;
+        input.removeAttribute('oninput');
+        input.addEventListener('input', () => {
+            if (typeof window.handleSearch === 'function') {
+                window.handleSearch();
+            }
+        });
+    }
 });
 
 // Theme Logic
@@ -119,26 +215,36 @@ function navigateTo(view, params = {}, fromHash = false) {
 function render() {
     const app = document.getElementById('app');
     app.innerHTML = ''; // Clear current content
+    let renderResult = null;
 
     switch (currentState.view) {
         case 'home':
-            renderHome(app);
+            renderResult = renderHome(app);
             break;
         case 'semesters':
-            renderSemesters(app, currentState.dept);
+            renderResult = renderSemesters(app, currentState.dept);
             break;
         case 'subjects':
-            renderSubjects(app, currentState.dept, currentState.sem);
+            renderResult = renderSubjects(app, currentState.dept, currentState.sem);
             break;
         case 'details':
-            renderSubjectDetails(app, currentState.subjectCode);
+            renderResult = renderSubjectDetails(app, currentState.subjectCode);
             break;
         case 'browse':
-            renderHome(app); // same as home but focus on departments
+            renderResult = renderHome(app); // same as home but focus on departments
             break;
         default:
-            renderHome(app);
+            renderResult = renderHome(app);
     }
+    loadDeferredEnhancements(currentState.view);
+    if (renderResult && typeof renderResult.then === 'function') {
+        renderResult.finally(() => {
+            emitRenderEvent();
+            window.scrollTo(0, 0);
+        });
+        return;
+    }
+    emitRenderEvent();
     window.scrollTo(0, 0);
 }
 
@@ -198,16 +304,21 @@ async function renderHome(container) {
 
     // load all department sem files (non-blocking) and collect subjects
     const allSubjects = [];
+    const tasks = [];
     for (const dept of DEPARTMENTS) {
         for (let s = 1; s <= 8; s++) {
-            const arr = await loadSemesterData(dept.id, s);
-            if (arr && arr.length) {
-                arr.forEach(sub => {
-                    allSubjects.push({ ...sub, dept: dept.id, deptName: dept.name, sem: s });
-                });
-            }
+            tasks.push(
+                getSemesterDataShared(dept.id, s, 'r2021').then(arr => ({ dept, sem: s, arr }))
+            );
         }
     }
+    const batches = await Promise.all(tasks);
+    batches.forEach(({ dept, sem, arr }) => {
+        if (!arr || !arr.length) return;
+        arr.forEach(sub => {
+            allSubjects.push({ ...sub, dept: dept.id, deptName: dept.name, sem });
+        });
+    });
 
     // Popular
     const popular = allSubjects.filter(s => s.popular).slice(0, 8);
@@ -277,12 +388,11 @@ async function loadSemesterData(deptId, sem) {
 
     const path = `data/${dept.folder}/sem${sem}.json`;
     try {
-        const res = await fetch(path);
-        if (!res.ok) {
+        const json = await fetchJsonCached(path);
+        if (!json) {
             loadedData[key] = [];
             return loadedData[key];
         }
-        const json = await res.json();
         let subjects = [];
         // support two shapes: array directly, or {semester: n, subjects: []}
         if (Array.isArray(json)) {
@@ -472,7 +582,7 @@ function renderExamPrep(subject) {
 }
 
 // Search Logic with lazy indexing across all departments
-async function handleSearch() {
+async function handleSearchLegacy() {
     const input = document.getElementById('searchInput');
     if (!input) return;
     const query = (input.value || '').trim().toLowerCase();
@@ -483,16 +593,26 @@ async function handleSearch() {
         return;
     }
 
+    if (typeof window.handleSearch !== 'function') {
+        window.handleSearch = handleSearchLegacy;
+    }
+
     if (!searchIndex) {
         searchIndex = [];
+        const tasks = [];
         for (const dept of DEPARTMENTS) {
             for (let i = 1; i <= 8; i++) {
-                const arr = await loadSemesterData(dept.id, i);
-                arr.forEach(s => {
-                    searchIndex.push({ ...s, dept: dept.id, deptName: dept.name, sem: i });
-                });
+                tasks.push(
+                    getSemesterDataShared(dept.id, i, 'r2021').then(arr => ({ dept, sem: i, arr }))
+                );
             }
         }
+        const rows = await Promise.all(tasks);
+        rows.forEach(({ dept, sem, arr }) => {
+            arr.forEach(s => {
+                searchIndex.push({ ...s, dept: dept.id, deptName: dept.name, sem });
+            });
+        });
     }
 
     const matches = [];
@@ -550,3 +670,15 @@ function selectSearch(code, sem = 1, dept = 'mech', unitIndex = null) {
 
 // Exported for debugging
 window._AUNOTES = { DEPARTMENTS, loadedData };
+window.ACADRIX_DATA = {
+    ...(window.ACADRIX_DATA || {}),
+    fetchJsonCached,
+    fetchTextCached,
+    getSemesterDataShared,
+    getSubjectByRoute,
+    invalidateCaches() {
+        sharedResponseCache.clear();
+        sharedSemesterPromiseCache.clear();
+        searchIndex = null;
+    }
+};

@@ -16,6 +16,7 @@ function enhance(){
   exam.insertBefore(banner,exam.firstChild);
  }
 }
-new MutationObserver(enhance).observe(document.getElementById('app')||document.body,{childList:true,subtree:true});
+document.addEventListener('acadrx:rendered', enhance);
+window.addEventListener('hashchange', enhance);
 enhance();
 })();

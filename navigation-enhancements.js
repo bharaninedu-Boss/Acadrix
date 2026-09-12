@@ -83,4 +83,5 @@
   // Navigation changes are hash changes, so refresh after every route.
   window.addEventListener('hashchange', refresh);
   document.addEventListener('DOMContentLoaded', refresh, { once: true });
+  document.addEventListener('acadrx:rendered', refresh);
 })();

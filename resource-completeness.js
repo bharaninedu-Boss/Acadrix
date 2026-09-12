@@ -37,8 +37,9 @@
     return r.regulation==='r2021'&&DEPT_ROOTS[r.dept]?`${DEPT_ROOTS[r.dept]}/sem${r.sem}.json`:null;
   }
   async function loadSubject(r){
+    if (window.ACADRIX_DATA?.getSubjectByRoute) return window.ACADRIX_DATA.getSubjectByRoute(r);
     const path=dataPath(r); if(!path) return null;
-    try{ const res=await fetch(path,{cache:'no-store'}); if(!res.ok)return null; const data=await res.json(); const list=Array.isArray(data)?data:(Array.isArray(data.subjects)?data.subjects:[]); return list.find(s=>String(s.code||'').toUpperCase()===r.code)||null; }catch(_){return null;}
+    try{ const res=await fetch(path); if(!res.ok)return null; const data=await res.json(); const list=Array.isArray(data)?data:(Array.isArray(data.subjects)?data.subjects:[]); return list.find(s=>String(s.code||'').toUpperCase()===r.code)||null; }catch(_){return null;}
   }
   function esc(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   function render(subject,route){
@@ -62,6 +63,6 @@
   }
   function schedule(){clearTimeout(timer);timer=setTimeout(refresh,80);}
   window.addEventListener('hashchange',()=>{lastRoute='';schedule();});
-  const app=document.getElementById('app'); if(app)new MutationObserver(schedule).observe(app,{childList:true,subtree:true});
+  document.addEventListener('acadrx:rendered', schedule);
   schedule();
 })();
