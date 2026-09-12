@@ -6,29 +6,37 @@ ACADRIX is a GitHub Pages study-resource portal for engineering students. The we
 
 **New rule: upload the PDF to GitHub and that's it.**
 
-For Mechanical Engineering, upload files to:
+For Mechanical Engineering, upload each PDF into one of these category folders:
 
-`data/pdfs/mechanical/<regulation>/sem<semester>/<subject-code>/`
+`data/pdfs/mechanical/<regulation>/sem<semester>/<subject-code>/<category>/`
+
+Supported categories:
+- `notes/` — Notes / Study Materials
+- `pyq/` — Previous Year Question Papers
+- `important-questions/` — Important Questions
+- `syllabus/` — Syllabus
+- `lab-manual/` — Lab Manual / Practical Resources
 
 Examples:
-- `data/pdfs/mechanical/r2025/sem2/MA25C02/`
-- `data/pdfs/mechanical/r2025/sem1/MA25C01/`
-- `data/pdfs/mechanical/r2025/sem1/ME25C03/`
-- `data/pdfs/mechanical/r2021/sem5/ME3592/`
-
-The ACADRIX subject dashboard uses the public GitHub Contents API to discover `.pdf` files in the subject folder. No PDF text needs to be copied into JSON and no ChatGPT/token processing is needed just to publish a PDF.
+- `data/pdfs/mechanical/r2025/sem2/MA25C02/notes/`
+- `data/pdfs/mechanical/r2025/sem2/MA25C02/pyq/`
+- `data/pdfs/mechanical/r2025/sem1/MA25C01/important-questions/`
+- `data/pdfs/mechanical/r2025/sem1/ME25C03/syllabus/`
+- `data/pdfs/mechanical/r2021/sem5/ME3592/lab-manual/`
 
 ### Upload workflow
 1. Open the repository on GitHub.
-2. Open the correct subject folder under `data/pdfs/`.
+2. Open the correct subject and category folder under `data/pdfs/`.
 3. Upload the PDF.
 4. Commit to `main`.
-5. GitHub Pages deploys it; the subject dashboard automatically lists it.
+5. GitHub Pages deploys it; the subject dashboard automatically discovers and lists it.
 
-Clear filenames are recommended, such as `Unit_1_Notes.pdf`, `Full_Notes.pdf`, `Question_Paper_2024.pdf`, `Important_Questions.pdf`.
+**No JSON editing is required for normal PDF resources.**
+
+Clear filenames are recommended, such as `Unit_1_Notes.pdf`, `Full_Notes.pdf`, `Question_Paper_2024.pdf`, `Important_Questions.pdf`, `Lab_Manual.pdf` and `Syllabus.pdf`.
 
 ### Important technical note
-GitHub Pages is a static host, so it cannot magically scan repository folders by itself. ACADRIX therefore reads the public GitHub folder listing at runtime. This means no manual resource JSON is required for PDFs, while the actual PDF remains a normal GitHub file served by GitHub Pages.
+GitHub Pages is a static host, so it cannot magically scan repository folders by itself. ACADRIX therefore reads the public GitHub Contents API at runtime. The subject page presents the five resource categories as tabs and discovers `.pdf` files from the corresponding GitHub folder. The actual PDF remains a normal GitHub file served by GitHub Pages.
 
 ## Existing academic data
 Semester JSON files remain useful for lightweight curriculum information: subject code, subject name, credits, units and other navigation metadata. They should not contain large copied PDF text.
