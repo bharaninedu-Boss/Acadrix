@@ -4,20 +4,28 @@ Study PDFs are stored directly in this repository. The website discovers them au
 
 ## Upload workflow
 
-For Mechanical Engineering, place a PDF in:
+For Mechanical Engineering, place each PDF in the correct category:
 
-`data/pdfs/mechanical/<regulation>/sem<semester>/<subject-code>/`
+`data/pdfs/mechanical/<regulation>/sem<semester>/<subject-code>/<category>/`
+
+Supported categories:
+
+- `notes` — Notes / Study Materials
+- `pyq` — Previous Year Question Papers (PYQ)
+- `important-questions` — Important Questions
+- `syllabus` — Syllabus
 
 Examples:
 
-- `data/pdfs/mechanical/r2025/sem2/MA25C02/`
-- `data/pdfs/mechanical/r2025/sem1/MA25C01/`
-- `data/pdfs/mechanical/r2025/sem1/ME25C03/`
-- `data/pdfs/mechanical/r2021/sem5/ME3592/`
+- `data/pdfs/mechanical/r2025/sem2/MA25C02/notes/Unit_1_Notes.pdf`
+- `data/pdfs/mechanical/r2025/sem2/MA25C02/pyq/April_May_2025.pdf`
+- `data/pdfs/mechanical/r2025/sem1/MA25C01/notes/Full_Notes.pdf`
+- `data/pdfs/mechanical/r2025/sem1/MA25C01/pyq/November_December_2025.pdf`
+- `data/pdfs/mechanical/r2021/sem5/ME3592/pyq/November_December_2024.pdf`
 
 ## The new rule
 
-**Upload PDF → commit → done.**
+**Upload PDF → put it in the correct category → commit → done.**
 
 You do NOT need to:
 
@@ -26,7 +34,7 @@ You do NOT need to:
 - create a question bank just to display the PDF
 - edit subject JSON merely to make the PDF appear
 
-The ACADRIX subject dashboard checks the corresponding GitHub folder and lists every `.pdf` file automatically.
+The ACADRIX subject dashboard checks the four category folders and lists every `.pdf` file automatically.
 
 ## Naming
 
