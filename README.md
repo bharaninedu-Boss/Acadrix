@@ -1,94 +1,45 @@
-# MECH-KUTTY — AU Notes
+# ACADRIX — Engineering Study Hub
 
-This repository contains a static single-page site (SPA) for "AU Notes" — an Anna University engineering resource portal. The site is data-driven and loads academic content from JSON files in the `data/` folder.
+ACADRIX is a GitHub Pages study-resource portal for engineering students. The website keeps curriculum/navigation data lightweight and uses GitHub-hosted PDFs as the primary large-resource format.
 
-This README documents the JSON schema, how to add subjects and PDFs, and describes key behaviors added by the latest updates.
+## PDF-first architecture
 
----
+**New rule: upload the PDF to GitHub and that's it.**
 
-## What I changed recently
-- Made every department/semester/subject card fully clickable and keyboard accessible.
-- Implemented hash routing for shareable URLs (no server routing needed):
-  - Home: `#/` or no hash
-  - Department: `#/dept/<deptId>` (e.g. `#/dept/mech`)
-  - Semester: `#/dept/<deptId>/sem<N>` (e.g. `#/dept/mech/sem4`)
-  - Subject: `#/dept/<deptId>/sem<N>/<subjectCode>` (e.g. `#/dept/mech/sem4/ME4301`)
-- Search is global (header) and works on subject code, subject name, unit names and department names.
-- Added Popular Subjects and Recently Added sections on the homepage, generated from JSON.
-- Subject detail pages show unit cards and resource cards. Available resources are clickable; missing resources show "⏳ Coming Soon".
-- Improved mobile navigation (hamburger) and touch targets.
-- Added keyboard navigation for search results and unit deep-linking support.
+For Mechanical Engineering, upload files to:
 
----
+`data/pdfs/mechanical/<regulation>/sem<semester>/<subject-code>/`
 
-## JSON schema (recommended)
-Place department data under `data/<deptFolder>/sem<N>.json`.
+Examples:
+- `data/pdfs/mechanical/r2025/sem2/MA25C02/`
+- `data/pdfs/mechanical/r2025/sem1/MA25C01/`
+- `data/pdfs/mechanical/r2025/sem1/ME25C03/`
+- `data/pdfs/mechanical/r2021/sem5/ME3592/`
 
-Two supported shapes for `sem<N>.json`:
-1) Array of subject objects (recommended):
+The ACADRIX subject dashboard uses the public GitHub Contents API to discover `.pdf` files in the subject folder. No PDF text needs to be copied into JSON and no ChatGPT/token processing is needed just to publish a PDF.
 
-```json
-[
-  {
-    "code": "ME4301",
-    "name": "THERMAL ENGINEERING",
-    "updated": "2026-08-29",
-    "popular": true,
-    "units": [
-      { "name": "Basic Concepts and Properties of Pure Substances", "notes": "data/mechanical/ME4301_unit1.pdf" },
-      { "name": "Gas Power Cycles", "notes": "data/mechanical/ME4301_unit2.pdf" }
-    ],
-    "pyqs": [ { "year": "2024", "link": "data/mechanical/ME4301_PYQ_2024.pdf" } ],
-    "videos": [ { "title": "Lecture 1", "channel": "Channel", "url":"https://youtube.com/..." } ],
-    "questionBank": "data/mechanical/ME4301_QB.pdf",
-    "importantQuestions": "data/mechanical/ME4301_IMP.pdf",
-    "formulaSheet": "data/mechanical/ME4301_FORM.pdf",
-    "solvedProblems": "data/mechanical/ME4301_SOLVED.pdf"
-  }
-]
-```
+### Upload workflow
+1. Open the repository on GitHub.
+2. Open the correct subject folder under `data/pdfs/`.
+3. Upload the PDF.
+4. Commit to `main`.
+5. GitHub Pages deploys it; the subject dashboard automatically lists it.
 
-2) Object with `semester` and `subjects` (legacy):
+Clear filenames are recommended, such as `Unit_1_Notes.pdf`, `Full_Notes.pdf`, `Question_Paper_2024.pdf`, `Important_Questions.pdf`.
 
-```json
-{
-  "semester": 4,
-  "subjects": [ ... same subject objects ... ]
-}
-```
+### Important technical note
+GitHub Pages is a static host, so it cannot magically scan repository folders by itself. ACADRIX therefore reads the public GitHub folder listing at runtime. This means no manual resource JSON is required for PDFs, while the actual PDF remains a normal GitHub file served by GitHub Pages.
 
-Notes:
-- If a resource is not available, omit the field or set it to null; do not use `"#"` as a link placeholder.
-- Use relative repository paths for PDFs (e.g. `data/mechanical/...pdf`) so links work on GitHub Pages.
+## Existing academic data
+Semester JSON files remain useful for lightweight curriculum information: subject code, subject name, credits, units and other navigation metadata. They should not contain large copied PDF text.
 
----
+R-2025 has a separate 1-mark quiz/question-bank system. Those small structured JSON files remain in place because the quiz needs question/answer data; they are separate from the new PDF-first study-material workflow.
 
-## How to add a subject
-1. Upload PDF files to `data/<deptFolder>/` (create folder if it does not exist).
-2. Edit `data/<deptFolder>/sem<N>.json` and add a subject object following the schema above.
-3. Add `"updated": "YYYY-MM-DD"` to show up in Recently Added.
-4. Commit the change — the site will load JSON dynamically.
+## Regulation separation
+R-2025 and R-2021 Mechanical Engineering resources remain separate. PDF folders preserve the same separation.
 
----
+## Site
+`https://bharaninedu-boss.github.io/Acadrix/`
 
-## How to add a PDF
-1. Add the PDF to the repo (e.g., `data/mechanical/ME4301_unit1.pdf`).
-2. In the subject JSON, set the resource field to the relative path (e.g., `units[0].notes = "data/mechanical/ME4301_unit1.pdf"`).
-3. Commit. Links open in a new tab.
-
----
-
-## Developer notes
-- Data loader supports both array and `{semester, subjects}` shapes.
-- Search indexing is lazy and happens on first search; for very large datasets this can take time — consider pre-building an index if performance becomes an issue.
-- Search keyboard: use ArrowDown/ArrowUp to navigate results and Enter to open.
-- Unit deep-linking: search result entries that contain a unit will open the subject page; when available the UI will attempt to scroll to the unit card automatically.
-
----
-
-If you'd like, I can:
-- Populate other departments' JSON files using available syllabus PDFs (needs manual review),
-- Add an admin page to preview and edit JSON within the browser (requires more work), or
-- Add automatic PDF metadata extraction & indexing (experimental).
-
-If you want me to proceed with populating other departments from your B.E.Mech.pdf automatically, confirm and I will attempt to extract headings/topics and draft JSON entries (you will need to review them).
+## Repository
+`https://github.com/bharaninedu-Boss/Acadrix`
