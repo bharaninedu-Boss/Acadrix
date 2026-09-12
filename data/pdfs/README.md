@@ -14,14 +14,16 @@ Supported categories:
 - `pyq` — Previous Year Question Papers (PYQ)
 - `important-questions` — Important Questions
 - `syllabus` — Syllabus
+- `lab-manual` — Lab Manual / Practical Resources
 
 Examples:
 
 - `data/pdfs/mechanical/r2025/sem2/MA25C02/notes/Unit_1_Notes.pdf`
 - `data/pdfs/mechanical/r2025/sem2/MA25C02/pyq/April_May_2025.pdf`
 - `data/pdfs/mechanical/r2025/sem1/MA25C01/notes/Full_Notes.pdf`
-- `data/pdfs/mechanical/r2025/sem1/MA25C01/pyq/November_December_2025.pdf`
+- `data/pdfs/mechanical/r2025/sem1/MA25C01/important-questions/Unit_1_Important.pdf`
 - `data/pdfs/mechanical/r2021/sem5/ME3592/pyq/November_December_2024.pdf`
+- `data/pdfs/mechanical/r2021/sem5/ME3592/lab-manual/Metrology_Lab_Manual.pdf`
 
 ## The new rule
 
@@ -34,7 +36,7 @@ You do NOT need to:
 - create a question bank just to display the PDF
 - edit subject JSON merely to make the PDF appear
 
-The ACADRIX subject dashboard checks the four category folders and lists every `.pdf` file automatically.
+The ACADRIX subject dashboard checks all five category folders and lists every `.pdf` file automatically.
 
 ## Naming
 
@@ -45,6 +47,8 @@ Use clear filenames, for example:
 - `Question_Paper_April_May_2024.pdf`
 - `Full_Notes.pdf`
 - `Important_Questions.pdf`
+- `Lab_Manual.pdf`
+- `Syllabus.pdf`
 
 The filename is displayed as the resource title.
 
